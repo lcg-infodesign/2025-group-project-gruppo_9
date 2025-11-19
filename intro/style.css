@@ -1,0 +1,124 @@
+:root {
+	--bgColor: #fefae0;
+	--fgColor: #7f4f24;
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 100%;
+	}
+
+	to {
+		opacity: 0%;
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0%;
+	}
+
+	to {
+		opacity: 100%;
+	}
+}
+
+/* classi per l'implementazione delle animazioni */
+.fade-out-class {
+	animation: fade-out 700ms 1;
+}
+.fade-in-class {
+	animation: fade-in 700ms 1;
+}
+
+* {
+	font-family: Georgia, serif;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+
+	background-color: var(--bgColor);
+}
+
+canvas {
+	display: block;
+}
+
+.sketch {
+	height: 100vh;
+	width: 100%;
+
+	position: fixed;
+
+	top: 0;
+}
+
+/* gruppo indicatori sketch */
+#sketch-list {
+	display: flex;
+	flex-direction: column;
+
+	position: fixed;
+	z-index: 101;
+
+	top: 50%;
+	transform: translateY(-50%);
+	left: 50px;
+}
+
+/* indicatore sketch */
+.sketch-button {
+	width: 15px;
+	height: 15px;
+
+	cursor: pointer;
+
+	background-color: var(--bgColor);
+	border: 1px solid var(--fgColor);
+	border-radius: 7.5px;
+}
+.sketch-button:not(:first-child) {
+	margin-top: 10px;
+}
+
+/* proprietà generali dei bottoni */
+.buttons {
+	width: 140px;
+	height: 60px;
+	
+	cursor: pointer;
+	position: fixed;
+	z-index: 102;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 37px;
+
+	border: none;
+}
+
+/* bottone per passare allo sketch successivo */
+#forward {
+	background-color: #FFF2E400;
+}
+
+/* bottone per passare al grafico */
+#leave {
+	width: 12vw;
+	height: 6vh;
+
+	display: none;
+
+	background-color: var(--bgColor);
+	color: var(--fgColor);
+
+	font-size: 1.5vw;
+	border: 1px solid var(--fgColor);
+	border-radius: 10px;
+}
+#leave:hover {
+	background-color: var(--fgColor);
+	color: var(--bgColor);
+}
