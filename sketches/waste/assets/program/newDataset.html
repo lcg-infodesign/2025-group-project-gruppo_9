@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+    <title>Processa Dataset</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #progressContainer { margin: 20px 0; }
+        #progressBar { width: 0%; height: 20px; background: #4CAF50; transition: width 0.3s; }
+        #progressText { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Processa Dataset</h1>
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+        <div id="progressText">Caricamento...</div>
+    </div>
+
+    <script>
+function processDatasetWithProgress(rawData, onProgress) {
+    const aggregated = {};
+    const totalRows = rawData.length;
+    
+    for (let i = 0; i < rawData.length; i++) {
+        const row = rawData[i];
+        const key = `${row.country}-${row.commodity}-${row.year}`;
+        
+        // CONVERSIONE CORRETTA PER DECIMALI CON VIRGOLA
+        let lossPct = row.loss_percentage;
+        
+        if (typeof lossPct === 'string') {
+            // Rimuovi simboli % e gestisci virgola come separatore decimale
+            lossPct = lossPct.replace('%', '').trim();
+            // Sostituisci la virgola con il punto per parseFloat
+            lossPct = lossPct.replace(',', '.');
+        }
+        
+        lossPct = parseFloat(lossPct);
+        
+        if (!aggregated[key]) {
+            aggregated[key] = {
+                country: row.country,
+                commodity: row.commodity,
+                year: parseInt(row.year),
+                loss_percentages: [],
+                maxLossRow: null
+            };
+        }
+        
+        // Aggiungi la percentuale alla lista per la media
+        if (!isNaN(lossPct) && lossPct >= 0 && lossPct <= 100) {
+            aggregated[key].loss_percentages.push(lossPct);
+        }
+        
+        // Aggiorna la riga con percentuale massima
+        if (!isNaN(lossPct) && lossPct >= 0 && lossPct <= 100) {
+            if (!aggregated[key].maxLossRow || lossPct > parseFloat(aggregated[key].maxLossRow.loss_percentage)) {
+                aggregated[key].maxLossRow = {
+                    loss_percentage: row.loss_percentage, // Mantieni il valore originale
+                    food_supply_stage: row.food_supply_stage,
+                    cause_of_loss: row.cause_of_loss
+                };
+            }
+        } else if (!aggregated[key].maxLossRow) {
+            aggregated[key].maxLossRow = {
+                loss_percentage: row.loss_percentage,
+                food_supply_stage: row.food_supply_stage,
+                cause_of_loss: row.cause_of_loss
+            };
+        }
+        
+        // Aggiorna il progresso
+        if (i % 100 === 0 || i === totalRows - 1) {
+            const progress = (i / totalRows) * 100;
+            onProgress(progress, i, totalRows);
+        }
+    }
+    
+    return aggregated;
+}
+
+
+function saveProcessedData(data) {
+    let csv = 'country,commodity,year,loss_percentage,food_supply_stage,cause_of_loss,original_records_count\n';
+    
+    for (let key in data) {
+        const item = data[key];
+        if (item.loss_percentages.length > 0) {
+            const avgLoss = item.loss_percentages.reduce((a, b) => a + b, 0) / item.loss_percentages.length;
+            const maxRow = item.maxLossRow || { food_supply_stage: '', cause_of_loss: '' };
+            
+            // VERSIONE MOLTO PRECISA: usa Math.round solo per i decimali
+            const formattedAvg = Math.round(avgLoss * 100) / 100; // Due decimali precisi
+            
+            csv += `"${item.country}","${item.commodity}",${item.year},${formattedAvg},"${maxRow.food_supply_stage || ''}","${maxRow.cause_of_loss || ''}",${item.loss_percentages.length}\n`;
+        }
+    }
+    
+    // Crea e scarica il file
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cleaned_dataset.csv';
+    a.click();
+    
+    console.log('File salvato: cleaned_dataset.csv');
+}
+
+
+function setup() {
+    // Carica il dataset originale
+    loadTable('../dataset/dataset.csv', 'csv', 'header', function(originalTable) {
+        const progressBar = select('#progressBar');
+        const progressText = select('#progressText');
+        
+        progressText.html('Lettura dati...');
+        
+        const rawData = [];
+        for (let i = 0; i < originalTable.getRowCount(); i++) {
+            rawData.push({
+                country: originalTable.getString(i, 'country'),
+                commodity: originalTable.getString(i, 'commodity'),
+                year: originalTable.getString(i, 'year'),
+                loss_percentage: originalTable.getString(i, 'loss_percentage'),
+                food_supply_stage: originalTable.getString(i, 'food_supply_stage'),
+                cause_of_loss: originalTable.getString(i, 'cause_of_loss')
+            });
+        }
+        
+        progressText.html('Processamento in corso...');
+        
+        const cleanedData = processDatasetWithProgress(rawData, function(progress, current, total) {
+            progressBar.style('width', progress + '%');
+            progressText.html(`Processando: ${Math.round(progress)}% (${current}/${total} righe)`);
+        });
+        
+        progressText.html('Salvataggio file...');
+        saveProcessedData(cleanedData);
+        
+        progressText.html('Completato! File "cleaned_dataset.csv" scaricato.');
+        progressBar.style('width', '100%');
+    });
+}
+    </script>
+</body>
+</html>
