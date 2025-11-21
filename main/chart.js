@@ -40,12 +40,17 @@ let maxWastePercentage = 0;
 
 // ===== INIZIALIZZAZIONE =====
 function preload() {
+    console.log("Preloading dataset...");
     dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
+    console.log("Dataset loaded.");
 }
 
 function initializeData() {
+    console.log("Initializing data...");
     commodities = getUniqueValues('commodity');
+    console.log("Unique commodities:", commodities);
     countries = getUniqueValues('country');
+    console.log("Unique countries:", countries);
 }
 
 function getUniqueValues(columnName) {
