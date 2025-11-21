@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Food Loss Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      font-family: sans-serif;
+    }
+
+    /* Titolo + tendina */
+    #headerBar {
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #headerBar h1 {
+      margin: 0;
+      font-size: 38px;
+    }
+
+    #countrySelect {
+      font-size: 20px;
+      padding: 6px 10px;
+    }
+
+    /* Contenitore del canvas */
+    #canvasContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    /* Timeline al centro */
+    #timelineContainer {
+      width: 100%;
+      text-align: center;
+      margin: 30px 0 20px 0;
+    }
+
+    #yearSlider {
+      width: 70%;
+    }
+
+    #yearMarks {
+      width: 70%;
+      margin: auto;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    /* Rettangoli sotto */
+    #bottomScroll {
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 20px 0 40px 0;
+      background: #fafafa;
+      border-top: 1px solid #ddd;
+
+      display: flex;
+      align-items: flex-end; /* LI ALLINEA SULLA BASELINE */
+      gap: 20px;
+    }
+
+    .bottomBinWrapper {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bottomBin {
+      width: 100px;
+      height: 250px;
+      background: #ddd;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bottomFill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #6cc24a;
+    }
+
+    .bottomLabel {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 5px;
+      width: 100px;
+      white-space: normal;
+    }
+
+    #tooltip {
+      position: absolute;
+      padding: 7px 10px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      border-radius: 6px;
+      font-size: 12px;
+      display: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Titolo + menu -->
+<div id="headerBar">
+  <h1 id="title">Loading...</h1>
+  <select id="countrySelect"></select>
+</div>
+
+<div id="tooltip"></div>
+
+<!-- CANVAS -->
+<div id="canvasContainer"></div>
+
+<!-- TIMELINE -->
+<div id="timelineContainer">
+  <input type="range" id="yearSlider" min="2005" max="2022" value="2005" step="1">
+  <div id="yearMarks"></div>
+</div>
+
+<!-- RETTANGOLI IN BASSO -->
+<div id="bottomScroll"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+<script src="countrySketch.js"></script>
+</body>
+</html>
