@@ -40,7 +40,7 @@ let maxWastePercentage = 0;
 
 // ===== INIZIALIZZAZIONE =====
 function preload() {
-    dataset = loadTable('../../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
+    dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
 }
 
 function initializeData() {
