@@ -17,7 +17,8 @@
     <header id="mainHeader">
       <div class="header-left">
         <button class="nav-btn" onclick="window.location.href='../index.html'">Home</button>
-        <button class="nav-btn" onclick="window.location.href='mainWithChart.html'">Chart</button>
+        <!--<button class="nav-btn" onclick="window.location.href='mainWithChart.html'">Chart</button>-->
+        <a href="mainWithChart.html" onclick="clearP5Cache()">Chart</a>
       </div>
       
       <h1 class="site-title">Food Waste</h1>
@@ -44,6 +45,13 @@
     <div id="p5-container"></div>
 
     <script>
+      function clearP5Cache() {
+    // Forza il browser a ricaricare le risorse
+    if(window.p5) {
+        window.p5.remove();
+    }
+}
+
       function switchToChart() {
         alert("Chart view coming soon!");
       }
