@@ -1,24 +1,27 @@
 // ===== CONFIGURAZIONE =====
 const CONFIG = {
     colors: {
-        background: '#fefae0',
+        background: '#ffffff00', // Trasparente per far vedere lo sfondo CSS
+        chartBackground: '#ffffffcc', // Bianco semitrasparente (80% opaco)
         point: {
-            minColor: '#f4a261',  // Colore chiaro per valori bassi
-            maxColor: '#7f4f24',  // Colore scuro per valori alti
-            hover: '#331a05'      // Colore hover ancora più scuro
+            minColor: '#F7BA14',  // Colore chiaro per valori bassi
+            maxColor: '#C31A1A',  // Colore scuro per valori alti
+            hover: '#331a05',      // Colore hover ancora più scuro
+            clicked: '#1a0d02'     // Colore quando cliccato (aggiunto)
         },
         axes: {
             line: '#331a05',
             text: '#331a05'
         },
         tooltip: {
-            background: '#ffffff',
-            border: '#bc6c25',
+            background: '#ffffffff',
+            border: '#EC3434',
             text: '#331a05'
         }
     },
     layout: {
-        margin: 60,  // Ridotto per più spazio
+        margin: 60,
+        chartPadding: 20, // Aggiunto padding per lo sfondo
         point: {
             minSize: 8,
             maxSize: 35
@@ -30,11 +33,11 @@ const CONFIG = {
     }
 };
 
-
 // ===== VARIABILI GLOBALI =====
 let dataset = [], commodities = [], countries = [];
 let yearSlider, yearValue;
 let hoveredPoint = null;
+let clickedPoint = null; // Aggiunto per gestire il punto cliccato
 let countriesData = [];
 let maxWastePercentage = 0;
 
@@ -62,15 +65,13 @@ function getUniqueValues(columnName) {
 }
 
 function setup() {
-    // Calcola l'altezza disponibile (tutta la finestra - altezza header)
-    const headerHeight = 120; // Stima l'altezza dell'header
+    const headerHeight = 120;
     const canvasHeight = windowHeight - headerHeight;
     createCanvas(windowWidth, canvasHeight);
     
     initializeSlider();
     calculateCountriesData(int(yearSlider.value));
 }
-
 
 // ===== GESTIONE SLIDER =====
 function initializeSlider() {
@@ -167,7 +168,6 @@ function calculateCountriesData(currentYear) {
             dataPoints: 0
         };
         
-        // Calcola la media delle percentuali di spreco per tutte le commodity di questo paese
         for (let commodity of commodities) {
             const row = findDatasetRow(country, commodity, currentYear);
             if (row) {
@@ -180,25 +180,19 @@ function calculateCountriesData(currentYear) {
             }
         }
         
-        // Calcola la percentuale media di spreco SOLO se ha dati
         if (countryData.dataPoints > 0) {
             countryData.wastePercentage = countryData.totalWaste / countryData.dataPoints;
-            // Aggiorna il massimo globale
             if (countryData.wastePercentage > maxWastePercentage) {
                 maxWastePercentage = countryData.wastePercentage;
             }
         }
         
-        // Aggiungi solo i paesi che hanno almeno una commodity con dati
         if (countryData.commoditiesCount > 0) {
             countriesData.push(countryData);
         }
     }
     
-    // MODIFICA: Ordina alfabeticamente invece che per percentuale
     countriesData.sort((a, b) => a.name.localeCompare(b.name));
-    
-    // Aggiungi un 10% di margine al massimo valore per l'asse Y
     maxWastePercentage = maxWastePercentage * 1.1;
     
     return countriesData;
@@ -215,11 +209,16 @@ function findDatasetRow(country, commodity, year) {
     return null;
 }
 
-// ===== RENDER CHART =====
+// ===== RENDER CHART MODIFICATO =====
 function draw() {
+    // Sfondo trasparente per far vedere l'immagine CSS
     background(CONFIG.colors.background);
+    
     if (!yearSlider || countriesData.length === 0) return;
 
+    // Disegna lo sfondo semitrasparente per l'area del grafico
+    drawChartBackground();
+    
     updateHoveredPoint();
     drawAxes();
     drawDataPoints();
@@ -228,6 +227,19 @@ function draw() {
     if (hoveredPoint !== null) {
         drawTooltip();
     }
+}
+
+// AGGIUNTA: Funzione per lo sfondo semitrasparente
+function drawChartBackground() {
+    fill(CONFIG.colors.chartBackground);
+    noStroke();
+    rect(
+        CONFIG.layout.margin - CONFIG.layout.chartPadding, 
+        CONFIG.layout.margin - CONFIG.layout.chartPadding, 
+        width - (CONFIG.layout.margin - CONFIG.layout.chartPadding) * 2, 
+        height - (CONFIG.layout.margin - CONFIG.layout.chartPadding) * 2,
+        10 // Border radius
+    );
 }
 
 function drawAxes() {
@@ -283,35 +295,34 @@ function drawAxisLabels() {
     pop();
 }
 
-
 function drawDataPoints() {
     const maxCommodities = Math.max(...countriesData.map(d => d.commoditiesCount));
     
     for (let i = 0; i < countriesData.length; i++) {
         const data = countriesData[i];
         const isHovered = (hoveredPoint === i);
+        const isClicked = (clickedPoint === i);
         
-        drawDataPoint(data, i, countriesData.length, maxCommodities, isHovered);
+        drawDataPoint(data, i, countriesData.length, maxCommodities, isHovered, isClicked);
     }
 }
 
-function drawDataPoint(countryData, index, totalCountries, maxCommodities, isHovered) {
+function drawDataPoint(countryData, index, totalCountries, maxCommodities, isHovered, isClicked) {
     const x = map(index, 0, totalCountries - 1, 
                  CONFIG.layout.margin + 30, width - CONFIG.layout.margin - 30);
     
     const y = map(countryData.wastePercentage, 0, maxWastePercentage, 
                  height - CONFIG.layout.margin, CONFIG.layout.margin);
     
-    // Dimensione basata sul numero di commodity con dati
     const size = map(countryData.commoditiesCount, 0, maxCommodities, 
                     CONFIG.layout.point.minSize, CONFIG.layout.point.maxSize);
     
-    // COLORE BASATO SULLA PERCENTUALE DI SPRECO
     let pointColor;
-    if (isHovered) {
+    if (isClicked) {
+        pointColor = CONFIG.colors.point.clicked;
+    } else if (isHovered) {
         pointColor = CONFIG.colors.point.hover;
     } else {
-        // Interpola tra colore chiaro e scuro in base alla percentuale
         const colorIntensity = map(countryData.wastePercentage, 0, maxWastePercentage, 0, 1);
         pointColor = lerpColor(
             color(CONFIG.colors.point.minColor),
@@ -324,10 +335,9 @@ function drawDataPoint(countryData, index, totalCountries, maxCommodities, isHov
     noStroke();
     ellipse(x, y, size);
     
-    // Cerchio esterno per punti hover
-    if (isHovered) {
+    if (isHovered || isClicked) {
         noFill();
-        stroke(CONFIG.colors.point.hover);
+        stroke(isClicked ? CONFIG.colors.point.clicked : CONFIG.colors.point.hover);
         strokeWeight(2);
         ellipse(x, y, size + 8);
     }
@@ -341,7 +351,6 @@ function updateHoveredPoint() {
         const x = map(i, 0, countriesData.length - 1, 
                      CONFIG.layout.margin + 30, width - CONFIG.layout.margin - 30);
         
-        // MODIFICA: Usa maxWastePercentage invece di 100 fisso
         const y = map(data.wastePercentage, 0, maxWastePercentage, 
                      height - CONFIG.layout.margin, CONFIG.layout.margin);
         
@@ -357,6 +366,20 @@ function updateHoveredPoint() {
     }
 }
 
+// AGGIUNTA: Funzione per gestire il click del mouse
+function mouseClicked() {
+    if (hoveredPoint !== null) {
+        clickedPoint = hoveredPoint;
+        const countryName = countriesData[hoveredPoint].name;
+        
+        // Naviga alla pagina di dettaglio con il parametro country
+        window.location.href = `../visione%20dettaglio%20waste/country.html?country=${encodeURIComponent(countryName)}`;
+        
+        return false; // Previene altri eventi
+    }
+    return true;
+}
+
 function drawTooltip() {
     if (hoveredPoint === null) return;
     
@@ -364,27 +387,24 @@ function drawTooltip() {
     const x = map(hoveredPoint, 0, countriesData.length - 1, 
                  CONFIG.layout.margin + 30, width - CONFIG.layout.margin - 30);
     
-    // MODIFICA: Usa maxWastePercentage invece di 100 fisso
     const y = map(data.wastePercentage, 0, maxWastePercentage, 
                  height - CONFIG.layout.margin, CONFIG.layout.margin);
     
     const tooltipText = [
         data.name,
         `Waste: ${data.wastePercentage.toFixed(1)}%`,
-        `Commodities: ${data.commoditiesCount}/${commodities.length}`
+        `Commodities: ${data.commoditiesCount}/${commodities.length}`,
     ];
     
     push();
     textSize(CONFIG.typography.tooltipSize);
     textFont('Inter');
     
-    // Calcola dimensioni tooltip
     const padding = 12;
     const lineHeight = 18;
     const maxWidth = Math.max(...tooltipText.map(line => textWidth(line))) + padding * 2;
     const tooltipHeight = tooltipText.length * lineHeight + padding;
     
-    // Posizione tooltip (evita bordi)
     let tooltipX = mouseX + 20;
     let tooltipY = mouseY - tooltipHeight / 2;
     
@@ -398,20 +418,27 @@ function drawTooltip() {
         tooltipY = height - tooltipHeight - 10;
     }
     
-    // Sfondo tooltip
     fill(CONFIG.colors.tooltip.background);
     stroke(CONFIG.colors.tooltip.border);
     strokeWeight(1);
     rect(tooltipX, tooltipY, maxWidth, tooltipHeight, 5);
     
-    // Testo tooltip
     noStroke();
     fill(CONFIG.colors.tooltip.text);
     textAlign(LEFT, TOP);
     
     for (let i = 0; i < tooltipText.length; i++) {
         const lineY = tooltipY + padding + i * lineHeight;
-        text(tooltipText[i], tooltipX + padding, lineY);
+        
+        // Ultima riga in grassetto (indicazione click)
+        if (i === tooltipText.length - 1) {
+            push();
+            textStyle(BOLD);
+            text(tooltipText[i], tooltipX + padding, lineY);
+            pop();
+        } else {
+            text(tooltipText[i], tooltipX + padding, lineY);
+        }
     }
     
     pop();

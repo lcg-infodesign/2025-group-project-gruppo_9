@@ -17,8 +17,8 @@
     <header id="mainHeader">
       <div class="header-left">
         <button class="nav-btn" onclick="window.location.href='../index.html'">Home</button>
-        <!--<button class="nav-btn" onclick="window.location.href='mainWithChart.html'">Chart</button>-->
-        <a href="mainWithChart.html" class="nav-btn" onclick="clearP5Cache()">Chart</a>
+        <button class="nav-btn" onclick="window.location.href='main.html'">Matrix</button>
+        <!--<a href="main.html" class="nav-btn" onclick="clearP5Cache()">Matrix</a>-->
       </div>
       
       <h1 class="site-title">Food Waste</h1>
@@ -51,72 +51,6 @@
             window.p5.remove();
         }
         
-      function switchToChart() {
-        alert("Chart view coming soon!");
-      }
-
-      // Funzione per inizializzare lo slider con i dati dal dataset
-      function initializeSliderFromData(yearRange) {
-        const yearSlider = document.getElementById("yearSlider");
-        const yearValue = document.getElementById("yearValue");
-        
-        if (yearRange && yearSlider) {
-          yearSlider.min = yearRange.min;
-          yearSlider.max = yearRange.max;
-          yearSlider.value = yearRange.max; // Imposta l'anno più recente
-          yearValue.textContent = yearRange.max;
-          updateActiveTick();
-        }
-      }
-
-      function updateActiveTick() {
-        const slider = document.getElementById("yearSlider");
-        const activeTick = document.getElementById("activeTick");
-        const track = document.getElementById("sliderTrack");
-
-        if (!slider || !activeTick || !track) return;
-
-        const min = parseInt(slider.min);
-        const max = parseInt(slider.max);
-        const value = parseInt(slider.value);
-        const percent = (value - min) / (max - min);
-        
-        activeTick.style.left = (percent * 100) + "%";
-      }
-
-      // Inizializza lo slider quando la pagina è caricata
-      document.addEventListener('DOMContentLoaded', function() {
-        const yearSlider = document.getElementById("yearSlider");
-        const sliderTrack = document.getElementById("sliderTrack");
-
-        function updateSlider() {
-          const min = parseInt(yearSlider.min);
-          const max = parseInt(yearSlider.max);
-          const value = parseInt(yearSlider.value);
-          const percent = (value - min) / (max - min);
-          
-          activeTick.style.left = (percent * 100) + "%";
-          yearValue.textContent = value;
-        }
-
-        // Click sul track
-        sliderTrack.addEventListener("click", (e) => {
-          const rect = sliderTrack.getBoundingClientRect();
-          const percent = (e.clientX - rect.left) / rect.width;
-          const min = parseInt(yearSlider.min);
-          const max = parseInt(yearSlider.max);
-          const newValue = min + Math.round(percent * (max - min));
-          
-          yearSlider.value = newValue;
-          updateSlider();
-        });
-
-        // Input sullo slider
-        yearSlider.addEventListener("input", updateSlider);
-
-        // Inizializza
-        updateSlider();
-      });
     </script>
   </body>
 </html>

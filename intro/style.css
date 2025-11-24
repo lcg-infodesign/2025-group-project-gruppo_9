@@ -1,6 +1,6 @@
 :root {
-	--bgColor: #fefae0;
-	--fgColor: #7f4f24;
+	--bgColor: #ffffff;
+	--fgColor: #455A80;
 }
 
 @keyframes fade-out {
