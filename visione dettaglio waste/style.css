@@ -15,7 +15,7 @@ html,body { height:100%; margin:0; background:#fafafa; font-family: Inter, Arial
   padding:18px 12px;
   position:relative;
 }
-#headerBar h1 { margin:0; font-size:40px; color:var(--accent); }
+#headerBar h1 { margin:0; font-size:40px; color:#f10707; }
 #countrySelect { font-size:16px; padding:6px 10px; border-radius:6px; }
 
 /* canvas container centered */
@@ -23,7 +23,7 @@ html,body { height:100%; margin:0; background:#fafafa; font-family: Inter, Arial
   width:100%;
   display:flex;
   justify-content:center;
-  margin-top:8px;
+  margin-top:0px;
 }
 
 /* timeline area */
@@ -118,4 +118,63 @@ html,body { height:100%; margin:0; background:#fafafa; font-family: Inter, Arial
   #yearSlider { width:95%; }
   .bottomBinWrapper { width:100px; }
   .bottomBin { width:84px; height:130px; }
+}
+
+/* --- BACKGROUND INTERO SITO --- */
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("assets/sfondo.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: Inter, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* --- CANVAS TRASPARENTE --- */
+#canvasContainer {
+  position: relative;
+  width: 100%;
+  height: 600px;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent !important;
+}
+
+/* --- CESTINI SOTTO CENTRATI --- */
+#bottomScroll {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.bottomBin {
+  width: 120px;
+  height: 140px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  position: relative;
+}
+
+.bottomFill {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  background: rgba(255, 120, 0, 0.65);
+  border-radius: 4px;
+  pointer-events: none;
 }
