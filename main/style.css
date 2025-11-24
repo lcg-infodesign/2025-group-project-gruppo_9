@@ -3,8 +3,15 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #fefae0;
+  background-color: #ffffff;
   font-family: 'Inter', sans-serif; 
+
+      background-image: url('../assets/img/sfondo.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
 }
 
 /* HEADER STYLES - AGGIUNTO */
@@ -13,12 +20,12 @@ html, body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background-color: rgba(254, 250, 224, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid #e9d8a6;
+  border-bottom: 1px solid #ffffff;
   position: sticky;
   top: 0;
   z-index: 1000;
+
 }
 
 .header-left, .header-right {
@@ -35,7 +42,7 @@ html, body {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #7f4f24;
+  color: #C31A1A;
   margin: 0;
   text-align: center;
   flex: 2;
@@ -44,8 +51,8 @@ html, body {
 .nav-btn {
   padding: 12px 24px;
   background: transparent;
-  border: 2px solid #bc6c25;
-  color: #bc6c25;
+  border: 2px solid #EC3434;
+  color: #EC3434;
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
@@ -56,8 +63,8 @@ html, body {
 }
 
 .nav-btn:hover {
-  background: #bc6c25;
-  color: #fefae0;
+  background: #EC3434;
+  color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
 }
@@ -91,7 +98,7 @@ canvas {
   left: 0;
   width: 100%;
   height: 10px;
-  background: #bc6c25;
+  background: #EC3434;
   transform: translateY(-50%);
   border-radius: 5px;
   z-index: 1;
@@ -107,7 +114,7 @@ canvas {
   top: 50%;
   width: 28px;
   height: 28px;
-  background: #7f4f24;
+  background: #C31A1A;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
