@@ -14,7 +14,7 @@ function sketch0(p) {
 	let bgImage;
 
 	p.preload = () => {
-		//bgImage = p.loadImage("../assets/img/sfondoQuadri.png");
+		bgImage = p.loadImage("../../../assets/img/sfondoQuadri.png");
 	}
 
 	p.setup = () => {
