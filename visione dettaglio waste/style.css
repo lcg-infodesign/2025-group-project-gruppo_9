@@ -61,9 +61,10 @@ a.button:active {
   align-items:center;
   gap:8px;
   margin:28px 0 8px 0;
+  
 }
 #yearSlider { width:90%; max-width:1200px; }
-#yearLabelWrap { width:90%; max-width:1200px; display:flex; justify-content:center; }
+#yearLabelWrap { width:90%; max-width:1200px; display:flex; justify-content:center;  }
 #yearLabel { font-weight:700; padding:4px 10px; background:var(--ui-bg); border-radius:6px; }
 
 /* ticks / marks */
