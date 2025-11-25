@@ -8,7 +8,7 @@ let sketches = document.getElementsByClassName("sketch");
 // Bottone per lo sketch seguente
 let forwardButton = document.getElementById("forward");
 forwardButton.addEventListener("click", () => {
-    changeSketch(currentSketch + 1);    
+    changeSketch(currentSketch + 1);
 });
 
 // Gestione della pressione delle frecce
