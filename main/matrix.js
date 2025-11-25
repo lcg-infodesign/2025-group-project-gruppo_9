@@ -1,7 +1,7 @@
 // ===== CONFIGURAZIONE =====
 const CONFIG = {
     colors: {
-        background: '#ffffffff', // Ora sarà trasparente per far vedere lo sfondo CSS
+        background: '#ffffffff',
         cell: {
             active: '#EC3434',
             inactive: '#f8f9fa', 
@@ -39,10 +39,10 @@ const CONFIG = {
 let dataset = [], commodities = [], countries = [];
 let cellWidth, cellHeight;
 let hoveredCol = -1, hoveredRow = -1;
-let clickedCol = -1, clickedRow = -1; // Aggiunto per gestire la cella cliccata
+let clickedCol = -1, clickedRow = -1;
 let currentYear = 2014;
 let yearRange = { min: 2000, max: 2023 };
-// RIMOSSO: let bgImage;
+let sortedCountries = [];
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -92,10 +92,14 @@ function setup() {
     canvas.parent('p5-container');
     calculateCellSize();
     setupSliderListener();
+    
+    // Ordina le nazioni inizialmente
+    sortCountriesByCommodities(currentYear);
 }
 
 function calculateDynamicHeight() {
     const headerHeight = 150;
+    // Usa countries.length invece di sortedCountries.length per il calcolo iniziale
     const matrixHeight = CONFIG.layout.margin * 2 + (countries.length * CONFIG.layout.minCellHeight);
     const minHeight = 600;
     return Math.max(matrixHeight + headerHeight, minHeight);
@@ -108,11 +112,19 @@ function setupSliderListener() {
         yearSlider.addEventListener("input", function() {
             currentYear = parseInt(this.value);
             combinationCache = {};
-            clickedCol = -1; // Reset cella cliccata quando cambia anno
+            clickedCol = -1;
             clickedRow = -1;
+            
+            // Riordina le nazioni per il nuovo anno
+            sortCountriesByCommodities(currentYear);
+            // Ricalcola le dimensioni delle celle dopo l'ordinamento
+            calculateCellSize();
             redraw();
         });
         currentYear = yearRange.max;
+        
+        // Ordina anche all'inizio con l'anno massimo
+        sortCountriesByCommodities(currentYear);
     }
 }
 
@@ -121,17 +133,53 @@ function getCurrentYear() {
     return yearSlider ? parseInt(yearSlider.value) : currentYear;
 }
 
+// ===== ORDINAMENTO NAZIONI =====
+function sortCountriesByCommodities(year) {
+    console.log(`Calcolo ordinamento per l'anno ${year}...`);
+    
+    const countryCommodityCounts = [];
+    
+    for (let country of countries) {
+        let count = 0;
+        for (let commodity of commodities) {
+            if (checkCombination(country, commodity, year)) {
+                count++;
+            }
+        }
+        countryCommodityCounts.push({
+            name: country,
+            count: count
+        });
+    }
+    
+    // Ordina in ordine decrescente (dalla nazione con più commodity a quella con meno)
+    countryCommodityCounts.sort((a, b) => b.count - a.count);
+    
+    // Aggiorna l'array sortedCountries
+    sortedCountries = countryCommodityCounts.map(item => item.name);
+    
+    console.log(`Nazioni ordinate per l'anno ${year}: ${sortedCountries.length} nazioni totali`);
+    countryCommodityCounts.forEach((item, index) => {
+        console.log(`${index + 1}. ${item.name}: ${item.count} commodity`);
+    });
+}
+
 // ===== LAYOUT =====
 function calculateCellSize() {
     const availableW = width - CONFIG.layout.margin * 2;
     const availableH = height - CONFIG.layout.margin * 2;
 
     cellWidth = min(availableW / commodities.length, CONFIG.layout.maxCellWidth);
+    
+    // Usa sortedCountries.length per calcolare l'altezza delle celle
+    const calculatedHeight = availableH / sortedCountries.length;
     cellHeight = constrain(
-        availableH / countries.length,
+        calculatedHeight,
         CONFIG.layout.minCellHeight,
         CONFIG.layout.maxCellHeight
     );
+    
+    console.log(`Cell dimensions: ${cellWidth}x${cellHeight}, ${sortedCountries.length} countries`);
 }
 
 function windowResized() {
@@ -142,8 +190,12 @@ function windowResized() {
 
 // ===== RENDER SEMPLIFICATO =====
 function draw() {
-   
-    if (commodities.length === 0) return;
+    background(CONFIG.colors.background);
+    
+    if (commodities.length === 0 || sortedCountries.length === 0) {
+        console.log("Waiting for data...");
+        return;
+    }
 
     const year = getCurrentYear();
     updateHoveredCell();
@@ -155,8 +207,6 @@ function draw() {
         drawTooltip();
     }
 }
-
-// RIMOSSO: funzione drawBackground()
 
 function updateHoveredCell() {
     hoveredCol = floor((mouseX - CONFIG.layout.margin) / cellWidth);
@@ -172,7 +222,7 @@ function drawColumnLabels() {
 }
 
 function drawRowLabels() {
-    drawLabels(countries, CONFIG.typography.rowSize, (i) => ({
+    drawLabels(sortedCountries, CONFIG.typography.rowSize, (i) => ({
         x: 10,
         y: CONFIG.layout.margin + i * cellHeight + cellHeight / 2,
         truncate: CONFIG.typography.maxCountryChars
@@ -213,7 +263,12 @@ function drawMatrix(currentYear) {
         currentCacheYear = currentYear;
     }
     
-    for (let r = 0; r < countries.length; r++) {
+    // Debug: verifica che stiamo disegnando tutte le nazioni
+    if (sortedCountries.length > 0) {
+        console.log(`Drawing matrix: ${sortedCountries.length} countries x ${commodities.length} commodities`);
+    }
+    
+    for (let r = 0; r < sortedCountries.length; r++) {
         for (let c = 0; c < commodities.length; c++) {
             drawCell(r, c, currentYear);
         }
@@ -224,7 +279,8 @@ function drawCell(row, col, year) {
     const x = CONFIG.layout.margin + col * cellWidth;
     const y = CONFIG.layout.margin + row * cellHeight;
     
-    const exists = checkCombinationCached(countries[row], commodities[col], year);
+    const country = sortedCountries[row];
+    const exists = checkCombinationCached(country, commodities[col], year);
     const isHovered = (row === hoveredRow || col === hoveredCol);
     const isClicked = (row === clickedRow && col === clickedCol);
 
@@ -273,21 +329,20 @@ function drawCellDot(x, y, isClicked) {
 // AGGIUNTA: Funzione per gestire il click del mouse
 function mouseClicked() {
     if (isValidCell(hoveredRow, hoveredCol)) {
-        const exists = checkCombinationCached(countries[hoveredRow], commodities[hoveredCol], getCurrentYear());
+        const country = sortedCountries[hoveredRow];
+        const exists = checkCombinationCached(country, commodities[hoveredCol], getCurrentYear());
         
         if (exists) {
             clickedCol = hoveredCol;
             clickedRow = hoveredRow;
             
-            const countryName = countries[hoveredRow];
-            // Naviga alla pagina di dettaglio con il parametro country
+            const countryName = country;
             window.location.href = `../visione%20dettaglio%20waste/country.html?country=${encodeURIComponent(countryName)}`;
             
-            return false; // Previene altri eventi
+            return false;
         }
     }
     
-    // Reset del click se si clicca fuori da una cella attiva
     clickedCol = -1;
     clickedRow = -1;
     return true;
@@ -296,10 +351,22 @@ function mouseClicked() {
 function drawTooltip() {
     if (!isValidCell(hoveredRow, hoveredCol)) return;
 
-    const exists = checkCombinationCached(countries[hoveredRow], commodities[hoveredCol], getCurrentYear());
-    let tooltipText = `${countries[hoveredRow]} — ${commodities[hoveredCol]}`;
+    const country = sortedCountries[hoveredRow];
+    const exists = checkCombinationCached(country, commodities[hoveredCol], getCurrentYear());
     
-    // Aggiungi indicazione click se la cella è attiva
+    // Calcola il numero di commodity per questa nazione
+    let commodityCount = 0;
+    for (let commodity of commodities) {
+        if (checkCombination(country, commodity, getCurrentYear())) {
+            commodityCount++;
+        }
+    }
+    
+    const percentage = (commodityCount / commodities.length * 100).toFixed(1);
+    
+    let tooltipText = `${country} — ${commodities[hoveredCol]}`;
+    tooltipText += `\nCommodity: ${commodityCount}/${commodities.length} (${percentage}%)`;
+    
     if (exists) {
         tooltipText += '\nClick for details →';
     }
@@ -308,7 +375,6 @@ function drawTooltip() {
     const lineHeight = 16;
     const padding = 8;
     
-    // Calcola larghezza massima del tooltip
     let maxWidth = 0;
     push();
     textSize(CONFIG.typography.tooltipSize);
@@ -333,11 +399,9 @@ function drawTooltip() {
     noStroke();
     fill(CONFIG.colors.text.tooltip);
     
-    // Disegna ogni linea del tooltip
     for (let i = 0; i < lines.length; i++) {
         const yPos = mouseY + 26 + i * lineHeight;
         
-        // Ultima riga in grassetto se è l'indicazione click
         if (i === lines.length - 1 && exists && lines[i].includes('Click')) {
             push();
             textStyle(BOLD);
@@ -351,7 +415,7 @@ function drawTooltip() {
 }
 
 function isValidCell(row, col) {
-    return row >= 0 && row < countries.length && col >= 0 && col < commodities.length;
+    return row >= 0 && row < sortedCountries.length && col >= 0 && col < commodities.length;
 }
 
 function checkCombination(country, commodity, year) {

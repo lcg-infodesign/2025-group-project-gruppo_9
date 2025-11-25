@@ -8,7 +8,6 @@ const FG_COLOR = "#292929ff";
 let rf;
 let typewriterSpeed = 30; // ms per carattere
 
-
 // Primo sketch: Titolo (senza typewriter)
 function sketch0(p) {
 	let bgImage;
