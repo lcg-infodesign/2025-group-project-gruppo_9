@@ -1,7 +1,14 @@
-// ===== CONFIGURAZIONE =====
+// ===== CONFIGURAZIONE COMPLETA =====
 const CONFIG = {
     colors: {
         background: '#ffffffff',
+        headerBackground: '#ffffffff',
+        headerText: '#EC3434',
+        button: {
+            normal: '#EC3434',
+            hover: '#C31A1A',
+            text: '#ffffff'
+        },
         cell: {
             active: '#EC3434',
             inactive: '#f8f9fa', 
@@ -18,20 +25,36 @@ const CONFIG = {
         tooltip: {
             background: '#ffffff',
             border: '#adb5bd'
+        },
+        slider: {
+            track: '#EC3434',
+            thumb: '#C31A1A',
+            text: '#331a05'
         }
     },
     layout: {
+        headerHeight: 120,
+        sliderHeight: 100,
         margin: 100,
         minCellHeight: 30,
         maxCellHeight: 50,
-        maxCellWidth: 120
+        maxCellWidth: 120,
+        button: {
+            width: 120,
+            height: 40,
+            radius: 25
+        }
     },
     typography: {
+        titleSize: 48,
+        buttonSize: 14,
         columnSize: 11,
         rowSize: 10,
         tooltipSize: 12,
+        sliderValueSize: 18,
         maxCountryChars: 18,
-        fontFamily: 'Inter'
+        fontFamily: 'Inter',
+        titleFont: 'Playfair Display'
     }
 };
 
@@ -43,6 +66,12 @@ let clickedCol = -1, clickedRow = -1;
 let currentYear = 2014;
 let yearRange = { min: 2000, max: 2023 };
 let sortedCountries = [];
+let slider = {
+    x: 0, y: 0, width: 0, height: 30,
+    thumb: { x: 0, width: 28, dragging: false }
+};
+let buttons = [];
+let matrixY = 0; 
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -56,9 +85,8 @@ function preload() {
 function initializeData() {
     commodities = getUniqueValues('commodity');
     countries = getUniqueValues('country');
-    
     calculateYearRange();
-    initializeSliderWithData();
+    sortCountriesByCommodities(yearRange.max);
 }
 
 function calculateYearRange() {
@@ -70,12 +98,7 @@ function calculateYearRange() {
         min: Math.min(...years),
         max: Math.max(...years)
     };
-}
-
-function initializeSliderWithData() {
-    if (window.initializeSliderFromData) {
-        window.initializeSliderFromData(yearRange);
-    }
+    currentYear = yearRange.max;
 }
 
 function getUniqueValues(columnName) {
@@ -87,56 +110,229 @@ function getUniqueValues(columnName) {
 }
 
 function setup() {
-    const dynamicHeight = calculateDynamicHeight();
-    const canvas = createCanvas(windowWidth, dynamicHeight);
+    // Calcola l'altezza totale necessaria per tutte le righe
+    const totalHeight = calculateTotalHeight();
+    const canvas = createCanvas(windowWidth, totalHeight);
     canvas.parent('p5-container');
-    calculateCellSize();
-    setupSliderListener();
     
-    // Ordina le nazioni inizialmente
-    sortCountriesByCommodities(currentYear);
+    setupUI();
+    calculateCellSize();
+    
+    console.log(`Canvas height: ${totalHeight}, Countries: ${sortedCountries.length}, Matrix Y: ${matrixY}`);
 }
 
-function calculateDynamicHeight() {
-    const headerHeight = 150;
-    // Usa countries.length invece di sortedCountries.length per il calcolo iniziale
-    const matrixHeight = CONFIG.layout.margin * 2 + (countries.length * CONFIG.layout.minCellHeight);
-    const minHeight = 600;
-    return Math.max(matrixHeight + headerHeight, minHeight);
+function calculateTotalHeight() {
+    const headerHeight = CONFIG.layout.headerHeight;
+    const sliderHeight = CONFIG.layout.sliderHeight;
+    const matrixAreaHeight = CONFIG.layout.margin * 2 + (sortedCountries.length * CONFIG.layout.minCellHeight);
+    const minHeight = 800;
+    
+    // Calcola l'altezza totale necessaria
+    const calculatedHeight = headerHeight + sliderHeight + matrixAreaHeight;
+    
+    console.log(`Header: ${headerHeight}, Slider: ${sliderHeight}, Matrix: ${matrixAreaHeight}, Total: ${calculatedHeight}`);
+    
+    return Math.max(calculatedHeight, minHeight);
 }
 
-// ===== COMUNICAZIONE CON SLIDER =====
-function setupSliderListener() {
-    const yearSlider = document.getElementById("yearSlider");
-    if (yearSlider) {
-        yearSlider.addEventListener("input", function() {
-            currentYear = parseInt(this.value);
-            combinationCache = {};
-            clickedCol = -1;
-            clickedRow = -1;
-            
-            // Riordina le nazioni per il nuovo anno
-            sortCountriesByCommodities(currentYear);
-            // Ricalcola le dimensioni delle celle dopo l'ordinamento
-            calculateCellSize();
-            redraw();
-        });
-        currentYear = yearRange.max;
-        
-        // Ordina anche all'inizio con l'anno massimo
-        sortCountriesByCommodities(currentYear);
+function setupUI() {
+    // Setup slider
+    slider.width = width * 0.8;
+    slider.x = (width - slider.width) / 2;
+    slider.y = CONFIG.layout.headerHeight + 60;
+    updateSliderThumb();
+    matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + 20;
+    
+    // Setup buttons
+    buttons = [
+        {
+            label: "Home",
+            x: 240,
+            y: CONFIG.layout.headerHeight / 2,
+            action: () => window.location.href = '../index.html'
+        },
+        {
+            label: "Dataset", 
+            x: 380,
+            y: CONFIG.layout.headerHeight / 2,
+            action: () => window.location.href = 'methodology.html'
+        },
+        {
+            label: "About",
+            x: width - 380,
+            y: CONFIG.layout.headerHeight / 2,
+            action: () => window.location.href = 'about.html'
+        },
+        {
+            label: "?",
+            x: width - 240,
+            y: CONFIG.layout.headerHeight / 2,
+            action: () => window.location.href = 'domanda.html'
+        }
+    ];
+}
+
+function calculateCellSize() {
+    const availableW = width - CONFIG.layout.margin * 2;
+    
+    // Per l'altezza, usa tutto lo spazio disponibile nel canvas
+    const availableH = height - matrixY - CONFIG.layout.margin;
+
+    cellWidth = min(availableW / commodities.length, CONFIG.layout.maxCellWidth);
+    
+    // Calcola l'altezza delle celle in base allo spazio disponibile
+    const calculatedHeight = availableH / sortedCountries.length;
+    cellHeight = constrain(
+        calculatedHeight,
+        CONFIG.layout.minCellHeight,
+        CONFIG.layout.maxCellHeight
+    );
+    
+    console.log(`Available H: ${availableH}, Cell Height: ${cellHeight}, Total rows height: ${sortedCountries.length * cellHeight}`);
+}
+
+function windowResized() {
+    const totalHeight = calculateTotalHeight();
+    resizeCanvas(windowWidth, totalHeight);
+    setupUI();
+    calculateCellSize();
+}
+
+// ===== INTERFACCIA UTENTE =====
+function draw() {
+    background(CONFIG.colors.background);
+    
+    drawHeader();
+    drawSlider();
+    
+    if (commodities.length === 0 || sortedCountries.length === 0) {
+        drawLoadingMessage();
+        return;
+    }
+
+    drawColumnLabels();
+    drawRowLabels();
+    drawMatrix(currentYear);
+    
+    if (isValidCell(hoveredRow, hoveredCol)) {
+        drawTooltip();
     }
 }
 
-function getCurrentYear() {
-    const yearSlider = document.getElementById("yearSlider");
-    return yearSlider ? parseInt(yearSlider.value) : currentYear;
+function drawHeader() {
+    // Header background
+    fill(CONFIG.colors.headerBackground);
+    noStroke();
+    rect(0, 0, width, CONFIG.layout.headerHeight);
+    
+    // Title
+    fill(CONFIG.colors.headerText);
+    textFont(CONFIG.typography.titleFont);
+    textSize(CONFIG.typography.titleSize);
+    textAlign(CENTER, CENTER);
+    text("Food Waste", width / 2, CONFIG.layout.headerHeight / 2);
+    
+    // Buttons
+    textFont(CONFIG.typography.fontFamily);
+    textSize(CONFIG.typography.buttonSize);
+    
+    for (let button of buttons) {
+        drawButton(button);
+    }
+}
+
+function drawButton(button) {
+    const isHover = dist(mouseX, mouseY, button.x, button.y) < CONFIG.layout.button.width / 2;
+    
+    fill(isHover ? CONFIG.colors.button.hover : CONFIG.colors.button.normal);
+    stroke(CONFIG.colors.headerText);
+    strokeWeight(2);
+    rect(button.x - CONFIG.layout.button.width/2, button.y - CONFIG.layout.button.height/2, 
+         CONFIG.layout.button.width, CONFIG.layout.button.height, CONFIG.layout.button.radius);
+    
+    fill(CONFIG.colors.button.text);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text(button.label, button.x, button.y);
+}
+
+function drawSlider() {
+    // Slider track
+    fill(CONFIG.colors.slider.track);
+    noStroke();
+    rect(slider.x, slider.y, slider.width, 10, 5);
+    
+    // Slider thumb
+    fill(CONFIG.colors.slider.thumb);
+    ellipse(slider.thumb.x, slider.y + 5, slider.thumb.width);
+    
+    // Year value
+    fill(CONFIG.colors.slider.text);
+    textFont(CONFIG.typography.fontFamily);
+    textSize(CONFIG.typography.sliderValueSize);
+    textAlign(CENTER, CENTER);
+    text(currentYear, slider.x + slider.width / 2, slider.y + 40);
+    
+    // Year range labels
+    textSize(12);
+    text(yearRange.min, slider.x, slider.y + 40);
+    text(yearRange.max, slider.x + slider.width, slider.y + 40);
+}
+
+function updateSliderThumb() {
+    const percent = (currentYear - yearRange.min) / (yearRange.max - yearRange.min);
+    slider.thumb.x = slider.x + percent * slider.width;
+}
+
+function mousePressed() {
+    // Check slider
+    if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
+        slider.thumb.dragging = true;
+        return;
+    }
+    
+    // Check slider track
+    if (mouseX >= slider.x && mouseX <= slider.x + slider.width &&
+        mouseY >= slider.y - 10 && mouseY <= slider.y + 20) {
+        updateYearFromSlider(mouseX);
+        slider.thumb.dragging = true;
+        return;
+    }
+    
+    // Check buttons
+    for (let button of buttons) {
+        if (dist(mouseX, mouseY, button.x, button.y) < CONFIG.layout.button.width / 2) {
+            button.action();
+            return;
+        }
+    }
+}
+
+function mouseDragged() {
+    if (slider.thumb.dragging) {
+        updateYearFromSlider(mouseX);
+    }
+}
+
+function mouseReleased() {
+    slider.thumb.dragging = false;
+}
+
+function updateYearFromSlider(x) {
+    const percent = constrain((x - slider.x) / slider.width, 0, 1);
+    currentYear = yearRange.min + round(percent * (yearRange.max - yearRange.min));
+    updateSliderThumb();
+    
+    // Riordina le nazioni per il nuovo anno
+    combinationCache = {};
+    currentCacheYear = null;
+    sortCountriesByCommodities(currentYear);
+    calculateCellSize();
+    redraw();
 }
 
 // ===== ORDINAMENTO NAZIONI =====
 function sortCountriesByCommodities(year) {
-    console.log(`Calcolo ordinamento per l'anno ${year}...`);
-    
     const countryCommodityCounts = [];
     
     for (let country of countries) {
@@ -152,79 +348,42 @@ function sortCountriesByCommodities(year) {
         });
     }
     
-    // Ordina in ordine decrescente (dalla nazione con più commodity a quella con meno)
     countryCommodityCounts.sort((a, b) => b.count - a.count);
-    
-    // Aggiorna l'array sortedCountries
     sortedCountries = countryCommodityCounts.map(item => item.name);
     
-    console.log(`Nazioni ordinate per l'anno ${year}: ${sortedCountries.length} nazioni totali`);
-    countryCommodityCounts.forEach((item, index) => {
-        console.log(`${index + 1}. ${item.name}: ${item.count} commodity`);
-    });
+    return sortedCountries;
 }
 
-// ===== LAYOUT =====
-function calculateCellSize() {
-    const availableW = width - CONFIG.layout.margin * 2;
-    const availableH = height - CONFIG.layout.margin * 2;
-
-    cellWidth = min(availableW / commodities.length, CONFIG.layout.maxCellWidth);
-    
-    // Usa sortedCountries.length per calcolare l'altezza delle celle
-    const calculatedHeight = availableH / sortedCountries.length;
-    cellHeight = constrain(
-        calculatedHeight,
-        CONFIG.layout.minCellHeight,
-        CONFIG.layout.maxCellHeight
-    );
-    
-    console.log(`Cell dimensions: ${cellWidth}x${cellHeight}, ${sortedCountries.length} countries`);
-}
-
-function windowResized() {
-    const dynamicHeight = calculateDynamicHeight();
-    resizeCanvas(windowWidth, dynamicHeight);
-    calculateCellSize();
-}
-
-// ===== RENDER SEMPLIFICATO =====
-function draw() {
-    background(CONFIG.colors.background);
-    
-    if (commodities.length === 0 || sortedCountries.length === 0) {
-        console.log("Waiting for data...");
-        return;
-    }
-
-    const year = getCurrentYear();
-    updateHoveredCell();
-    drawColumnLabels();
-    drawRowLabels();
-    drawMatrix(year);
-    
-    if (isValidCell(hoveredRow, hoveredCol)) {
-        drawTooltip();
-    }
+// ===== MATRIX RENDERING =====
+function drawLoadingMessage() {
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    fill(CONFIG.colors.text.primary);
+    text("Loading data...", width / 2, height / 2);
+    pop();
 }
 
 function updateHoveredCell() {
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
     hoveredCol = floor((mouseX - CONFIG.layout.margin) / cellWidth);
-    hoveredRow = floor((mouseY - CONFIG.layout.margin) / cellHeight);
+    hoveredRow = floor((mouseY - matrixY) / cellHeight);
 }
 
 function drawColumnLabels() {
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
     drawLabels(commodities, CONFIG.typography.columnSize, (i) => ({
         x: CONFIG.layout.margin + i * cellWidth + 5,
-        y: CONFIG.layout.margin - 15,
+        y: matrixY - 15,
         rotation: -PI / 4
     }));
 }
 
 function drawRowLabels() {
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
     drawLabels(sortedCountries, CONFIG.typography.rowSize, (i) => ({
         x: 10,
-        y: CONFIG.layout.margin + i * cellHeight + cellHeight / 2,
+        y: matrixY + i * cellHeight + cellHeight / 2,
         truncate: CONFIG.typography.maxCountryChars
     }), false);
 }
@@ -233,7 +392,7 @@ function drawLabels(items, fontSize, positionCallback, rotated = true) {
     push();
     textAlign(LEFT, CENTER);
     textSize(fontSize);
-    textFont(CONFIG.typography.fontFamily); 
+    textFont(CONFIG.typography.fontFamily);
     fill(CONFIG.colors.text.primary);
 
     for (let i = 0; i < items.length; i++) {
@@ -258,26 +417,25 @@ function drawLabels(items, fontSize, positionCallback, rotated = true) {
 }
 
 function drawMatrix(currentYear) {
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
+    
     if (currentCacheYear !== currentYear) {
         combinationCache = {};
         currentCacheYear = currentYear;
     }
     
-    // Debug: verifica che stiamo disegnando tutte le nazioni
-    if (sortedCountries.length > 0) {
-        console.log(`Drawing matrix: ${sortedCountries.length} countries x ${commodities.length} commodities`);
-    }
+    updateHoveredCell();
     
     for (let r = 0; r < sortedCountries.length; r++) {
         for (let c = 0; c < commodities.length; c++) {
-            drawCell(r, c, currentYear);
+            drawCell(r, c, currentYear, matrixY);
         }
     }
 }
 
-function drawCell(row, col, year) {
+function drawCell(row, col, year, matrixY) {
     const x = CONFIG.layout.margin + col * cellWidth;
-    const y = CONFIG.layout.margin + row * cellHeight;
+    const y = matrixY + row * cellHeight;
     
     const country = sortedCountries[row];
     const exists = checkCombinationCached(country, commodities[col], year);
@@ -326,18 +484,17 @@ function drawCellDot(x, y, isClicked) {
     ellipse(x + cellWidth / 2, y + cellHeight / 2, min(cellWidth, cellHeight) * 0.4);
 }
 
-// AGGIUNTA: Funzione per gestire il click del mouse
 function mouseClicked() {
     if (isValidCell(hoveredRow, hoveredCol)) {
         const country = sortedCountries[hoveredRow];
-        const exists = checkCombinationCached(country, commodities[hoveredCol], getCurrentYear());
+        const exists = checkCombinationCached(country, commodities[hoveredCol], currentYear);
         
         if (exists) {
             clickedCol = hoveredCol;
             clickedRow = hoveredRow;
             
             const countryName = country;
-            window.location.href = `../visione%20dettaglio%20waste/country.html?country=${encodeURIComponent(countryName)}`;
+            window.location.href = `../visione%20dettaglio%20waste/country.html?country=${encodeURIComponent(countryName)}&year=${currentYear}`;
             
             return false;
         }
@@ -348,33 +505,41 @@ function mouseClicked() {
     return true;
 }
 
+// ===== TOOLTIP =====
+function getWastePercentage(country, commodity, year) {
+    for (let i = 0; i < dataset.getRowCount(); i++) {
+        if (dataset.getNum(i, 'year') !== year) continue;
+        if (dataset.getString(i, 'country') !== country) continue;
+        if (dataset.getString(i, 'commodity') !== commodity) continue;
+        return dataset.getNum(i, 'loss_percentage');
+    }
+    return null;
+}
+
 function drawTooltip() {
     if (!isValidCell(hoveredRow, hoveredCol)) return;
 
     const country = sortedCountries[hoveredRow];
-    const exists = checkCombinationCached(country, commodities[hoveredCol], getCurrentYear());
+    const commodity = commodities[hoveredCol];
+    const exists = checkCombinationCached(country, commodity, currentYear);
     
-    // Calcola il numero di commodity per questa nazione
-    let commodityCount = 0;
-    for (let commodity of commodities) {
-        if (checkCombination(country, commodity, getCurrentYear())) {
-            commodityCount++;
-        }
-    }
-    
-    const percentage = (commodityCount / commodities.length * 100).toFixed(1);
-    
-    let tooltipText = `${country} — ${commodities[hoveredCol]}`;
-    tooltipText += `\nCommodity: ${commodityCount}/${commodities.length} (${percentage}%)`;
+    let tooltipText = `${country} - ${commodity}`;
     
     if (exists) {
+        const wastePercentage = getWastePercentage(country, commodity, currentYear);
+        if (wastePercentage !== null) {
+            tooltipText += `\n${wastePercentage.toFixed(1)}% waste`;
+        }
         tooltipText += '\nClick for details →';
+    } else {
+        tooltipText += '\nNo data available';
     }
     
     const lines = tooltipText.split('\n');
     const lineHeight = 16;
-    const padding = 8;
+    const padding = 12; // Aumentato il padding
     
+    // Calcola la larghezza massima del tooltip
     let maxWidth = 0;
     push();
     textSize(CONFIG.typography.tooltipSize);
@@ -386,29 +551,47 @@ function drawTooltip() {
     pop();
     
     const w = maxWidth + padding * 2;
-    const h = lines.length * lineHeight + padding * 2;
+    const h = lines.length * lineHeight + padding;
+    
+    // Posiziona il tooltip per non farlo uscire dallo schermo
+    let tooltipX = mouseX + 15;
+    let tooltipY = mouseY + 15;
+    
+    // Se il tooltip esce a destra, spostalo a sinistra del mouse
+    if (tooltipX + w > width - 10) {
+        tooltipX = mouseX - w - 15;
+    }
+    
+    // Se il tooltip esce in basso, spostalo sopra il mouse
+    if (tooltipY + h > height - 10) {
+        tooltipY = mouseY - h - 15;
+    }
     
     push();
     textSize(CONFIG.typography.tooltipSize);
-    textFont(CONFIG.typography.fontFamily); 
+    textFont(CONFIG.typography.fontFamily);
     
+    // Sfondo del tooltip
     fill(CONFIG.colors.tooltip.background);
     stroke(CONFIG.colors.tooltip.border);
-    rect(mouseX + 10, mouseY + 10, w, h, 4);
+    strokeWeight(1);
+    rect(tooltipX, tooltipY, w, h, 5);
     
+    // Testo del tooltip - ALLINEATO CORRETTAMENTE
     noStroke();
     fill(CONFIG.colors.text.tooltip);
+    textAlign(LEFT, TOP); // Importante: allineamento a sinistra in alto
     
     for (let i = 0; i < lines.length; i++) {
-        const yPos = mouseY + 26 + i * lineHeight;
+        const yPos = tooltipY + padding + i * lineHeight;
         
         if (i === lines.length - 1 && exists && lines[i].includes('Click')) {
             push();
             textStyle(BOLD);
-            text(lines[i], mouseX + 16, yPos);
+            text(lines[i], tooltipX + padding, yPos);
             pop();
         } else {
-            text(lines[i], mouseX + 16, yPos);
+            text(lines[i], tooltipX + padding, yPos);
         }
     }
     pop();
