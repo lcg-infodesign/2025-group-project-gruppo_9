@@ -79,7 +79,7 @@ function sketch1(p) {
 	let bgImage;
 
 	p.preload = () => {
-		//bgImage = p.loadImage("../../assets/img/sfondo.png");
+		bgImage = p.loadImage("assets/img/sfondo.png");
 	}
 
     p.setup = () => {
@@ -161,7 +161,7 @@ function sketch2(p) {
 	let bgImage;
 
 	p.preload = () => {
-		//bgImage = p.loadImage("../../assets/img/sfondo.png");
+		bgImage = p.loadImage("assets/img/sfondo.png");
 	}
 
     p.setup = () => {
@@ -241,7 +241,7 @@ function sketch3(p) {
 	let bgImage;
 
 	p.preload = () => {
-		//bgImage = p.loadImage("../../assets/img/sfondo.png");
+		bgImage = p.loadImage("assets/img/sfondo.png");
 	}
 
     p.setup = () => {
@@ -321,7 +321,7 @@ function sketch4(p) {
 	let bgImage;
 
 	p.preload = () => {
-		//bgImage = p.loadImage("../../assets/img/sfondo.png");
+		bgImage = p.loadImage("assets/img/sfondo.png");
 	}
 
     p.setup = () => {
