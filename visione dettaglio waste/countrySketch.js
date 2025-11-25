@@ -1,4 +1,4 @@
-// countrySketch.js (versione aggiornata: sfondo su body, canvas trasparente, decadi timeline, keyboard, mask fills)
+// countrySketch.js (versione aggiornata: gestione parametri URL)
 
 // --- globals
 let table;
@@ -17,10 +17,39 @@ const ASSETS_BASE = "assets/";
 const BASKET_FILE_ASSET = ASSETS_BASE + "basket.png";
 const BOTTOM_BIN_FILE_ASSET = ASSETS_BASE + "empty.basket.png";
 // fallback paths (uploaded to session)
-const BASKET_FILE_FALLBACK = "/mnt/data/basket.png";            // if you used different name, asset path used first
+const BASKET_FILE_FALLBACK = "/mnt/data/basket.png";            
 const BOTTOM_BIN_FILE_FALLBACK = "/mnt/data/empty.basket.png";
 const BACKGROUND_FILE = "assets/sfondo.png";
 const BACKGROUND_FILE_FALLBACK = "/mnt/data/sfondo.png";
+
+// --- Funzione per leggere i parametri dall'URL
+// --- Funzione per leggere i parametri dall'URL
+function getURLParams() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const urlCountry = params.get('country');
+        let urlYear = params.get('year');
+        
+        // Converti l'anno in numero, se presente
+        if (urlYear) {
+            urlYear = parseInt(urlYear);
+            if (isNaN(urlYear)) {
+                console.warn("Invalid year parameter:", params.get('year'));
+                urlYear = null;
+            }
+        }
+        
+        console.log("URL Parameters parsed:", { country: urlCountry, year: urlYear });
+        
+        return {
+            country: urlCountry,
+            year: urlYear
+        };
+    } catch (error) {
+        console.error("Error parsing URL parameters:", error);
+        return { country: null, year: null };
+    }
+}
 
 // normalize function for filenames
 function normalizeFilename(name) {
@@ -86,8 +115,7 @@ function setup() {
   } else {
     loadData();
     setupCountrySelect();
-    setupTimeline();
-    if (countries.length) selectedCountry = countries[0];
+    // setupTimeline() viene chiamato DOPO loadData() ora
     updateVisualization();
   }
 
@@ -125,12 +153,63 @@ function loadData() {
     if (!countries.includes(country)) countries.push(country);
   }
   countries.sort();
-  // set slider range based on found years (if slider exists)
+  
+  // Leggi i parametri dall'URL
+  const urlParams = getURLParams();
+  
+  console.log("URL Parameters:", urlParams);
+  
+  // Imposta l'anno dai parametri URL o usa il più recente
   const years = [...new Set(data.map(d => d.year))].sort((a,b)=>a-b);
+  
+  console.log("Available years in dataset:", years);
+  console.log("Max year:", Math.max(...years));
+  
   if (years.length) {
     const s = document.getElementById("yearSlider");
-    if (s) { s.min = Math.min(...years); s.max = Math.max(...years); s.value = s.max; selectedYear = +s.value; document.getElementById('yearLabel').innerText = selectedYear; }
+    if (s) { 
+      const minYear = Math.min(...years);
+      const maxYear = Math.max(...years);
+      
+      s.min = minYear; 
+      s.max = maxYear; 
+      
+      // IMPOSTA L'ANNO PRIMA DI setupTimeline
+      //if (urlParams.year && years.includes(urlParams.year)) {
+        selectedYear = urlParams.year;
+        console.log("Using year from URL:", selectedYear);
+      /*} else {
+        selectedYear = maxYear;
+        console.log("Using max year from dataset:", selectedYear);
+      }*/
+      
+      s.value = selectedYear;
+      document.getElementById('yearLabel').innerText = selectedYear;
+      
+      console.log("Slider configured:", { 
+        min: s.min, 
+        max: s.max, 
+        value: s.value,
+        selectedYear: selectedYear 
+      });
+    }
   }
+  
+  // Imposta la nazione dai parametri URL se disponibile
+  if (urlParams.country && countries.includes(urlParams.country)) {
+    selectedCountry = urlParams.country;
+    console.log("Using country from URL:", selectedCountry);
+  } else if (countries.length) {
+    selectedCountry = countries[0];
+    console.log("Using first country from dataset:", selectedCountry);
+  }
+  
+  // Setup UI dopo che i dati sono caricati
+  setTimeout(() => {
+    setupCountrySelect();
+    setupTimeline();
+    updateVisualization();
+  }, 100);
 }
 
 // ---------------- UI wiring ----------------
@@ -143,24 +222,47 @@ function setupCountrySelect() {
     opt.text = c;
     sel.appendChild(opt);
   }
+  
+  // Imposta la nazione dai parametri URL se disponibile
+  if (selectedCountry) {
+    sel.value = selectedCountry;
+  }
+  
   sel.addEventListener("change", () => {
     selectedCountry = sel.value;
     updateVisualization();
   });
-  if (countries.length) {
-    selectedCountry = countries[0];
-    sel.value = selectedCountry;
-  }
 }
 
 function setupTimeline() {
   const slider = document.getElementById("yearSlider");
   const marks = document.getElementById("yearMarks");
+  
+  if (!slider) {
+    console.error("Slider element not found!");
+    return;
+  }
+  
+  console.log("Setup Timeline - Current values:", {
+    min: slider.min,
+    max: slider.max, 
+    value: slider.value,
+    selectedYear: selectedYear
+  });
+  
   marks.innerHTML = "";
 
   // compute min/max
   const minY = parseInt(slider.min);
   const maxY = parseInt(slider.max);
+
+  // Verifica che i valori siano validi
+  if (isNaN(minY) || isNaN(maxY)) {
+    console.error("Invalid slider min/max values:", minY, maxY);
+    return;
+  }
+
+  console.log("Valid years range:", minY, "to", maxY);
 
   // only show decade labels (very close to slider)
   const firstDecade = Math.ceil(minY/10)*10;
@@ -168,8 +270,9 @@ function setupTimeline() {
   const decades = [];
   for (let y = firstDecade; y <= lastDecade; y += 10) decades.push(y);
 
+  console.log("Decades to show:", decades);
+
   // create labels positioned evenly in the marks container
-  // we fill marks with flexible spans to keep them aligned
   const totalSlots = decades.length;
   for (let i=0;i<totalSlots;i++){
     const lbl = document.createElement("div");
@@ -178,22 +281,33 @@ function setupTimeline() {
     // click to set year to decade
     lbl.addEventListener("click", (() => {
       const yy = decades[i];
-      return () => { slider.value = yy; document.getElementById('yearLabel').innerText = yy; selectedYear = yy; updateVisualization(); };
+      return () => { 
+        console.log("Decade clicked:", yy);
+        slider.value = yy; 
+        document.getElementById('yearLabel').innerText = yy; 
+        selectedYear = yy; 
+        updateVisualization(); 
+      };
     })());
     marks.appendChild(lbl);
   }
 
-  // slider change event
+  // slider change event - IMPORTANTE: non resettare selectedYear qui
   slider.addEventListener("input", (e) => {
+    console.log("Slider input:", e.target.value);
     selectedYear = parseInt(e.target.value);
     document.getElementById('yearLabel').innerText = selectedYear;
     updateVisualization();
   });
 
-  // initial label
-  document.getElementById('yearLabel').innerText = slider.value;
-  selectedYear = parseInt(slider.value);
+  // IMPORTANTE: NON resettare selectedYear qui!
+  // Usa il valore già impostato da loadData()
+  document.getElementById('yearLabel').innerText = selectedYear;
+  
+  console.log("Timeline setup complete - selectedYear:", selectedYear);
+  console.log("Slider final value:", slider.value);
 }
+
 
 // keyboard control for timeline
 function keyPressed() {
@@ -218,15 +332,21 @@ function keyPressed() {
 
 // ---------------- Visualization update ----------------
 function updateVisualization() {
+  console.log("Updating visualization for:", selectedCountry, selectedYear);
+  
   document.getElementById('title').innerText = selectedCountry + "  " + selectedYear;
 
   const filtered = data.filter(d => d.country === selectedCountry && d.year === selectedYear);
 
+  console.log("Filtered data for", selectedCountry, selectedYear + ":", filtered.length, "items");
+
   items = [];
   if (filtered.length === 0) {
+    console.log("No data found for", selectedCountry, "in", selectedYear);
     createBottomBins([]);
     return;
   }
+
 
   // conic sector above basket
   const spanDeg = 110;
@@ -346,24 +466,21 @@ async function createBottomBins(list) {
       const imgW = Math.round(emptyBinImg.width * scale);
       const imgH = Math.round(emptyBinImg.height * scale);
 
-      // compute inner area (the visible empty area inside the PNG) approximation:
-      // We'll use the whole image as mask but the visible fill region will be the transparent interior.
-      // create a graphics 'fillCanvas' and mask it using inverted alpha of emptyBinImg
+      // compute fill height in pixels proportional to item.loss
+      const fillPct = Math.max(0, Math.min(1, item.loss / 100));
+      const fillPx = Math.round(imgH * fillPct);
+
+      // draw solid color rectangle (from bottom)
       const fillCanvas = createGraphics(imgW, imgH);
       fillCanvas.pixelDensity(1);
       fillCanvas.clear();
-      // compute fill height in pixels proportional to item.loss
       
-
-      // draw solid color rectangle (from bottom)
-      fillCanvas.noStroke();
       // color choice: gradient-ish via simple solid for now
       const c = color(220, 60, 90, 220);
       fillCanvas.fill(red(c), green(c), blue(c), alpha(c));
       fillCanvas.rect(0, imgH - fillPx, imgW, fillPx);
 
       // create mask image by copying emptyBinImg and inverting its alpha channel
-      // copy emptyBinImg into a temporary image scaled to imgW x imgH
       const maskImg = createImage(imgW, imgH);
       maskImg.copy(emptyBinImg, 0, 0, emptyBinImg.width, emptyBinImg.height, 0, 0, imgW, imgH);
       maskImg.loadPixels();
@@ -372,7 +489,6 @@ async function createBottomBins(list) {
         // invert alpha: transparent interior (a=0) -> becomes 255, outer parts (a>0) -> lower
         const inv = 255 - a;
         // write luminance into mask alpha channel (p5 mask uses the brightness/alpha of mask)
-        // we'll set all channels to inv and alpha to inv
         maskImg.pixels[i] = inv;
         maskImg.pixels[i+1] = inv;
         maskImg.pixels[i+2] = inv;
@@ -386,41 +502,25 @@ async function createBottomBins(list) {
       fillImg.mask(maskImg);
 
       // convert masked result to data URL
-      // get underlying canvas of fillCanvas (p5 Graphics)
       const dataURL = fillCanvas.elt.toDataURL("image/png");
       // set as background of fillDiv and size/position to match
       fillDiv.style.backgroundImage = `url(${dataURL})`;
       fillDiv.style.backgroundSize = `${imgW}px ${imgH}px`;
       fillDiv.style.backgroundRepeat = "no-repeat";
       fillDiv.style.backgroundPosition = "center bottom";
-      // set height in px equal to imgH*fillPct — because masked image will show only that portion
-      // but since we use background positioned bottom we set fillDiv height to fillPx and align bottom
-
-      // position fillDiv absolutely relative to box
 
       // misure interne dichiarate (lo spazio vuoto dentro il cestino)
-const innerW = 76;  
-const innerH = 98;
+      const innerW = 76;  
+      const innerH = 98;
 
-// percentuale del riempimento
-const fillPct = Math.max(0, Math.min(1, item.loss / 100));
-const fillPx = Math.round(innerH * fillPct);
+      // centratura perfetta dentro il cestino
+      fillDiv.style.position = "absolute";
+      fillDiv.style.width = innerW + "px";
+      fillDiv.style.height = fillPx + "px";
 
-// centratura perfetta dentro il cestino
-fillDiv.style.position = "absolute";
-fillDiv.style.width = innerW + "px";
-fillDiv.style.height = fillPx + "px";
-
-// centratura orizzontale
-fillDiv.style.left = Math.round((box.clientWidth - innerW) / 2) + "px";
-
-
-
-
-
-
-
-      
+      // centratura orizzontale
+      fillDiv.style.left = Math.round((box.clientWidth - innerW) / 2) + "px";
+      fillDiv.style.bottom = "12px";
       fillDiv.style.pointerEvents = "none";
     } else {
       // fallback: no mask possible - simple colored fill anchored bottom with percentage of box height
