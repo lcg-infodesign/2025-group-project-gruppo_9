@@ -1,6 +1,6 @@
 // Tracciamento sketch
 let currentSketch = 0;
-const totalSketches = 4; // 5 sketch: da 0 a 4
+const totalSketches = 1; // SOLO 2 SKETCH: da 0 a 1
 
 // Array degli sketch
 let sketches = document.getElementsByClassName("sketch");
@@ -25,15 +25,6 @@ document.addEventListener("keydown", arrows);
 // Funzione per il cambio di sketch
 function changeSketch(selectedSketch) {
     if(selectedSketch !== currentSketch && selectedSketch <= totalSketches) {
-        // Gestione bottone "Show Matrix" (solo nell'ultima sezione)
-        if(selectedSketch === totalSketches) {
-            forwardButton.style.display = "none";
-            document.getElementById("leave").style.display = "block";
-        } else {
-            forwardButton.style.display = "block";
-            document.getElementById("leave").style.display = "none";
-        }
-
         // Sketch selezionato non più nascosto
         sketches[selectedSketch].hidden = false;
 
@@ -55,8 +46,14 @@ function changeSketch(selectedSketch) {
             sketches[selectedSketch].classList.remove("fade-in-class");
             currentSketch = selectedSketch;
             
-            // Avvia effetto macchina da scrivere per sketch 1-4
-            if(selectedSketch >= 1 && selectedSketch <= 4) {
+            if(selectedSketch === 0) {
+                // SKETCH 0: Mostra solo forward
+                forwardButton.style.display = "block";
+                document.getElementById("leave").style.display = "none";
+            } else if(selectedSketch === 1) {
+                // SKETCH 1: Nascondi tutto e avvia typewriter
+                forwardButton.style.display = "none";
+                document.getElementById("leave").style.display = "none";
                 startTypewriterEffect(selectedSketch);
             }
         }, 600);
@@ -70,26 +67,17 @@ function changeSketch(selectedSketch) {
 
 // Funzione per avviare il typewriter
 function startTypewriterEffect(sketchIndex) {
-    // Forza il redraw dello sketch per avviare il typewriter
     switch(sketchIndex) {
         case 1:
             if (window.sketch1Instance) {
                 window.sketch1Instance.startTyping();
-            }
-            break;
-        case 2:
-            if (window.sketch2Instance) {
-                window.sketch2Instance.startTyping();
-            }
-            break;
-        case 3:
-            if (window.sketch3Instance) {
-                window.sketch3Instance.startTyping();
-            }
-            break;
-        case 4:
-            if (window.sketch4Instance) {
-                window.sketch4Instance.startTyping();
+                
+                // Imposta callback per quando il typing è completo
+                window.onTypingComplete = () => {
+                    // Quando il typing finisce, mostra SOLO "Scopri di più"
+                    document.getElementById("leave").style.display = "block";
+                    forwardButton.style.display = "none"; // Assicurati che forward sia nascosto
+                };
             }
             break;
     }
@@ -97,5 +85,7 @@ function startTypewriterEffect(sketchIndex) {
 
 // Inizializza
 document.addEventListener('DOMContentLoaded', function() {
+    // All'inizio siamo sullo sketch 0, mostra solo forward
+    forwardButton.style.display = "block";
     document.getElementById("leave").style.display = "none";
 });
