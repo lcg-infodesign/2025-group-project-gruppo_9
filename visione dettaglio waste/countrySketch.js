@@ -353,8 +353,7 @@ async function createBottomBins(list) {
       fillCanvas.pixelDensity(1);
       fillCanvas.clear();
       // compute fill height in pixels proportional to item.loss
-      const fillPct = Math.max(0, Math.min(1, item.loss / 100.0));
-      const fillPx = Math.round(imgH * fillPct);
+      
 
       // draw solid color rectangle (from bottom)
       fillCanvas.noStroke();
@@ -396,12 +395,32 @@ async function createBottomBins(list) {
       fillDiv.style.backgroundPosition = "center bottom";
       // set height in px equal to imgH*fillPct — because masked image will show only that portion
       // but since we use background positioned bottom we set fillDiv height to fillPx and align bottom
+
       // position fillDiv absolutely relative to box
-      fillDiv.style.position = "absolute";
-      fillDiv.style.left = `${Math.round((boxW - imgW)/2)}px`; // center horizontally
-      fillDiv.style.width = `${imgW}px`;
-      fillDiv.style.bottom = `${14}px`; // matches CSS padding-bottom so it fits inside bin graphic
-      fillDiv.style.height = `${fillPx}px`;
+
+      // misure interne dichiarate (lo spazio vuoto dentro il cestino)
+const innerW = 76;  
+const innerH = 98;
+
+// percentuale del riempimento
+const fillPct = Math.max(0, Math.min(1, item.loss / 100));
+const fillPx = Math.round(innerH * fillPct);
+
+// centratura perfetta dentro il cestino
+fillDiv.style.position = "absolute";
+fillDiv.style.width = innerW + "px";
+fillDiv.style.height = fillPx + "px";
+
+// centratura orizzontale
+fillDiv.style.left = Math.round((box.clientWidth - innerW) / 2) + "px";
+
+
+
+
+
+
+
+      
       fillDiv.style.pointerEvents = "none";
     } else {
       // fallback: no mask possible - simple colored fill anchored bottom with percentage of box height
@@ -411,7 +430,7 @@ async function createBottomBins(list) {
       fillDiv.style.position = "absolute";
       fillDiv.style.left = "0";
       fillDiv.style.right = "0";
-      fillDiv.style.bottom = "14px";
+      fillDiv.style.bottom = "12px";
       fillDiv.style.background = "linear-gradient(180deg, rgba(220,65,90,0.95), rgba(200,40,80,0.95))";
       fillDiv.style.borderRadius = "4px";
       fillDiv.style.pointerEvents = "none";
