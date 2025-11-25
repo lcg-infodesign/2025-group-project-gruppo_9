@@ -7,7 +7,7 @@ const CONFIG = {
             inactive: '#f8f9fa', 
             hoverActive: '#C31A1A',
             hoverInactive: '#e9ecef',
-            clicked: '#8B0000', // Aggiunto colore per cella cliccata
+            clicked: '#8B0000',
             dot: '#7f4f24',
             stroke: '#dee2e6'
         },
