@@ -124,10 +124,10 @@ html,body { height:100%; margin:0; background:#fafafa; font-family: Inter, Arial
 body {
   margin: 0;
   padding: 0;
-  /*background-image: url("../assets/img/sfondo.png");
+  background-image: url("../assets/img/sfondo.png");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;*/
+  background-attachment: fixed;
   font-family: Inter, Arial, sans-serif;
   overflow-x: hidden;
 }
