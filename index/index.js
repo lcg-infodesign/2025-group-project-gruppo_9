@@ -42,7 +42,7 @@ function sketch0(p) {
 			p.noTint();
 		}
 
-		p.textFont("Georgia");
+		//p.textFont("Georgia");
 		p.fill(FG_COLOR);
 		p.noStroke();
 
@@ -53,7 +53,7 @@ function sketch0(p) {
 
 		// Sottotitolo
 		p.textSize(18 * rf);
-		p.text("FAO Dataset • 2005 - 2022", p.width / 2, p.height / 2 + 20);
+		p.text("Dataset della FAO sullo spreco alimentare", p.width / 2, p.height / 2 + 20);
 
 		// Freccia scroll down
 		createScrollButton(p);
