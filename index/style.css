@@ -117,8 +117,14 @@ canvas {
 	font-size: 1.5vw;
 	border: 1px solid var(--fgColor);
 	border-radius: 10px;
+	    transition: opacity 0.5s ease;
+
 }
 #leave:hover {
 	background-color: var(--fgColor);
 	color: var(--bgColor);
+}
+
+#leave.fade-in {
+    opacity: 1;
 }
