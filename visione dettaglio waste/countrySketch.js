@@ -9,44 +9,20 @@ let selectedYear = null;
 
 // images
 const ASSETS_BASE = "assets/";
-const BASKET_FILE_ASSET = ASSETS_BASE + "basket.png";
-const BOTTOM_BIN_FILE_ASSET = ASSETS_BASE + "empty.basket.png";
-// fallback paths (uploaded to session)
-const BASKET_FILE_FALLBACK = "/mnt/data/basket.png";            
-const BOTTOM_BIN_FILE_FALLBACK = "/mnt/data/empty.basket.png";
-const BACKGROUND_FILE = "assets/sfondo.png";
-const BACKGROUND_FILE_FALLBACK = "/mnt/data/sfondo.png";
+let img_empty = null;
+let img_over = null;
+let img_basket = null;
+let img_nodata = null;
+let commodityImgs = {};
 
-// --- Funzione per leggere i parametri dall'URL
-// --- Funzione per leggere i parametri dall'URL
-function getURLParams() {
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const urlCountry = params.get('country');
-        let urlYear = params.get('year');
-        
-        // Converti l'anno in numero, se presente
-        if (urlYear) {
-            urlYear = parseInt(urlYear);
-            if (isNaN(urlYear)) {
-                console.warn("Invalid year parameter:", params.get('year'));
-                urlYear = null;
-            }
-        }
-        
-        console.log("URL Parameters parsed:", { country: urlCountry, year: urlYear });
-        
-        return {
-            country: urlCountry,
-            year: urlYear
-        };
-    } catch (error) {
-        console.error("Error parsing URL parameters:", error);
-        return { country: null, year: null };
-    }
-}
+// visual params
+const COLS = 4;
+const INTERNAL_NOMINAL_W = 76;
+const INTERNAL_NOMINAL_H = 98;
+const CELL_GAP = 40;
+const CELL_PADDING = 12;
+const LEVEL2_COLOR = [220, 60, 90, 220];
 
-// normalize function for filenames
 function normalizeFilename(name) {
 if (!name) return "";
 return name.toLowerCase().trim()
@@ -81,14 +57,9 @@ clear();
 noStroke();
 textFont("Inter, Arial, sans-serif");
 
-  if (!table) {
-    console.error("CSV table not available in setup()");
-  } else {
-    loadData();
-    setupCountrySelect();
-    // setupTimeline() viene chiamato DOPO loadData() ora
-    updateVisualization();
-  }
+parseCSV();
+setupCountrySelect();
+setupTimelineUI();
 
 for (let c of commodities) {
 const n = normalizeFilename(c);
@@ -106,183 +77,73 @@ const sel = document.getElementById("countrySelect");
 if (sel) sel.value = selectedCountry;
 }
 
-// ---------------- DATA LOADING ----------------
-function loadData() {
-  data = [];
-  for (let r = 0; r < table.getRowCount(); r++) {
-    const row = table.getRow(r);
-    const country = row.getString("country");
-    const commodity = row.getString("commodity");
-    const year = int(row.getString("year"));
-    const lossRaw = row.getString("loss_percentage");
-    const loss = parseFloat(String(lossRaw).replace(",", "."));
-    if (!country || !commodity || isNaN(year) || isNaN(loss)) continue;
-    data.push({ country, commodity, year, loss });
-    if (!countries.includes(country)) countries.push(country);
-  }
-  countries.sort();
-  
-  // Leggi i parametri dall'URL
-  const urlParams = getURLParams();
-  
-  console.log("URL Parameters:", urlParams);
-  
-  // Imposta l'anno dai parametri URL o usa il più recente
-  const years = [...new Set(data.map(d => d.year))].sort((a,b)=>a-b);
-  
-  console.log("Available years in dataset:", years);
-  console.log("Max year:", Math.max(...years));
-  
-  if (years.length) {
-    const s = document.getElementById("yearSlider");
-    if (s) { 
-      const minYear = Math.min(...years);
-      const maxYear = Math.max(...years);
-      
-      s.min = minYear; 
-      s.max = maxYear; 
-      
-      // IMPOSTA L'ANNO PRIMA DI setupTimeline
-      //if (urlParams.year && years.includes(urlParams.year)) {
-        selectedYear = urlParams.year;
-        console.log("Using year from URL:", selectedYear);
-      /*} else {
-        selectedYear = maxYear;
-        console.log("Using max year from dataset:", selectedYear);
-      }*/
-      
-      s.value = selectedYear;
-      document.getElementById('yearLabel').innerText = selectedYear;
-      
-      console.log("Slider configured:", { 
-        min: s.min, 
-        max: s.max, 
-        value: s.value,
-        selectedYear: selectedYear 
-      });
-    }
-  }
-  
-  // Imposta la nazione dai parametri URL se disponibile
-  if (urlParams.country && countries.includes(urlParams.country)) {
-    selectedCountry = urlParams.country;
-    console.log("Using country from URL:", selectedCountry);
-  } else if (countries.length) {
-    selectedCountry = countries[0];
-    console.log("Using first country from dataset:", selectedCountry);
-  }
-  
-  // Setup UI dopo che i dati sono caricati
-  setTimeout(() => {
-    setupCountrySelect();
-    setupTimeline();
-    updateVisualization();
-  }, 100);
+updateVisualization();
+}
+
+function parseCSV() {
+data = [];
+commodities = [];
+countries = [];
+
+if (!table) return;
+
+for (let r = 0; r < table.getRowCount(); r++) {
+const row = table.getRow(r);
+const country = row.getString("country");
+const commodity = row.getString("commodity");
+const year = parseInt(row.getString("year"));
+let loss = parseFloat(String(row.getString("loss_percentage")).replace(",", "."));
+loss = isNaN(loss) ? NaN : loss;
+
+data.push({ country, commodity, year, loss });
+
+if (commodity && !commodities.includes(commodity)) commodities.push(commodity);
+if (country && !countries.includes(country)) countries.push(country);
+
+
+}
+
+countries.sort();
+commodities.sort();
 }
 
 function setupCountrySelect() {
-  const sel = document.getElementById("countrySelect");
-  sel.innerHTML = "";
-  for (let c of countries) {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.text = c;
-    sel.appendChild(opt);
-  }
-  
-  // Imposta la nazione dai parametri URL se disponibile
-  if (selectedCountry) {
-    sel.value = selectedCountry;
-  }
-  
-  sel.addEventListener("change", () => {
-    selectedCountry = sel.value;
-    updateVisualization();
-  });
+const sel = document.getElementById("countrySelect");
+if (!sel) return;
+sel.innerHTML = "";
+for (let c of countries) {
+const opt = document.createElement("option");
+opt.value = c;
+opt.text = c;
+sel.appendChild(opt);
+}
+sel.addEventListener("change", () => {
+selectedCountry = sel.value;
+updateVisualization();
+});
+if (countries.length) {
+selectedCountry = countries[0];
+sel.value = selectedCountry;
+}
 }
 
-function setupTimeline() {
-  const slider = document.getElementById("yearSlider");
-  const marks = document.getElementById("yearMarks");
-  
-  if (!slider) {
-    console.error("Slider element not found!");
-    return;
-  }
-  
-  console.log("Setup Timeline - Current values:", {
-    min: slider.min,
-    max: slider.max, 
-    value: slider.value,
-    selectedYear: selectedYear
-  });
-  
-  marks.innerHTML = "";
+function setupTimelineUI() {
+const slider = document.getElementById("yearSlider");
+if (!slider) return;
 
-  // compute min/max
-  const minY = parseInt(slider.min);
-  const maxY = parseInt(slider.max);
-
-  // Verifica che i valori siano validi
-  if (isNaN(minY) || isNaN(maxY)) {
-    console.error("Invalid slider min/max values:", minY, maxY);
-    return;
-  }
-
-  console.log("Valid years range:", minY, "to", maxY);
-
-  // only show decade labels (very close to slider)
-  const firstDecade = Math.ceil(minY/10)*10;
-  const lastDecade = Math.floor(maxY/10)*10;
-  const decades = [];
-  for (let y = firstDecade; y <= lastDecade; y += 10) decades.push(y);
-
-  console.log("Decades to show:", decades);
-
-  // create labels positioned evenly in the marks container
-  const totalSlots = decades.length;
-  for (let i=0;i<totalSlots;i++){
-    const lbl = document.createElement("div");
-    lbl.className = "decadeLabel";
-    lbl.innerText = decades[i];
-    // click to set year to decade
-    lbl.addEventListener("click", (() => {
-      const yy = decades[i];
-      return () => { 
-        console.log("Decade clicked:", yy);
-        slider.value = yy; 
-        document.getElementById('yearLabel').innerText = yy; 
-        selectedYear = yy; 
-        updateVisualization(); 
-      };
-    })());
-    marks.appendChild(lbl);
-  }
-
-  // slider change event - IMPORTANTE: non resettare selectedYear qui
-  slider.addEventListener("input", (e) => {
-    console.log("Slider input:", e.target.value);
-    selectedYear = parseInt(e.target.value);
-    document.getElementById('yearLabel').innerText = selectedYear;
-    updateVisualization();
-  });
-
-  // IMPORTANTE: NON resettare selectedYear qui!
-  // Usa il valore già impostato da loadData()
-  document.getElementById('yearLabel').innerText = selectedYear;
-  
-  console.log("Timeline setup complete - selectedYear:", selectedYear);
-  console.log("Slider final value:", slider.value);
+const years = Array.from(new Set(data.map(d => d.year))).filter(y => !isNaN(y)).sort((a, b) => a - b);
+if (years.length) {
+slider.min = Math.min(...years);
+slider.max = Math.max(...years);
+if (!slider.value) slider.value = slider.max;
 }
 
-
-// keyboard control for timeline
-function keyPressed() {
-  // left/right arrows adjust year by 1
-  const slider = document.getElementById("yearSlider");
-  if (!slider) return;
-  const minY = parseInt(slider.min);
-  const maxY = parseInt(slider.max);
+slider.addEventListener("input", e => {
+selectedYear = parseInt(e.target.value);
+const lbl = document.getElementById("yearLabel");
+if (lbl) lbl.innerText = selectedYear;
+updateVisualization();
+});
 
 const marks = document.getElementById("yearMarks");
 if (marks) {
@@ -327,47 +188,8 @@ updateVisualization();
 }
 
 function updateVisualization() {
-  console.log("Updating visualization for:", selectedCountry, selectedYear);
-  
-  document.getElementById('title').innerText = selectedCountry + "  " + selectedYear;
-
-  const filtered = data.filter(d => d.country === selectedCountry && d.year === selectedYear);
-
-  console.log("Filtered data for", selectedCountry, selectedYear + ":", filtered.length, "items");
-
-  items = [];
-  if (filtered.length === 0) {
-    console.log("No data found for", selectedCountry, "in", selectedYear);
-    createBottomBins([]);
-    return;
-  }
-
-
-  // conic sector above basket
-  const spanDeg = 110;
-  const centerAngle = -PI/2;
-  const startAngle = centerAngle - radians(spanDeg/2);
-  const endAngle = centerAngle + radians(spanDeg/2);
-
-  const centerX = width/2;
-  const basketY = height/2.5 ; // basket drawn lower, spawn above
-  const spawnRadius = Math.min(260, height*0.26);
-
-  for (let i = 0; i < filtered.length; i++) {
-    const d = filtered[i];
-    const ang = map(i, 0, Math.max(1, filtered.length-1), startAngle, endAngle);
-    const extra = map(i % 3, 0, 2, -18, 18);
-    const rx = spawnRadius + extra;
-    const size = map(d.loss, 0, 20, 18, 70);
-    const x = centerX + cos(ang) * rx;
-    const y = basketY + sin(ang) * rx * 0.5;
-    const norm = normalizeFilename(d.commodity);
-    let img = commodityImgs[norm];
-    if (!img) img = commodityImgs[d.commodity.toLowerCase()];
-    items.push({commodity: d.commodity, loss: d.loss, x, y, size, img});
-  }
-
-  createBottomBins(filtered);
+const titleEl = document.getElementById("title");
+if (titleEl) titleEl.innerText = (selectedCountry || "—") + "  " + (selectedYear || "");
 }
 
 function draw() {
@@ -437,14 +259,14 @@ const s = Math.min(availW / img_basket.width, availH / img_basket.height);
 const bw = Math.round(img_basket.width * s);
 const bh = Math.round(img_basket.height * s);
 imageMode(CORNER);
-image(img_basket, x  +  (w - bw) / 2, y + (h - bh) / 2, bw, bh);
+image(img_basket, x + (w - bw) / 2, y + (h - bh) / 2, bw, bh);
 }
 if (img_nodata && img_nodata.width) {
 const s2 = Math.min(baseW / img_nodata.width, baseH / img_nodata.height);
 const nw = Math.round(img_nodata.width * s2);
 const nh = Math.round(img_nodata.height * s2);
 imageMode(CORNER);
-image(img_nodata, x + (w - nw) / 2, y + (h - nh) / 2, nw/2, nh/2);
+image(img_nodata, x + (w - nw) / 2, y + (h - nh) / 2, nw, nh);
 } else {
 fill(100);
 noStroke();
@@ -519,7 +341,5 @@ pop();
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, 600);
-  updateVisualization();
-}
+resizeCanvas(windowWidth, windowHeight);
 }
