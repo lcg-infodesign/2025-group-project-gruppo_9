@@ -1,8 +1,9 @@
 <!doctype html>
+
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Country — Food Loss Visualization</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,13 +13,14 @@
     <a href="../main/main.html" class="button">Go Back</a>
     <h1 id="title">Loading...</h1>
     <select id="countrySelect"></select>
-    
   </header>
 
   <!-- contenitore per il canvas p5 -->
+
   <div id="canvasContainer"></div>
 
   <!-- timeline: slider + ticks -->
+
   <div id="timelineContainer">
     <input id="yearSlider" type="range" min="1975" max="2024" step="1" value="2024">
     <div id="yearLabelWrap">
@@ -27,12 +29,13 @@
     <div id="yearMarks"></div>
   </div>
 
-  <!-- rettangoli / cestini in basso ) -->
-  <section id="bottomScroll"></section>
+  <!-- tooltip opzionale -->
 
   <div id="tooltip"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+
   <script src="countrySketch.js"></script>
+
 </body>
 </html>

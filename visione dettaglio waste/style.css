@@ -1,175 +1,167 @@
 :root {
-  --ui-bg: rgba(255,255,255,0.95);
-  --accent: #222;
+--ui-bg: rgba(255,255,255,0.95);
+--accent: #222;
 }
+
 * { box-sizing: border-box; }
-html,body { height:100%; margin:0; background:#fafafa; font-family: Inter, Arial, sans-serif; }
 
-/* header with title + select */
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+background: #fafafa;
+font-family: Inter, Arial, sans-serif;
+overflow-x: hidden;
+}
+
+/* --- HEADER --- */
 #headerBar {
-  width:100%;
-  background-color: #ffffff89;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:24px;
-  padding:18px 12px;
-  position:relative;
+width: 100%;
+background-color: #ffffff89;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 24px;
+padding: 18px 12px;
+position: relative;
+z-index: 10;
 }
-#headerBar h1 { margin-left:200px; font-size:40px; color:#f10707; }
-#countrySelect {  font-size:16px; padding:6px 10px;  border-radius:6px; }
-
+#headerBar h1 {
+margin-left: 200px;
+font-size: 40px;
+color: #f10707;
+}
+#countrySelect {
+font-size: 16px;
+padding: 6px 10px;
+border-radius: 6px;
+}
 a.button {
-    padding: 12px 24px;
-  background: transparent;
-  border: 2px solid #EC3434;
-  color: #EC3434;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 0.9rem;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  
+padding: 12px 24px;
+background: transparent;
+border: 2px solid #EC3434;
+color: #EC3434;
+font-family: 'Inter', sans-serif;
+font-weight: 500;
+font-size: 0.9rem;
+border-radius: 25px;
+cursor: pointer;
+transition: all 0.3s ease;
+text-decoration: none;
 }
-
 a.button:hover {
-  background: #EC3434;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
+background: #EC3434;
+color: #ffffff;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
 }
-
 a.button:active {
-  transform: translateY(0);
+transform: translateY(0);
 }
 
-/* canvas container centered */
+/* --- CANVAS --- */
 #canvasContainer {
-  width:100%;
-  display:flex;
-  justify-content:center;
-  margin-top:0px;
+width: 100%;
+min-height: calc(100vh - 180px); /* lascia spazio a header + timeline */
+position: relative;
+display: flex;
+justify-content: center;
+margin-top: 0;
 }
 
-/* timeline area */
+/* --- TIMELINE --- */
 #timelineContainer {
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  margin:28px 0 8px 0;
-  
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+margin: 28px 0 8px 0;
+z-index: 10;
 }
-#yearSlider { width:90%; max-width:1200px; }
-#yearLabelWrap { width:90%; max-width:1200px; display:flex; justify-content:center;  }
-#yearLabel { font-weight:700; padding:4px 10px; background:var(--ui-bg); border-radius:6px; }
+#yearSlider {
+width: 90%;
+max-width: 1200px;
+}
+#yearLabelWrap {
+width: 90%;
+max-width: 1200px;
+display: flex;
+justify-content: center;
+}
+#yearLabel {
+font-weight: 700;
+padding: 4px 10px;
+background: var(--ui-bg);
+border-radius: 6px;
+}
 
 /* ticks / marks */
-#yearMarks { width:90%; max-width:1200px; display:flex; align-items:flex-start; justify-content:space-between; gap:3px; margin-top:3px; font-size:12px; color:#444;background: transparent !important; }
-.yearTick { width:2px; height:10px; background:#666; display:inline-block; margin: 2px; }
-.yearLabel { font-size:12px; margin-top:0px; }
-
-/* Each bottom bin wrapper centers label under the image */
-.bottomBinWrapper {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:140px;
-  background: transparent !important;
+#yearMarks {
+width: 90%;
+max-width: 1200px;
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 3px;
+margin-top: 3px;
+font-size: 12px;
+color: #444;
+background: transparent !important;
+}
+.yearTick {
+width: 2px;
+height: 10px;
+background: #666;
+display: inline-block;
+margin: 2px;
+}
+.yearLabel {
+font-size: 12px;
+margin-top: 0px;
 }
 
-
-
-/* label under each bin */
-.bottomLabel {
-  width:120px;
-  text-align:center;
-  font-size:13px;
-  margin-top:8px;
-  color:#222;
-}
-
-/* tooltip */
+/* --- TOOLTIP --- */
 #tooltip {
-  position: fixed;
-  display: none;
-  pointer-events: none;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding:8px 10px;
-  border-radius:6px;
-  font-size:13px;
-  z-index:9999;
+position: fixed;
+display: none;
+pointer-events: none;
+background: rgba(0,0,0,0.85);
+color: #fff;
+padding: 8px 10px;
+border-radius: 6px;
+font-size: 13px;
+z-index: 9999;
 }
 
-/* responsive tweaks */
-@media (max-width:720px) {
-  #headerBar h1 { font-size:26px; }
-  #yearSlider { width:95%; }
-  .bottomBinWrapper { width:100px; }
-  .bottomBin { width:84px; height:130px; }
+/* --- RESPONSIVE --- */
+@media (max-width: 720px) {
+#headerBar h1 { font-size: 26px; }
+#yearSlider { width: 95%; }
 }
 
-/* --- BACKGROUND INTERO SITO --- */
+/* --- BACKGROUND SITO --- */
 body {
-  margin: 0;
-  padding: 0;
-  background-image: url("assets/sfondo.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  font-family: Inter, Arial, sans-serif;
-  overflow-x: hidden;
+margin: 0;
+padding: 0;
+background-image: url("assets/sfondo.png");
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
+font-family: Inter, Arial, sans-serif;
 }
 
-/* --- CANVAS TRASPARENTE --- */
-#canvasContainer {
-  position: relative;
-  width: 100%;
-  height: 600px;
-}
-
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: transparent !important;
-}
-
-/* --- CESTINI SOTTO CENTRATI --- */
-#bottomScroll {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 40px;
-  padding: 40px 20px;
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-.bottomBin {
-  width: 120px;
-  height: 140px;
-  background-color: transparent;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: bottom center;
-  position: relative;
-}
-
-.bottomFill {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 75%;
-  background: rgba(255, 120, 0, 0.65);
-  background-color: transparent;
-  border-radius: 4px;
-  pointer-events: none;
+/* --- FOOTER (opzionale) --- */
+#timelineFooter {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 70px;
+background: rgba(255,255,255,0.85);
+z-index: 9999;
+backdrop-filter: blur(4px);
+display: flex;
+align-items: center;
+justify-content: center;
 }
