@@ -35,7 +35,10 @@ const CONFIG = {
     layout: {
         headerHeight: 120,
         sliderHeight: 100,
-        margin: 100,
+        margin: {
+            horizontal: 300,
+            vertical: 100
+        },
         minCellHeight: 30,
         maxCellHeight: 50,
         maxCellWidth: 120,
@@ -43,6 +46,10 @@ const CONFIG = {
             width: 120,
             height: 40,
             radius: 25
+        },
+        decorativeImages: {
+            size: 80, 
+            opacity: 150 
         }
     },
     typography: {
@@ -72,6 +79,7 @@ let slider = {
 };
 let buttons = [];
 let matrixY = 0; 
+let decorativeImages = []; 
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -80,6 +88,13 @@ let currentCacheYear = null;
 // ===== INIZIALIZZAZIONE =====
 function preload() {
     dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
+
+    decorativeImages = [
+        loadImage('../assets/img/mela.png'),
+        loadImage('../assets/img/banana.png'),
+        loadImage('../assets/img/pollo.png'),
+        loadImage('../assets/img/insalata.png')
+    ];
 }
 
 function initializeData() {
@@ -124,7 +139,7 @@ function setup() {
 function calculateTotalHeight() {
     const headerHeight = CONFIG.layout.headerHeight;
     const sliderHeight = CONFIG.layout.sliderHeight;
-    const matrixAreaHeight = CONFIG.layout.margin * 2 + (sortedCountries.length * CONFIG.layout.minCellHeight);
+    const matrixAreaHeight = CONFIG.layout.margin.vertical * 2 + (sortedCountries.length * CONFIG.layout.minCellHeight);
     const minHeight = 800;
     
     // Calcola l'altezza totale necessaria
@@ -141,31 +156,31 @@ function setupUI() {
     slider.x = (width - slider.width) / 2;
     slider.y = CONFIG.layout.headerHeight + 60;
     updateSliderThumb();
-    matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + 20;
+    matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     
     // Setup buttons
     buttons = [
         {
             label: "Home",
-            x: 240,
+            x: CONFIG.layout.margin.horizontal,
             y: CONFIG.layout.headerHeight / 2,
             action: () => window.location.href = '../index.html'
         },
         {
-            label: "Dataset", 
-            x: 380,
+            label: "I dati", 
+            x: width - CONFIG.layout.margin.horizontal - 240,
             y: CONFIG.layout.headerHeight / 2,
-            action: () => window.location.href = 'methodology.html'
+            action: () => window.location.href = '../dati/dati.html'
         },
         {
-            label: "About",
-            x: width - 380,
+            label: "Il team",
+            x: width - CONFIG.layout.margin.horizontal - 100,
             y: CONFIG.layout.headerHeight / 2,
             action: () => window.location.href = 'about.html'
         },
         {
             label: "?",
-            x: width - 240,
+            x: width - CONFIG.layout.margin.horizontal,
             y: CONFIG.layout.headerHeight / 2,
             action: () => window.location.href = 'domanda.html'
         }
@@ -173,10 +188,10 @@ function setupUI() {
 }
 
 function calculateCellSize() {
-    const availableW = width - CONFIG.layout.margin * 2;
+    const availableW = width - CONFIG.layout.margin.horizontal * 2;
     
     // Per l'altezza, usa tutto lo spazio disponibile nel canvas
-    const availableH = height - matrixY - CONFIG.layout.margin;
+    const availableH = height - matrixY - CONFIG.layout.margin.vertical;
 
     cellWidth = min(availableW / commodities.length, CONFIG.layout.maxCellWidth);
     
@@ -188,7 +203,7 @@ function calculateCellSize() {
         CONFIG.layout.maxCellHeight
     );
     
-    console.log(`Available H: ${availableH}, Cell Height: ${cellHeight}, Total rows height: ${sortedCountries.length * cellHeight}`);
+    console.log(`Available W: ${availableW}, Available H: ${availableH}, Cell Height: ${cellHeight}`);
 }
 
 function windowResized() {
@@ -204,6 +219,7 @@ function draw() {
     
     drawHeader();
     drawSlider();
+    drawDecorativeImages();
     
     if (commodities.length === 0 || sortedCountries.length === 0) {
         drawLoadingMessage();
@@ -226,11 +242,11 @@ function drawHeader() {
     rect(0, 0, width, CONFIG.layout.headerHeight);
     
     // Title
-    fill(CONFIG.colors.headerText);
+    /*fill(CONFIG.colors.headerText);
     textFont(CONFIG.typography.titleFont);
     textSize(CONFIG.typography.titleSize);
     textAlign(CENTER, CENTER);
-    text("Food Waste", width / 2, CONFIG.layout.headerHeight / 2);
+    text("Food Waste", width / 2, CONFIG.layout.headerHeight / 2);*/
     
     // Buttons
     textFont(CONFIG.typography.fontFamily);
@@ -247,8 +263,16 @@ function drawButton(button) {
     fill(isHover ? CONFIG.colors.button.hover : CONFIG.colors.button.normal);
     stroke(CONFIG.colors.headerText);
     strokeWeight(2);
-    rect(button.x - CONFIG.layout.button.width/2, button.y - CONFIG.layout.button.height/2, 
-         CONFIG.layout.button.width, CONFIG.layout.button.height, CONFIG.layout.button.radius);
+    
+    // Se il bottone è "?", disegna un cerchio invece di un rettangolo
+    if (button.label === "?") {
+        const circleDiameter = min(CONFIG.layout.button.width, CONFIG.layout.button.height);
+        ellipse(button.x, button.y, circleDiameter, circleDiameter);
+    } else {
+        // Per gli altri bottoni, usa il rettangolo normale
+        rect(button.x - CONFIG.layout.button.width/2, button.y - CONFIG.layout.button.height/2, 
+             CONFIG.layout.button.width, CONFIG.layout.button.height, CONFIG.layout.button.radius);
+    }
     
     fill(CONFIG.colors.button.text);
     noStroke();
@@ -278,6 +302,58 @@ function drawSlider() {
     text(yearRange.min, slider.x, slider.y + 40);
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
 }
+
+// ===== FUNZIONE PER DISEGNARE LE IMMAGINI DECORATIVE =====
+function drawDecorativeImages() {
+    if (decorativeImages.length === 0) return;
+    
+    const imgSize = CONFIG.layout.decorativeImages.size;
+    
+    // Posizioni delle 4 immagini (regolabili)
+    const positions = [
+        // Sinistra - in alto
+        { 
+            x: CONFIG.layout.margin.horizontal * 0.3, 
+            y: CONFIG.layout.headerHeight + 300 
+        },
+        // Sinistra - in basso
+        { 
+            x: CONFIG.layout.margin.horizontal * 0.3, 
+            y: height/3
+        },
+        // Destra - in alto
+        { 
+            x: width - CONFIG.layout.margin.horizontal * 0.6, 
+            y: height/5
+        },
+        // Destra - in basso
+        { 
+            x: width - CONFIG.layout.margin.horizontal * 0.6, 
+            y: height - 500 
+        }
+    ];
+    
+    push();
+    //tint(255, opacity); // Applica trasparenza
+    
+    for (let i = 0; i < Math.min(decorativeImages.length, 4); i++) {
+        const img = decorativeImages[i];
+        const pos = positions[i];
+        
+        if (img && img.width > 0) {
+            imageMode(CENTER);
+            // Aggiungi una leggera rotazione casuale per un effetto più naturale
+            push();
+            translate(pos.x, pos.y);
+            rotate(random(-0.1, 0.1)); // Rotazione molto leggera
+            image(img, 0, 0, imgSize, imgSize * (img.height / img.width));
+            pop();
+        }
+    }
+    
+    pop();
+}
+
 
 function updateSliderThumb() {
     const percent = (currentYear - yearRange.min) / (yearRange.max - yearRange.min);
@@ -365,24 +441,24 @@ function drawLoadingMessage() {
 }
 
 function updateHoveredCell() {
-    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
-    hoveredCol = floor((mouseX - CONFIG.layout.margin) / cellWidth);
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
+    hoveredCol = floor((mouseX - CONFIG.layout.margin.horizontal) / cellWidth);
     hoveredRow = floor((mouseY - matrixY) / cellHeight);
 }
 
 function drawColumnLabels() {
-    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     drawLabels(commodities, CONFIG.typography.columnSize, (i) => ({
-        x: CONFIG.layout.margin + i * cellWidth + 5,
+        x: CONFIG.layout.margin.horizontal + i * cellWidth + 5,
         y: matrixY - 15,
         rotation: -PI / 4
     }));
 }
 
 function drawRowLabels() {
-    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     drawLabels(sortedCountries, CONFIG.typography.rowSize, (i) => ({
-        x: 10,
+        x: CONFIG.layout.margin.horizontal - 100,
         y: matrixY + i * cellHeight + cellHeight / 2,
         truncate: CONFIG.typography.maxCountryChars
     }), false);
@@ -417,7 +493,7 @@ function drawLabels(items, fontSize, positionCallback, rotated = true) {
 }
 
 function drawMatrix(currentYear) {
-    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin;
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     
     if (currentCacheYear !== currentYear) {
         combinationCache = {};
@@ -434,7 +510,7 @@ function drawMatrix(currentYear) {
 }
 
 function drawCell(row, col, year, matrixY) {
-    const x = CONFIG.layout.margin + col * cellWidth;
+    const x = CONFIG.layout.margin.horizontal + col * cellWidth;
     const y = matrixY + row * cellHeight;
     
     const country = sortedCountries[row];
@@ -537,7 +613,7 @@ function drawTooltip() {
     
     const lines = tooltipText.split('\n');
     const lineHeight = 16;
-    const padding = 12; // Aumentato il padding
+    const padding = 12;
     
     // Calcola la larghezza massima del tooltip
     let maxWidth = 0;
@@ -580,7 +656,7 @@ function drawTooltip() {
     // Testo del tooltip - ALLINEATO CORRETTAMENTE
     noStroke();
     fill(CONFIG.colors.text.tooltip);
-    textAlign(LEFT, TOP); // Importante: allineamento a sinistra in alto
+    textAlign(LEFT, TOP);
     
     for (let i = 0; i < lines.length; i++) {
         const yPos = tooltipY + padding + i * lineHeight;

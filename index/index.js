@@ -52,12 +52,7 @@ function sketch1(p) {
                     'Ma soprattutto: sappiamo quante cose non sappiamo?';
     let typing = false;
     let hasTyped = false;
-    let typingComplete = false; // NUOVA VARIABILE
-	let bgImage;
-
-	p.preload = () => {
-		bgImage = p.loadImage("assets/img/sfondoQuadri.png");
-	}
+    let typingComplete = false; 
 
     p.setup = () => {
         let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
@@ -72,7 +67,7 @@ function sketch1(p) {
                     hasTyped = true;
                 }
             },
-            isTypingComplete: () => typingComplete // NUOVA FUNZIONE
+            isTypingComplete: () => typingComplete 
         };
     }
 

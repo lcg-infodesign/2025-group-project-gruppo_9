@@ -1,0 +1,153 @@
+/* Stili specifici per la pagina dataset */
+.content-block {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    min-height: 60vh;
+}
+
+.content-block:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.text-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.image-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tic-tac-image {
+    max-width: 100%;
+    height: auto;
+    animation: tic-tac 4s ease-in-out infinite;
+}
+
+/* Animazione tic-tac (solo rotazione sinistra-destra) */
+@keyframes tic-tac {
+    0%, 100% {
+        transform: rotate(-3deg);
+    }
+    50% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Timing leggermente diversi per ogni immagine */
+.tic-tac-image:nth-child(1) {
+  animation-name: tic-tac; /* nome dell'animazione */
+  animation-duration: 2s; /* durata di un ciclo completo */
+  animation-timing-function: steps(1, end); /* crea un movimento a scatti */
+  animation-iteration-count: infinite; /* ripeti all'infinito */
+}
+
+@keyframes tic-tac1 {
+    0%, 100% {
+        transform: rotate(-3deg);
+    }
+    50% {
+        transform: rotate(3deg);
+    }
+}
+
+h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #283618;
+    margin-bottom: 20px;
+}
+
+p.underline {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+ul {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #283618;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+.bullet-points {
+    list-style-type: disc;
+    margin-left: 30px;
+}
+
+@media (max-width: 768px) {
+    .content-block {
+        flex-direction: column !important;
+        padding: 40px 20px;
+        gap: 40px;
+    }
+    
+    h2 {
+        font-size: 2rem;
+    }
+
+    .tic-tac-image {
+        max-width: 80%;
+    }
+}
+
+/* Stili per l'header */
+#headerBar {
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #eee;
+}
+
+.button {
+    padding: 12px 24px;
+    background: transparent;
+    border: 2px solid #EC3434;
+    color: #EC3434;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #EC3434;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
+}
+
+.button:active {
+    transform: translateY(0);
+}

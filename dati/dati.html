@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Dati - Food Waste</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dataset.css">
+	<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body>
+    <!-- Header -->
+    <header id="headerBar">
+        <a href="../index.html" class="button">Home</a>
+        <a href="../main/main.html" class="button">Matrice</a>
+        <a href="about.html" class="button">Il team</a>
+        <a href="../info/info.html" class="button">?</a>
+    </header>
+
+    <!-- Contenuto principale -->
+    <main>
+        <!-- Blocco 1: Testo a sinistra, immagine a destra -->
+        <section class="content-block">
+            <div class="text-content">
+                <h2>SUL DATASET</h2>
+                <p>Il dataset utilizzato in questo sito proviene dalla FAO - Technical Platform on the Measurement and Reduction of Food Loss and Waste, la principale piattaforma internazionale dedicata allo studio delle perdite e degli sprechi alimentari lungo la filiera.</p>
+                <p class="underline">Origine dei dati</p>
+                <p>La FAO aggrega informazioni provenienti da oltre 700 pubblicazioni scientifiche, rapporti istituzionali, banche dati globali (World Bank, IFPRI, FAOSTAT…) e studi nazionali.<br>La versione più recente include più di 29.000 punti dati, raccolti e aggiornati nel tempo: il database è infatti un sistema "vivente", in continua revisione.</p>
+                <p class="underline">Come vengono raccolti</p>
+                <p>La FAO utilizza due approcci principali:</p>
+                <ul>
+                    <li><strong>Raccolta diretta</strong> dalla letteratura tramite revisione e integrazione manuale.</li>
+                    <li><strong>Raccolta automatizzata</strong> tramite FAO Data Lab: web scraping, riconoscimento linguistico, estrazione automatica di prodotti, luoghi, fasi della filiera e valori numerici.</li>
+                </ul>
+                <p>Ogni punto dati mantiene informazioni sulla metodologia con cui è stato prodotto:</p>
+                <ul class="bullet-points">
+                    <li>misurazioni dirette;</li>
+                    <li>survey e indagini sul campo;</li>
+                    <li>case study;</li>
+                    <li>opinione di esperti;</li>
+                    <li>stime modellate;</li>
+                    <li>dati censuari;</li>
+                    <li>protocollo FLW;</li>
+                    <li>estrazioni FAOSTAT.</li>
+                </ul>
+            </div>
+            <div class="image-content">
+                <img src="../assets/img/sacco.png" alt="FAO Logo" class="tic-tac-image" style="max-width: 450px;">
+            </div>
+        </section>
+
+        <!-- Blocco 2: Immagine a sinistra, testo a destra -->
+        <section class="content-block">
+            <div class="text-content">
+                <p class="underline">Come si misurano i dati</p>
+                <p>Per ogni osservazione sono disponibili vari elementi:</p>
+                <ul class="bullet-points">
+                    <li>country (paese);</li>
+                    <li>commodity (tipo di alimento secondo CPC 2.1);</li>
+                    <li>year;</li>
+                    <li>loss_percentage (percentuale di perdita);</li>
+                    <li>food_supply_stage (fase della filiera: produzione, post-raccolta, stoccaggio, trasporto, trasformazione, ingrosso);</li>
+                    <li>cause of loss (spesso mancante);</li>
+                    <li>method_data_collection e sample_size</li>
+                </ul>
+                <p class="underline">Unità di misura e indici</p>
+                <p>Le perdite possono essere espresse in percentuale, peso (kg/tonnellate) o valore economico.<br>La FAO armonizza le unità quando possibile e utilizza questi dati per calcolare indicatori globali come il Food Loss Index (SDG 12.3.1.a).</p>
+            </div>
+            <div class="image-content">
+                <img src="../assets/img/banana.png" alt="Raccolta dati" class="tic-tac-image" style="max-width: 450px;">
+            </div>
+        </section>
+
+        <!-- Blocco 3: Testo a sinistra, immagine a destra -->
+        <section class="content-block">
+            <div class="text-content">
+                <p class="underline">Un dataset ricco, ma incompleto</p>
+                <p>Molti paesi e prodotti hanno poche o nessuna rilevazione.Alcune fasi della filiera sono documentate in modo eterogeneo.<br>Le cause di perdita sono spesso assenti.<br>Queste lacune non sono limiti del progetto: sono parte integrante del fenomeno che cerchiamo di raccontare</p>
+                <p class="underline">Riconoscimento del lavoro della FAO</p>
+                <p>La presenza di dati mancanti, percentuali duplicate o valori invariati per determinati paesi nel corso degli anni non indica una mancanza di impegno. Al contrario, la FAO ha svolto un lavoro notevole e prezioso, raccogliendo, armonizzando e aggiornando informazioni da fonti estremamente eterogenee. Queste caratteristiche riflettono la complessità intrinseca nel monitorare le perdite alimentari globali e la difficoltà di ottenere dati accurati, consistenti e aggiornati in ogni contesto.</p>
+                <p class="underline">Come abbiamo lavorato sul dataset</p>
+                <p>Per rendere il dataset utilizzabile in un'esplorazione visiva chiara e coerente, abbiamo:</p>
+                <ul class="bullet-points">
+                    <li>unificato e sistemato i nomi dei paesi;</li>
+                    <li>aggregato le commodity in categorie più ampie e gestibili;</li>
+                    <li>normalizzato le cause di perdita (cause_of_loss) e le fasi della filiera (food_supply_stage);</li>
+                    <li>ridotto i dati da quasi 30.000 righe a около 5.000, mantenendo informazioni su circa 165 paesi, 15 categorie di commodity, 14 cause di perdita e 20 fasi della filiera, dal 1972 al 2024.</li>
+                </ul>
+                <p>Il risultato è un dataset più leggibile, coerente e pronto per la visualizzazione interattiva, pensato per garantire una user experience chiara e intuitiva.</p>
+            </div>
+            <div class="image-content">
+                <img src="../assets/img/mela.png" alt="Metodologia" class="tic-tac-image" style="max-width: 500px;">
+            </div>
+        </section>
+    </main>
+</body>
+</html>

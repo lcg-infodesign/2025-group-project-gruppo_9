@@ -1,0 +1,204 @@
+/* Stili specifici per la pagina dataset */
+.content-block {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    min-height: 60vh;
+}
+
+.content-block:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.text-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.image-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    padding: 20px 0;
+}
+
+/* Container per le immagini verticali */
+.vertical-images {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+
+/* Immagini sparse orizzontalmente */
+.vertical-image {
+    max-width: 125px;
+    height: auto;
+    animation-name: tic-tac;
+    animation-duration: 2s;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
+}
+
+/* Posizionamento orizzontale diverso per ogni immagine */
+.vertical-image:nth-child(1) {
+    align-self: flex-start;
+    margin-left: 10%;
+}
+
+.vertical-image:nth-child(2) {
+    align-self: flex-end;
+    margin-right: 15%;
+}
+
+.vertical-image:nth-child(3) {
+    align-self: flex-start;
+    margin-left: 5%;
+}
+
+.vertical-image:nth-child(4) {
+    align-self: flex-end;
+    margin-right: 20%;
+}
+
+/* Animazione tic-tac (solo rotazione sinistra-destra) */
+@keyframes tic-tac {
+    0%, 100% {
+        transform: rotate(-3deg);
+    }
+    50% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Timing leggermente diversi per ogni immagine */
+.vertical-image:nth-child(1) {
+    animation-duration: 2s;
+}
+
+.vertical-image:nth-child(2) {
+    animation-duration: 2.3s;
+}
+
+.vertical-image:nth-child(3) {
+    animation-duration: 1.8s;
+}
+
+.vertical-image:nth-child(4) {
+    animation-duration: 2.5s;
+}
+
+h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #283618;
+    margin-bottom: 20px;
+}
+
+p.underline {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+ol {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #283618;
+    margin-bottom: 20px;
+}
+
+ul {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #283618;
+    margin-bottom: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+.bullet-points {
+    list-style-type: disc;
+}
+
+.numbered-points {
+    list-style-type: decimal;
+}
+
+@media (max-width: 768px) {
+    .content-block {
+        flex-direction: column !important;
+        padding: 40px 20px;
+        gap: 40px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+
+    .vertical-image {
+        max-width: 80%;
+    }
+    
+    .vertical-image {
+        align-self: center;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Stili per l'header */
+#headerBar {
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #eee;
+}
+
+.button {
+    padding: 12px 24px;
+    background: transparent;
+    border: 2px solid #EC3434;
+    color: #EC3434;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #EC3434;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
+}
+
+.button:active {
+    transform: translateY(0);
+}
