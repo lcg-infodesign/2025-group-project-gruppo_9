@@ -35,16 +35,6 @@
     width: 100%;
 }
 
-/* Immagini sparse orizzontalmente */
-.vertical-image {
-    max-width: 125px;
-    height: auto;
-    animation-name: tic-tac;
-    animation-duration: 2s;
-    animation-timing-function: steps(1, end);
-    animation-iteration-count: infinite;
-}
-
 /* Posizionamento orizzontale diverso per ogni immagine */
 .vertical-image:nth-child(1) {
     align-self: flex-start;
@@ -64,6 +54,16 @@
 .vertical-image:nth-child(4) {
     align-self: flex-end;
     margin-right: 20%;
+}
+
+/* Immagini sparse orizzontalmente */
+.vertical-image {
+    max-width: 125px;
+    height: auto;
+    animation-name: tic-tac;
+    animation-duration: 2s;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
 }
 
 /* Animazione tic-tac (solo rotazione sinistra-destra) */
@@ -94,14 +94,14 @@
 }
 
 h2 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 20px;
     color: #000000;
     margin-bottom: 15px;
 }
 
 p {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     line-height: 1.8;
     color: #283618;
@@ -114,7 +114,7 @@ p.underline {
 }
 
 ol {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     line-height: 1.8;
     color: #283618;
@@ -122,7 +122,7 @@ ol {
 }
 
 ul {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     line-height: 1.8;
     color: #283618;
@@ -130,15 +130,18 @@ ul {
 }
 
 li {
+    font-family: 'Roboto', sans-serif;
     margin-bottom: 8px;
 }
 
 .bullet-points {
     list-style-type: disc;
+    font-family: 'Roboto', sans-serif;
 }
 
 .numbered-points {
     list-style-type: decimal;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -183,7 +186,7 @@ li {
     background: transparent;
     border: 2px solid #EC3434;
     color: #EC3434;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
     border-radius: 25px;

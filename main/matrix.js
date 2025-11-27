@@ -10,13 +10,13 @@ const CONFIG = {
             text: '#ffffff'
         },
         cell: {
-            active: '#EC3434',
-            inactive: '#f8f9fa', 
-            hoverActive: '#C31A1A',
-            hoverInactive: '#e9ecef',
-            clicked: '#8B0000',
-            dot: '#7f4f24',
-            stroke: '#dee2e6'
+            active: '#ffffff',        // Bianco
+            inactive: '#d6d6d6',      // Grigio medio-chiaro
+            hoverActive: '#f0f0f0',   // Grigio molto chiaro al hover
+            hoverInactive: '#a8a8a8', // Grigio medio al hover
+            clicked: '#404040',       // Grigio scuro
+            dot: '#000000',           // Nero per il "dot"
+            stroke: '#808080'         // Grigio medio
         },
         text: {
             primary: '#283618',
@@ -33,13 +33,13 @@ const CONFIG = {
         }
     },
     layout: {
-        headerHeight: 120,
+        headerHeight: 0,
         sliderHeight: 100,
         margin: {
             horizontal: 300,
             vertical: 100
         },
-        minCellHeight: 30,
+        minCellHeight: 50,
         maxCellHeight: 50,
         maxCellWidth: 120,
         button: {
@@ -54,14 +54,13 @@ const CONFIG = {
     },
     typography: {
         titleSize: 48,
-        buttonSize: 14,
         columnSize: 11,
         rowSize: 10,
         tooltipSize: 12,
         sliderValueSize: 18,
         maxCountryChars: 18,
-        fontFamily: 'Inter',
-        titleFont: 'Playfair Display'
+        fontFamily: 'Roboto',
+        titleFont: 'Roboto'
     }
 };
 
@@ -77,9 +76,9 @@ let slider = {
     x: 0, y: 0, width: 0, height: 30,
     thumb: { x: 0, width: 28, dragging: false }
 };
-let buttons = [];
 let matrixY = 0; 
 let decorativeImages = []; 
+let dotImage = null;
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -95,6 +94,8 @@ function preload() {
         loadImage('../assets/img/pollo.png'),
         loadImage('../assets/img/insalata.png')
     ];
+
+    dotImage = loadImage('../assets/img/dotimage.png');
 }
 
 function initializeData() {
@@ -157,34 +158,6 @@ function setupUI() {
     slider.y = CONFIG.layout.headerHeight + 60;
     updateSliderThumb();
     matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
-    
-    // Setup buttons
-    buttons = [
-        {
-            label: "Home",
-            x: CONFIG.layout.margin.horizontal,
-            y: CONFIG.layout.headerHeight / 2,
-            action: () => window.location.href = '../index.html'
-        },
-        {
-            label: "I dati", 
-            x: width - CONFIG.layout.margin.horizontal - 240,
-            y: CONFIG.layout.headerHeight / 2,
-            action: () => window.location.href = '../dati/dati.html'
-        },
-        {
-            label: "Il team",
-            x: width - CONFIG.layout.margin.horizontal - 100,
-            y: CONFIG.layout.headerHeight / 2,
-            action: () => window.location.href = 'about.html'
-        },
-        {
-            label: "?",
-            x: width - CONFIG.layout.margin.horizontal,
-            y: CONFIG.layout.headerHeight / 2,
-            action: () => window.location.href = 'domanda.html'
-        }
-    ];
 }
 
 function calculateCellSize() {
@@ -217,7 +190,6 @@ function windowResized() {
 function draw() {
     background(CONFIG.colors.background);
     
-    drawHeader();
     drawSlider();
     drawDecorativeImages();
     
@@ -232,28 +204,6 @@ function draw() {
     
     if (isValidCell(hoveredRow, hoveredCol)) {
         drawTooltip();
-    }
-}
-
-function drawHeader() {
-    // Header background
-    fill(CONFIG.colors.headerBackground);
-    noStroke();
-    rect(0, 0, width, CONFIG.layout.headerHeight);
-    
-    // Title
-    /*fill(CONFIG.colors.headerText);
-    textFont(CONFIG.typography.titleFont);
-    textSize(CONFIG.typography.titleSize);
-    textAlign(CENTER, CENTER);
-    text("Food Waste", width / 2, CONFIG.layout.headerHeight / 2);*/
-    
-    // Buttons
-    textFont(CONFIG.typography.fontFamily);
-    textSize(CONFIG.typography.buttonSize);
-    
-    for (let button of buttons) {
-        drawButton(button);
     }
 }
 
@@ -303,49 +253,51 @@ function drawSlider() {
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
 }
 
-// ===== FUNZIONE PER DISEGNARE LE IMMAGINI DECORATIVE =====
 function drawDecorativeImages() {
     if (decorativeImages.length === 0) return;
     
     const imgSize = CONFIG.layout.decorativeImages.size;
     
-    // Posizioni delle 4 immagini (regolabili)
+    // Crea più posizioni - aumentato il numero per coprire l'altezza della tabella
     const positions = [
-        // Sinistra - in alto
-        { 
-            x: CONFIG.layout.margin.horizontal * 0.3, 
-            y: CONFIG.layout.headerHeight + 300 
-        },
-        // Sinistra - in basso
-        { 
-            x: CONFIG.layout.margin.horizontal * 0.3, 
-            y: height/3
-        },
-        // Destra - in alto
-        { 
-            x: width - CONFIG.layout.margin.horizontal * 0.6, 
-            y: height/5
-        },
-        // Destra - in basso
-        { 
-            x: width - CONFIG.layout.margin.horizontal * 0.6, 
-            y: height - 500 
-        }
+        // Colonna destra
+        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.05 },
+        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.2 },
+        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.4 },
+        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.6 },
+        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.8 },
+
+        // Colonna sinistra
+        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.1 },
+        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.3 },
+        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.5 },
+        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.7 },
+        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.9 }
     ];
     
     push();
-    //tint(255, opacity); // Applica trasparenza
     
-    for (let i = 0; i < Math.min(decorativeImages.length, 4); i++) {
-        const img = decorativeImages[i];
+    for (let i = 0; i < positions.length; i++) {
         const pos = positions[i];
+        
+        // Usa l'operatore modulo per ciclare attraverso le immagini
+        const imgIndex = i % decorativeImages.length;
+        const img = decorativeImages[imgIndex];
         
         if (img && img.width > 0) {
             imageMode(CENTER);
-            // Aggiungi una leggera rotazione casuale per un effetto più naturale
+            
+            // Calcola l'animazione "tic-tac"
+            const time = millis() / 1000; // tempo in secondi
+            const animationDuration = 2 + (i % 3) * 0.5; // durate diverse: 2s, 2.5s, 3s
+            const cycle = (time / animationDuration) % 1;
+            
+            const rotation = cycle < 0.5 ? -0.052 : 0.052;
+            
             push();
             translate(pos.x, pos.y);
-            rotate(random(-0.1, 0.1)); // Rotazione molto leggera
+            rotate(rotation);
+        
             image(img, 0, 0, imgSize, imgSize * (img.height / img.width));
             pop();
         }
@@ -373,14 +325,6 @@ function mousePressed() {
         updateYearFromSlider(mouseX);
         slider.thumb.dragging = true;
         return;
-    }
-    
-    // Check buttons
-    for (let button of buttons) {
-        if (dist(mouseX, mouseY, button.x, button.y) < CONFIG.layout.button.width / 2) {
-            button.action();
-            return;
-        }
     }
 }
 
@@ -555,9 +499,26 @@ function drawCellRect(x, y) {
 }
 
 function drawCellDot(x, y, isClicked) {
-    fill(isClicked ? CONFIG.colors.cell.clicked : CONFIG.colors.cell.dot);
-    noStroke();
-    ellipse(x + cellWidth / 2, y + cellHeight / 2, min(cellWidth, cellHeight) * 0.4);
+    //const dotImage = dotImage;
+    
+    if (dotImage && dotImage.width > 0) {
+        // Calcola la dimensione dell'immagine
+        const imgSize = min(cellWidth, cellHeight) * 0.6;
+        
+        // Opacità in base allo stato (opzionale)
+        const opacity = isClicked ? 150 : 255;
+        
+        push();
+        imageMode(CENTER);
+        tint(255, opacity);
+        image(dotImage, x + cellWidth / 2, y + cellHeight / 2, imgSize, imgSize);
+        pop();
+    } else {
+        // Fallback: disegna il puntino se l'immagine non è disponibile
+        fill(isClicked ? CONFIG.colors.cell.clicked : CONFIG.colors.cell.dot);
+        noStroke();
+        ellipse(x + cellWidth / 2, y + cellHeight / 2, min(cellWidth, cellHeight) * 0.4);
+    }
 }
 
 function mouseClicked() {

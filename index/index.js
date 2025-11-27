@@ -25,11 +25,12 @@ function sketch0(p) {
 		// Titolo principale
 		p.textSize(60 * rf);
 		p.textAlign(p.CENTER, p.CENTER);
-		p.text("Global Food Waste", p.width / 2, p.height / 2 - 50);
+        p.textFont("Roboto Black");
+		p.text("Global\nFood Waste", p.width / 2, p.height / 2 - 90);
 
 		// Sottotitolo
 		p.textSize(18 * rf);
-		p.text("Dataset della FAO sullo spreco alimentare", p.width / 2, p.height / 2 + 20);
+		p.text("Dataset della FAO sullo spreco alimentare", p.width / 2, p.height / 2 + 70);
 
 		// Freccia scroll down
 		createScrollButton(p);
@@ -73,7 +74,7 @@ function sketch1(p) {
 
     p.draw = () => {
         p.background(BG_COLOR);
-        p.textFont("Georgia");
+        p.textFont("Roboto");
         p.noStroke();
         p.fill(FG_COLOR);
 
