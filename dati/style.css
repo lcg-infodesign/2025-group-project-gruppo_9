@@ -25,31 +25,32 @@
     align-items: center;
 }
 
-.tic-tac-image {
-    max-width: 100%;
+.tic-tac-image1{
     height: auto;
-    animation: tic-tac 4s ease-in-out infinite;
+    animation-name: tic-tac;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+}
+
+.tic-tac-image2{
+    height: auto;
+    animation-name: tic-tac;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
+    animation-duration: 2.3s;
+}
+
+.tic-tac-image3{
+    height: auto;
+    animation-name: tic-tac;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
+    animation-duration: 1.8s;
 }
 
 /* Animazione tic-tac (solo rotazione sinistra-destra) */
 @keyframes tic-tac {
-    0%, 100% {
-        transform: rotate(-3deg);
-    }
-    50% {
-        transform: rotate(3deg);
-    }
-}
-
-/* Timing leggermente diversi per ogni immagine */
-.tic-tac-image:nth-child(1) {
-  animation-name: tic-tac; /* nome dell'animazione */
-  animation-duration: 2s; /* durata di un ciclo completo */
-  animation-timing-function: steps(1, end); /* crea un movimento a scatti */
-  animation-iteration-count: infinite; /* ripeti all'infinito */
-}
-
-@keyframes tic-tac1 {
     0%, 100% {
         transform: rotate(-3deg);
     }
