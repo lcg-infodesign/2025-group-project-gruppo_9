@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="it">
 <head>
   <meta charset="utf-8" />
@@ -7,34 +6,32 @@
   <title>Country — Food Loss Visualization</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <header id="headerBar">
-    <a href="../main/main.html" class="button">Go Back</a>
-    <h1 id="title">Loading...</h1>
-    <select id="countrySelect"></select>
+    <div id="headerTop">
+      <a href="../main/main.html" class="button">Go Back</a>
+      <h1 id="title">Loading...</h1>
+      <select id="countrySelect"></select>
+    </div>
+
+    <!-- TIMELINE SPOSTATA QUI -->
+    <div id="timelineContainer">
+      <input id="yearSlider" type="range" step="1">
+      <div id="yearLabelWrap">
+        <div id="yearLabel">selected year</div>
+      </div>
+     
+    </div>
   </header>
 
-  <!-- contenitore per il canvas p5 -->
-
+  <!-- CANVAS -->
   <div id="canvasContainer"></div>
-
-  <!-- timeline: slider + ticks -->
-
-  <div id="timelineContainer">
-    <input id="yearSlider" type="range" step="1">
-    <div id="yearLabelWrap">
-      <div id="yearLabel">Loading...</div>
-    </div>
-    <div id="yearMarks"></div>
-  </div>
-
-  <!-- tooltip opzionale -->
 
   <div id="tooltip"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-
   <script src="countrySketch.js"></script>
 
 </body>
