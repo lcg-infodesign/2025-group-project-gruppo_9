@@ -1,130 +1,111 @@
-:root {
-	--bgColor: #ffffff;
-	--fgColor: #C31A1A;
-}
-
-@keyframes fade-out {
-	from {
-		opacity: 100%;
-	}
-
-	to {
-		opacity: 0%;
-	}
-}
-
-@keyframes fade-in {
-	from {
-		opacity: 0%;
-	}
-
-	to {
-		opacity: 100%;
-	}
-}
-
-/* classi per l'implementazione delle animazioni */
-.fade-out-class {
-	animation: fade-out 700ms 1;
-}
-.fade-in-class {
-	animation: fade-in 700ms 1;
-}
+/* index/style.css */
 
 * {
-	font-family: Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html, body {
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-
-	background-color: var(--bgColor);
+body {
+    background-color: #93BE52;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
 }
 
-canvas {
-	display: block;
+h1 {
+    font-family: 'Roboto Black', 'Roboto', sans-serif;
+    font-weight: 900;
+    font-size: 4.5rem;
+    text-align: center;
+    color: #000000;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
 }
 
-.sketch {
-	height: 100vh;
-	width: 100%;
-
-	position: fixed;
-
-	top: 0;
+button {
+    background-color: #EC3434;
+    color: #ffffff;
+    border: none;
+    padding: 18px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 3rem;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
 }
 
-/* gruppo indicatori sketch */
-#sketch-list {
-	display: flex;
-	flex-direction: column;
-
-	position: fixed;
-	z-index: 101;
-
-	top: 50%;
-	transform: translateY(-50%);
-	left: 50px;
+button:hover {
+    background-color: #C31A1A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* indicatore sketch */
-.sketch-button {
-	width: 15px;
-	height: 15px;
-
-	cursor: pointer;
-
-	background-color: var(--bgColor);
-	border: 1px solid var(--fgColor);
-	border-radius: 7.5px;
-}
-.sketch-button:not(:first-child) {
-	margin-top: 10px;
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* proprietà generali dei bottoni */
-.buttons {
-	width: 140px;
-	height: 60px;
-	
-	cursor: pointer;
-	position: fixed;
-	z-index: 102;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 37px;
-
-	border: none;
+img {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    animation-name: tic-tac;
+    animation-duration: 2s;
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
 }
 
-/* bottone per passare allo sketch successivo */
-#forward {
-	background-color: #FFF2E400;
+/* Animazione fluttuante per l'immagine */
+@keyframes tic-tac {
+    0%, 100% {
+        transform: rotate(-3deg);
+    }
+    50% {
+        transform: rotate(3deg);
+    }
 }
 
-/* bottone per passare al grafico */
-#leave {
-	width: 12vw;
-	height: 6vh;
-
-	display: none;
-
-	background-color: var(--bgColor);
-	color: var(--fgColor);
-
-	font-size: 1.5vw;
-	border: 1px solid var(--fgColor);
-	border-radius: 10px;
-	    transition: opacity 0.5s ease;
-
-}
-#leave:hover {
-	background-color: var(--fgColor);
-	color: var(--bgColor);
+/* Responsive design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    button {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    img {
+        max-width: 250px;
+    }
 }
 
-#leave.fade-in {
-    opacity: 1;
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    button {
+        padding: 12px 25px;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    img {
+        max-width: 200px;
+    }
 }

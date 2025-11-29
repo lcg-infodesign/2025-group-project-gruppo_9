@@ -107,8 +107,8 @@ a.button:hover {
 /* ---------------- BACKGROUND ---------------- */
 
 body {
-  background-image: url("assets/sfondo.png");
+  /*background-image: url("assets/sfondo.png");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: fixed;*/
 }

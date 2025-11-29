@@ -77,6 +77,20 @@ function setup() {
     if (sel) sel.value = selectedCountry;
   }
 
+  // Applica i parametri URL
+  applyUrlParams();
+  
+  // Se non ci sono parametri URL, usa i valori di default
+  if (!selectedCountry && countries.length) {
+      selectedCountry = countries[0];
+      const sel = document.getElementById("countrySelect");
+      if (sel) sel.value = selectedCountry;
+  }
+  if (!selectedYear) {
+      const slider = document.getElementById("yearSlider");
+      if (slider) selectedYear = parseInt(slider.value);
+  }
+
   updateVisualization();
 }
 //parse dati
@@ -358,3 +372,43 @@ function windowResized() {
   // manteniamo resize al width della finestra; l'altezza verrà adattata in draw() in base al contenuto
   resizeCanvas(windowWidth, windowHeight);
 }
+
+// - Leggere i parametri dalla URL
+function getUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const country = urlParams.get('country');
+    const year = urlParams.get('year');
+    
+    return {
+        country: country,
+        year: year ? parseInt(year) : null
+    };
+}
+
+function applyUrlParams() {
+    const params = getUrlParams();
+    
+    if (params.country) {
+        selectedCountry = params.country;
+        const countrySelect = document.getElementById("countrySelect");
+        if (countrySelect) {
+            countrySelect.value = selectedCountry;
+        }
+    }
+    
+    if (params.year) {
+        selectedYear = params.year;
+        const yearSlider = document.getElementById("yearSlider");
+        const yearLabel = document.getElementById("yearLabel");
+        
+        if (yearSlider) {
+            yearSlider.value = selectedYear;
+        }
+        if (yearLabel) {
+            yearLabel.innerText = selectedYear;
+        }
+    }
+    
+    updateVisualization();
+}
+
