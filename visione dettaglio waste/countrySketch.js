@@ -1,99 +1,112 @@
-let cnv; // <--- reso globale per poter ridimensionare il canvas in draw
-let table;
-let data = [];
-let countries = [];
-let commodities = [];
+// ===== VARIABILI GLOBALI E CONFIGURAZIONE =====
 
-let selectedCountry = "";
-let selectedYear = null;
+// Riferimento al canvas (globale per ridimensionamento dinamico)
+let cnv;
 
-// images
+// Dati e strutture
+let table;              
+let data = [];          
+let countries = [];     
+let commodities = [];   
+
+// Stato dell'applicazione
+let selectedCountry = "";   
+let selectedYear = null;    
+
+// ===== GESTIONE IMMAGINI =====
 const ASSETS_BASE = "assets/";
-let img_empty = null;
-let img_over = null;
-let img_basket = null;
-let img_nodata = null;
-let commodityImgs = {};
+let img_empty = null;   
+let img_over = null;    
+let img_basket = null;  
+let img_nodata = null;  
+let commodityImgs = {}; 
 
-// visual params
-const COLS = 4;
-const INTERNAL_NOMINAL_W = 90;
-const INTERNAL_NOMINAL_H = 112;
-const CELL_GAP = 60;//40
-const CELL_PADDING = 40;//12
-const LEVEL2_COLOR = [220, 60,90, 220];
-//assicurarsi che i nomi vengano interpretati giusti
+// ===== PARAMETRI VISIVI =====
+const COLS = 4;                     
+const INTERNAL_NOMINAL_W = 90;      
+const INTERNAL_NOMINAL_H = 112;     
+const CELL_GAP = 50;                
+const CELL_PADDING = 30;            
+const LEVEL2_COLOR = [220, 60, 90, 220];
+const SIDE_MARGIN = 60;             
+
+// ===== FUNZIONI DI UTILITÀ =====
+
+// Normalizza i nomi dei file per garantire compatibilità
 function normalizeFilename(name) {
   if (!name) return "";
   return name.toLowerCase().trim()
-    .replace(/\s+/g, "*")
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9*-]/g, "");
+    .replace(/\s+/g, "*")                          
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+    .replace(/[^a-z0-9*-]/g, "");                 
 }
-//immagini
-function loadImageSafe(path, cb) {
-  loadImage(path,
-    (img) => { cb && cb(img); },
-    () => { cb && cb(null); }
+
+function loadImageSafe(path, callback) {
+  loadImage(
+    path,
+    (img) => { callback && callback(img); },       
+    () => { callback && callback(null); } // Fallback su errore
   );
 }
 
+// ===== INIZIALIZZAZIONE p5.js =====
 function preload() {
+  // Carica il dataset CSV
   table = loadTable("cleaned_dataset.csv", "csv", "header",
-    () => console.log("CSV loaded:", table.getRowCount()),
-    (err) => console.error("Failed to load CSV", err)
+    () => console.log("CSV caricato:", table.getRowCount(), "righe"),
+    (err) => console.error("Errore caricamento CSV:", err)
   );
-  //oggetti cestini ecc...
+  
+  // Carica le immagini base dei cestini
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_empty = img);
   loadImageSafe(ASSETS_BASE + "over.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
   loadImageSafe(ASSETS_BASE + "nodatafound.png", img => img_nodata = img);
 }
 
+//Setup iniziale dell'applicazione
 function setup() {
-  cnv = createCanvas(windowWidth, windowHeight); // non const, per poter ridimensionare dopo
+  // Crea canvas che occupa tutta la finestra
+  cnv = createCanvas(windowWidth, windowHeight);
   cnv.parent("canvasContainer");
+  
   clear();
   noStroke();
   textFont("Inter, Arial, sans-serif");
 
+  // Elabora i dati e inizializza l'interfaccia
   parseCSV();
   setupCountrySelect();
   setupTimelineUI();
 
-  for (let c of commodities) {
-    const n = normalizeFilename(c);
-    const path = ASSETS_BASE + n + ".png";
-    loadImageSafe(path, img => {
-      commodityImgs[n] = img || null;
+  // Carica le immagini per ogni commodity
+  for (let commodity of commodities) {
+    const normalizedName = normalizeFilename(commodity);
+    const imagePath = ASSETS_BASE + normalizedName + ".png";
+    loadImageSafe(imagePath, img => {
+      commodityImgs[normalizedName] = img || null;
     });
   }
-  //timeline e tendina
-  const slider = document.getElementById("yearSlider");
-  if (slider) selectedYear = parseInt(slider.value);
-  if (countries.length) {
-    selectedCountry = countries[0];
-    const sel = document.getElementById("countrySelect");
-    if (sel) sel.value = selectedCountry;
-  }
 
-  // Applica i parametri URL
+  // Applica i parametri dall'URL (se presenti)
   applyUrlParams();
   
-  // Se non ci sono parametri URL, usa i valori di default
-  if (!selectedCountry && countries.length) {
-      selectedCountry = countries[0];
-      const sel = document.getElementById("countrySelect");
-      if (sel) sel.value = selectedCountry;
+  // Imposta valori di default se non specificati nell'URL
+  if (!selectedCountry && countries.length > 0) {
+    selectedCountry = countries[0];
+    const countrySelect = document.getElementById("countrySelect");
+    if (countrySelect) countrySelect.value = selectedCountry;
   }
+  
   if (!selectedYear) {
-      const slider = document.getElementById("yearSlider");
-      if (slider) selectedYear = parseInt(slider.value);
+    const yearSlider = document.getElementById("yearSlider");
+    if (yearSlider) selectedYear = parseInt(yearSlider.value);
   }
 
   updateVisualization();
 }
-//parse dati
+
+// ===== ELABORAZIONE DATI =====
 function parseCSV() {
   data = [];
   commodities = [];
@@ -101,150 +114,170 @@ function parseCSV() {
 
   if (!table) return;
 
-  for (let r = 0; r < table.getRowCount(); r++) {
-    const row = table.getRow(r);
+  // Itera attraverso tutte le righe del CSV
+  for (let rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+    const row = table.getRow(rowIndex);
+    
+    // Estrai i dati dalla riga
     const country = row.getString("country");
     const commodity = row.getString("commodity");
     const year = parseInt(row.getString("year"));
-    let loss = parseFloat(String(row.getString("loss_percentage")).replace(",", "."));
-    loss = isNaN(loss) ? NaN : loss;
+    
+    // Pulisci e converti la percentuale di spreco
+    let lossPercentage = parseFloat(String(row.getString("loss_percentage")).replace(",", "."));
+    lossPercentage = isNaN(lossPercentage) ? NaN : lossPercentage;
 
-    data.push({ country, commodity, year, loss });
+    // Aggiungi ai dati
+    data.push({ 
+      country, 
+      commodity, 
+      year, 
+      loss: lossPercentage 
+    });
 
-    if (commodity && !commodities.includes(commodity)) commodities.push(commodity);
-    if (country && !countries.includes(country)) countries.push(country);
+    // Aggiorna liste uniche
+    if (commodity && !commodities.includes(commodity)) {
+      commodities.push(commodity);
+    }
+    if (country && !countries.includes(country)) {
+      countries.push(country);
+    }
   }
 
+  // Ordina le liste
   countries.sort();
   commodities.sort();
 }
 
+// ===== GESTIONE INTERFACCIA UTENTE =====
 function setupCountrySelect() {
-  const sel = document.getElementById("countrySelect");
-  if (!sel) return;
-  sel.innerHTML = "";
-  for (let c of countries) {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.text = c;
-    sel.appendChild(opt);
+  const selectElement = document.getElementById("countrySelect");
+  if (!selectElement) return;
+  
+  // Pulisce e popola il dropdown
+  selectElement.innerHTML = "";
+  for (let country of countries) {
+    const option = document.createElement("option");
+    option.value = country;
+    option.textContent = country;
+    selectElement.appendChild(option);
   }
-  sel.addEventListener("change", () => {
-    selectedCountry = sel.value;
+  
+  // Imposta listener per cambiamenti
+  selectElement.addEventListener("change", () => {
+    selectedCountry = selectElement.value;
     updateVisualization();
   });
-  if (countries.length) {
+  
+  // Imposta valore iniziale
+  if (countries.length > 0) {
     selectedCountry = countries[0];
-    sel.value = selectedCountry;
+    selectElement.value = selectedCountry;
   }
 }
 
+// Inizializza lo slider della timeline
 function setupTimelineUI() {
   const slider = document.getElementById("yearSlider");
   if (!slider) return;
 
-  const years = Array.from(new Set(data.map(d => d.year))).filter(y => !isNaN(y)).sort((a, b) => a - b);
-  if (years.length) {
+  // Estrai anni unici dal dataset
+  const years = Array.from(new Set(data.map(d => d.year)))
+    .filter(year => !isNaN(year))
+    .sort((a, b) => a - b);
+
+  // Configura lo slider
+  if (years.length > 0) {
     slider.min = Math.min(...years);
     slider.max = Math.max(...years);
     if (!slider.value) slider.value = slider.max;
   }
 
-  slider.addEventListener("input", e => {
-    selectedYear = parseInt(e.target.value);
-    const lbl = document.getElementById("yearLabel");
-    if (lbl) lbl.innerText = selectedYear;
+  // Listener per cambiamenti dello slider
+  slider.addEventListener("input", event => {
+    selectedYear = parseInt(event.target.value);
+    const yearLabel = document.getElementById("yearLabel");
+    if (yearLabel) yearLabel.textContent = selectedYear;
     updateVisualization();
   });
 
-  const marks = document.getElementById("yearMarks");
-  if (marks) {
-    marks.innerHTML = "";
-    if (years.length) {
-      const firstDec = Math.ceil(years[0] / 10) * 10;
-      const lastDec = Math.floor(years[years.length - 1] / 10) * 10;
-      for (let y = firstDec; y <= lastDec; y += 10) {
-        const lbl = document.createElement("div");
-        lbl.className = "decadeLabel";
-        lbl.innerText = y;
-        lbl.style.cursor = "pointer";
-        lbl.addEventListener("click", () => {
-          slider.value = y;
-          selectedYear = y;
-          const yearLbl = document.getElementById("yearLabel");
-          if (yearLbl) yearLbl.innerText = y;
-          updateVisualization();
-        });
-        marks.appendChild(lbl);
-      }
-    }
-  }
+  // Aggiungi navigazione da tastiera
+  setupKeyboardNavigation(slider);
+}
 
-  window.addEventListener("keydown", ev => {
-    const slider = document.getElementById("yearSlider");
+// Configura la navigazione da tastiera (freccie sinistra/destra)
+function setupKeyboardNavigation(slider) {
+  window.addEventListener("keydown", event => {
     if (!slider) return;
-    const minY = parseInt(slider.min);
-    const maxY = parseInt(slider.max);
-    if (ev.key === "ArrowLeft") {
-      selectedYear = Math.max(minY, (selectedYear || minY) - 1);
-      slider.value = selectedYear;
-      document.getElementById("yearLabel").innerText = selectedYear;
-      updateVisualization();
-    } else if (ev.key === "ArrowRight") {
-      selectedYear = Math.min(maxY, (selectedYear || maxY) + 1);
-      slider.value = selectedYear;
-      document.getElementById("yearLabel").innerText = selectedYear;
-      updateVisualization();
+    
+    const minYear = parseInt(slider.min);
+    const maxYear = parseInt(slider.max);
+    
+    if (event.key === "ArrowLeft") {
+      selectedYear = Math.max(minYear, (selectedYear || minYear) - 1);
+    } else if (event.key === "ArrowRight") {
+      selectedYear = Math.min(maxYear, (selectedYear || maxYear) + 1);
+    } else {
+      return;
     }
+    
+    slider.value = selectedYear;
+    const yearLabel = document.getElementById("yearLabel");
+    if (yearLabel) yearLabel.textContent = selectedYear;
+    updateVisualization();
   });
 }
 
 function updateVisualization() {
-  const titleEl = document.getElementById("title");
-  if (titleEl) titleEl.innerText = (selectedCountry || "—") + "  " + (selectedYear || "");
+  const titleElement = document.getElementById("title");
+  if (titleElement) {
+    titleElement.textContent = `${selectedCountry || "—"} ${selectedYear || ""}`;
+  }
 }
 
+// ===== DRAW PRINCIPALE =====
 function draw() {
-  if (!img_empty) return; // wait for images
+  if (!img_empty) return;
 
   clear();
 
   const header = document.getElementById("headerBar");
-  const headerH = header ? header.getBoundingClientRect().height : 0;
+  const headerHeight = header ? header.getBoundingClientRect().height : 0;
+  const gridTop = headerHeight + 20;
+  
+  // Usa la nuova costante per i margini laterali
+  const gridWidth = width - (SIDE_MARGIN * 2);
 
-  // area grid
-  const gridTop = headerH + 20;
-  const gridW = width - 40;
+  // Calcola dimensioni delle celle
+  const totalGapWidth = CELL_GAP * (COLS - 1);
+  const cellWidth = Math.floor((gridWidth - totalGapWidth) / COLS);
+  const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
 
-  const cols = COLS;
-  const gap = CELL_GAP;
-  const totalGapW = gap * (cols - 1);
-  const cellW = Math.floor((gridW - totalGapW) / cols);
-  const cellH = Math.round(cellW * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
-
-  // calcolo quante righe servono e altezza totale della griglia
-  const rows = Math.ceil(commodities.length / cols);
-  const totalGridHeight = rows > 0 ? (rows * cellH + Math.max(0, rows - 1) * gap) : cellH;
-  const neededHeight = Math.max(windowHeight, Math.round(gridTop + totalGridHeight + 80)); // +padding bottom
-
-  // se il canvas non è abbastanza alto, lo ridimensiono così la pagina può scrollare
+  // Calcola layout griglia
+  const rowsNeeded = Math.ceil(commodities.length / COLS);
+  const totalGridHeight = rowsNeeded > 0 ? 
+    (rowsNeeded * cellHeight + Math.max(0, rowsNeeded - 1) * CELL_GAP) : cellHeight;
+  
+  const neededHeight = Math.max(windowHeight, Math.round(gridTop + totalGridHeight + 80));
   if (height !== neededHeight || width !== windowWidth) {
     resizeCanvas(windowWidth, neededHeight);
   }
 
-  const startX = Math.round((width - ((cellW * cols) + totalGapW)) / 2);
+  // Centra la griglia considerando i nuovi margini
+  const startX = SIDE_MARGIN + Math.round((gridWidth - ((cellWidth * COLS) + totalGapWidth)) / 2);
 
   for (let i = 0; i < commodities.length; i++) {
-    const c = commodities[i];
-    const col = i % cols;
-    const row = Math.floor(i / cols);
+    const commodity = commodities[i];
+    const column = i % COLS;
+    const row = Math.floor(i / COLS);
 
-    const x = startX + col * (cellW + gap);
-    const y = gridTop + row * (cellH + gap);
+    const x = startX + column * (cellWidth + CELL_GAP);
+    const y = gridTop + row * (cellHeight + CELL_GAP);
 
-    drawComplexCell(c, x, y, cellW, cellH);
+    drawComplexCell(commodity, x, y, cellWidth, cellHeight);
   }
 }
+
 
 function drawComplexCell(commodityName, x, y, w, h) {
   push();
