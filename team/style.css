@@ -114,41 +114,100 @@ li {
 }
 
 /* Stili per l'header */
-#headerBar {
-    width: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-    padding: 18px 12px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid #eee;
+:root {
+    --bg: #F5F3EE;
+    --dark: #20332B;
+    --accent: #E6C031;
+    --highlight: #B64939;
 }
 
-.button {
-    padding: 12px 24px;
-    background: transparent;
-    border: 2px solid #EC3434;
-    color: #EC3434;
-    font-family: 'Roboto', sans-serif;
+/* HEADER */
+#headerBar {
+    width: 100vw;
+    height: 60px;
+    background: var(--bg);
+    border-bottom: 2px solid rgba(32, 51, 43, 0.15);
+    padding: 14px 32px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* Sinistra - centro - destra */
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    white-space: nowrap;   /* Evita che i link vadano a capo */
+    overflow-x: hidden;    /* Previene qualsiasi scroll orizzontale */
+}
+
+/* COLONNE */
+.header-left {
+    justify-self: start;
+}
+
+/* LOGO CENTRALE — SEMPRE CENTRATO */
+.header-center {
+    justify-self: center;
+}
+
+/* DESTRA */
+.header-right {
+    justify-self: end;
+    display: flex;
+    gap: 20px;
+}
+
+#siteLogo {
+    font-family: 'Spectral', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* HOME BUTTON */
+.nav-btn {
+    font-family: 'Inter', sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 2px solid var(--dark);
+    background: transparent;
+    color: var(--dark);
     text-decoration: none;
+
+    transition: all 0.25s ease;
 }
 
-.button:hover {
-    background: #EC3434;
-    color: #ffffff;
+.nav-btn:hover {
+    background: var(--dark);
+    color: var(--bg);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(188, 108, 37, 0.3);
 }
 
-.button:active {
-    transform: translateY(0);
+/* MENU LINK */
+.nav-link {
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--dark);
+    position: relative;
+}
+
+/* underline animata */
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
 }

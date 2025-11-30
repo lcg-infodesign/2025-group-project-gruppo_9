@@ -1,30 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Global Food Waste</title>
+  <title>Global Food Waste</title>
 
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="index/style.css">
-		<script src="libraries/p5.min.js"></script>
-		<link rel="icon" type="image/svg+xml" href="favicon.svg">
-	</head>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="index/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
 
-	<body>
-		<!--<div class="sketch" id="sketch0" style="z-index: 5;"></div>
-		<div class="sketch" id="sketch1" style="z-index: 4;" hidden></div>
+<body>
+  <!-- Sfondo -->
+  <div class="background-image"></div>
 
-		<button class="buttons" id="forward"></button>
-		<a href="main/main.html">
-			<button class="buttons" id="leave">Scopri di più</button>
-		</a>
+  <!-- Titolo principale -->
+  <header class="main-header">
+    <h1>
+      <span class="the">THE</span>
+      <span class="whole"><span class="w-hole">W</span>HOLE</span>
+      <span class="story">STORY</span>
+    </h1>
+  </header>
 
-		<script src="index/navigation.js"></script>
-		<script src="index/index.js"></script> -->
-		<h1>Global<br>Food Waste</h1>
-		<button onclick="location.href='main/main.html'">Scopri di più</button>
-		<image src="assets/img/sacco.png" alt="Food Waste" class="">
-	</body>
+  <!-- Freccia scroll -->
+<div class="scroll-arrow">&#8595;</div>
+
+<!-- Sezione storytelling -->
+<section class="story-section" id="storySection">
+  <p id="storyText"></p>
+  <a id="exploreBtn" href="main/main.html">Explore the gap</a>
+</section>
+
+</section>
+
+  <!-- Sacchi animati sul lato sinistro -->
+  <img src="assets/img/sacco.png" alt="Trash Bag" class="sacco sacco1">
+  <img src="assets/img/sacco.png" alt="Trash Bag" class="sacco sacco2">
+
+  <script>
+const arrow = document.querySelector('.scroll-arrow');
+const storySection = document.getElementById('storySection');
+const storyText = document.getElementById('storyText');
+
+const text = "<strong>Sappiamo davvero cosa significa “spreco alimentare”?</strong>\n\n" +
+"Gran parte del cibo non arriva mai nei nostri piatti.\n" +
+"Si perde prima. Si disperde lungo la filiera.\n" +
+"E spesso non sappiamo dove. Non sappiamo come. Non sappiamo perché.\n" +
+"Mancano dati, rilevazioni, mancano interi pezzi di storia.\n" +
+"Lo spreco riguarda il cibo, ma anche l’informazione.\n" +
+"Questo sito nasce per esplorare ciò che c’è e ciò che manca.\n" +
+"E per comprendere il problema, servono entrambe le cose.";
+
+function typeWriter(element, text, i = 0, speed = 60) {
+  if (i < text.length) {
+    element.innerHTML = text.substring(0, i + 1);
+    setTimeout(() => typeWriter(element, text, i + 1, speed), speed);
+  } else {
+    // Quando finisce → appare il bottone
+    document.getElementById("exploreBtn").classList.add("show");
+  }
+}
+
+arrow.addEventListener('click', () => {
+  storySection.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => typeWriter(storyText, text), 800);
+});
+</script>
+
+</body>
 </html>
+
+
