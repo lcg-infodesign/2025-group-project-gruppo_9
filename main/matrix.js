@@ -1,7 +1,7 @@
 // ===== CONFIGURAZIONE COMPLETA =====
 const CONFIG = {
     colors: {
-        background: '#ffffffff',
+        background: '#FBEFD3',
         headerBackground: '#ffffffff',
         headerText: '#EC3434',
         button: {

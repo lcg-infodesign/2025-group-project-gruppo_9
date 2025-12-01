@@ -1,4 +1,10 @@
 /* Stili specifici per la pagina dataset */
+body {
+    background-color: #FBEFD3;
+    margin: 0;
+    padding: 0;
+}
+
 .content-block {
     max-width: 1200px;
     margin: 0 auto;
