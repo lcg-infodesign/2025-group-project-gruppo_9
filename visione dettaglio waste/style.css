@@ -15,7 +15,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #fafafa;
+  background: #F5F3EE;
   font-family: Inter, Arial, sans-serif;
   overflow-x: hidden;
 }
@@ -46,14 +46,14 @@ html, body {
   justify-content: center;
   align-items: center;
   gap: 50px;
-  margin-top: 5px;
+  margin-top: 3px;
 }
 .header-left {
     justify-self: start;
 }
 #headerBar h1 {
   font-family: 'Spectral', serif;
-    font-size: 1.25rem;
+    font-size: 1.7rem;
     font-weight: 600;
     color: var(--dark);
     text-decoration: none;
@@ -76,7 +76,7 @@ html, body {
 .nav-btn {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.9rem;
 
     padding: 10px 18px;
     border-radius: 20px;
