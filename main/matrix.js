@@ -27,8 +27,8 @@ const CONFIG = {
             border: '#adb5bd'
         },
         slider: {
-            track: '#EC3434',
-            thumb: '#C31A1A',
+            track: '#4A4458',
+            thumb: '#D0BCFF',
             text: '#331a05'
         }
     },
@@ -234,11 +234,11 @@ function drawSlider() {
     // Slider track
     fill(CONFIG.colors.slider.track);
     noStroke();
-    rect(slider.x, slider.y, slider.width, 10, 5);
+    rect(slider.x, slider.y, slider.width, 20, 5);
     
     // Slider thumb
     fill(CONFIG.colors.slider.thumb);
-    ellipse(slider.thumb.x, slider.y + 5, slider.thumb.width);
+    ellipse(slider.thumb.x, slider.y +10, slider.thumb.width);
     
     // Year value
     fill(CONFIG.colors.slider.text);
