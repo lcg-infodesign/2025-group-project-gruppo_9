@@ -520,7 +520,7 @@ function drawCellDot(x, y, isClicked, col) {
     if (commodityImages[col] && commodityImages[col].width > 0) {
         // Calcola la dimensione dell'immagine
         const img = commodityImages[col];
-        const maxSize = min(cellWidth, cellHeight) ;
+        const maxSize = min(cellWidth *0.9, cellHeight*0.9) ;
         const aspectRatio = img.width / img.height;
         let w, h;
         if (aspectRatio > 1) {
