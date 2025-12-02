@@ -6,36 +6,126 @@
     <title>I Dati - Food Waste</title>
     <link rel="stylesheet" href="style.css">
 	<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <!-- HEADER -->
-    <header id="headerBar">
+
+<!-- HEADER -->
+<header id="headerBar">
     <div class="header-left">
         <a href="../main/main.html" class="nav-btn">Home</a>
     </div>
 
     <div class="header-center">
-        <a href="../index.html" id="siteLogo">THE (W)HOLE STORY</a>
-    </div>
+    <a href="../index.html" id="siteLogo">
+        THE <span class="logo-light">W</span>HOLE STORY
+    </a>
+</div>
 
     <nav class="header-right">
         <a href="../dati/dati.html" class="nav-link">Data</a>
-        <a href="../team/team.html" class="nav-link">About Us</a>
-        <a href="../info/info.html" class="nav-link">?</a>
+        <a href="../team/team.html" class="nav-link">About</a>
     </nav>
 </header>
 
-    <!-- Contenuto principale -->
-    <main>
-        <!-- Blocco 1: Testo a sinistra, immagine a destra -->
-        <section class="content-block">
-            <div class="text-content">
-                <h2>Chi siamo?</h2>
-            <div class="image-content">
-                <img src="../assets/img/mosche.png" alt="FAO Logo" class="tic-tac-image1" style="max-width: 450px;">
+
+<!-- TITOLO PRINCIPALE -->
+<section class="about-title">
+    <h1 class="about-heading">
+        <span class="about-word">about</span>
+        <span class="us-word">US</span>
+    </h1>
+    <p class="about-intro">
+        We are six Communication Design students from Politecnico di Milano. 
+        This project was created as part of the Computer Graphics for Information Design course.
+        Our team worked <br> collaboratively to combine our skills in data processing, 
+        interactive design, and visualization, aiming to present a complex narrative 
+        in a user-friendly and visually appealing way.
+    </p>
+</section>
+
+
+<!-- SEZIONE VERDE CON LE CARD -->
+<section class="team-section">
+    <div class="team-grid">
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Caterina Gallo</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Giulia Furlani</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Irene Massignani</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Rebecca Sole Bassani</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Stefano Lorini</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+        <div class="team-member">
+            <img src="../assets/img/mosche.png" alt="Member">
+            <h3>Lorenzo Barazzetta</h3>
+            <p>Roles and skills...</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+    <div class="footer-contacts">
+        <p><strong>Contatti:</strong></p>
+
+        <div class="contacts-grid">
+            <div class="names">
+                <p>Caterina Gallo</p>
+                <p>Irene Massignani</p>
+                <p>Giulia Furlani</p>
+                <p>Rebecca Sole Bassani</p>
+                <p>Stefano Lorini</p>
+                <p>Tommaso Barazzetta</p>
             </div>
-        </section>
-    </main>
+
+            <div class="emails">
+                <p>caterina.gallo@example.mail.it</p>
+                <p>irene.massignani@example.mail.it</p>
+                <p>giulia.furlani@example.mail.it</p>
+                <p>bassanirebecca@gmail.com</p>
+                <p>stefano.lorini@example.mail.it</p>
+                <p>tommaso.barazzetta@example.mail.it</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-right">
+        <p><strong>Laboratorio di Computer Grafica per l’Information Design</strong></p>
+        <p>A.A. 2025/2026</p>
+        <p>Docenti: Mauri Michele e Conficconi Davide</p>
+        <img src="../assets/img/logopolimi.png" alt="Polimi Logo">
+    </div>
+
+</footer>
+
 </body>
 </html>
