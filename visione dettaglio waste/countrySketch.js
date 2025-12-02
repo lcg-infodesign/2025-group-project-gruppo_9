@@ -323,7 +323,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
       textSize(14);
       text("No data", x + w/2, y + h/2);
     }
-    drawCommodityLabel(commodityName, x, y, w, h);
+    /*drawCommodityLabel(commodityName, x, y, w, h);*/
     pop();
     return;
   }
@@ -386,11 +386,11 @@ function drawComplexCell(commodityName, x, y, w, h) {
     pop();
   }
 
-  drawCommodityLabel(commodityName, x, y, w, h);
+  /*drawCommodityLabel(commodityName, x, y, w, h);*/
   pop();
 }
 
-function drawCommodityLabel(name, x, y, w, h) {
+/*function drawCommodityLabel(name, x, y, w, h) {
   push();
   noStroke();
   fill(30, 30, 30);
@@ -399,7 +399,7 @@ function drawCommodityLabel(name, x, y, w, h) {
   const labelY = y + h ;
   text(name, x + w/2, labelY);
   pop();
-}
+}*/
 
 function windowResized() {
   // manteniamo resize al width della finestra; l'altezza verrà adattata in draw() in base al contenuto
