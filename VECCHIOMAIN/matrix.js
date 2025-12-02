@@ -1,3 +1,5 @@
+
+
 // ===== CONFIGURAZIONE COMPLETA =====
 const CONFIG = {
     colors: {
