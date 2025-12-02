@@ -5,6 +5,12 @@
     --highlight: #B64939;
 }
 
+body {
+    background-color: #FBEFD3;
+    margin: 0;
+    padding: 0;
+}
+
 /* HEADER */
 #headerBar {
     width: 100vw;

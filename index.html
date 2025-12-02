@@ -58,16 +58,47 @@ function typeWriter(element, text, i = 0, speed = 60) {
     element.innerHTML = text.substring(0, i + 1);
     setTimeout(() => typeWriter(element, text, i + 1, speed), speed);
   } else {
-    // Quando finisce → appare il bottone
     document.getElementById("exploreBtn").classList.add("show");
   }
 }
 
-arrow.addEventListener('click', () => {
+// --- FUNZIONE UNICA DA ATTIVARE (click + scroll + tastiera)
+function triggerStory() {
+  // Evita che la funzione si riattivi più volte
+  if (triggerStory.started) return;
+  triggerStory.started = true;
+
   storySection.scrollIntoView({ behavior: 'smooth' });
+
+  // Aspetta che la sezione sia visibile prima di scrivere
   setTimeout(() => typeWriter(storyText, text), 800);
+}
+
+// CLICK sulla freccia
+arrow.addEventListener('click', triggerStory);
+
+// SCROLL manuale (trackpad, mouse wheel, touch)
+window.addEventListener('wheel', () => {
+  triggerStory();
+}, { passive: true, capture: true });
+
+// SCROLL *qualsiasi* (fallback per Android/iOS)
+document.addEventListener('touchmove', () => {
+  triggerStory();
+}, { passive: true });
+
+// Scroll generale (per sicurezza)
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 10) triggerStory();
+});
+
+// TASTI: freccia ↓, PageDown, Space
+window.addEventListener('keydown', (e) => {
+  const keys = ["ArrowDown", "PageDown", " ", "Spacebar"];
+  if (keys.includes(e.key)) triggerStory();
 });
 </script>
+
 
 </body>
 </html>
