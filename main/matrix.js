@@ -2,13 +2,6 @@
 const CONFIG = {
     colors: {
         background: '#FBEFD3',
-        headerBackground: '#ffffffff',
-        headerText: '#EC3434',
-        button: {
-            normal: '#EC3434',
-            hover: '#C31A1A',
-            text: '#ffffff'
-        },
         cell: {
             active: '#ffffff',        // Bianco
             inactive: '#d6d6d6',      // Grigio medio-chiaro
@@ -42,11 +35,6 @@ const CONFIG = {
         minCellHeight: 50,
         maxCellHeight: 50,
         maxCellWidth: 120,
-        button: {
-            width: 120,
-            height: 40,
-            radius: 25
-        },
         decorativeImages: {
             size: 80, 
             opacity: 150 
@@ -135,6 +123,8 @@ function setup() {
     calculateCellSize();
     
     console.log(`Canvas height: ${totalHeight}, Countries: ${sortedCountries.length}, Matrix Y: ${matrixY}`);
+
+    document.addEventListener('keydown', handleKeyPress);
 }
 
 function calculateTotalHeight() {
@@ -205,29 +195,6 @@ function draw() {
     if (isValidCell(hoveredRow, hoveredCol)) {
         drawTooltip();
     }
-}
-
-function drawButton(button) {
-    const isHover = dist(mouseX, mouseY, button.x, button.y) < CONFIG.layout.button.width / 2;
-    
-    fill(isHover ? CONFIG.colors.button.hover : CONFIG.colors.button.normal);
-    stroke(CONFIG.colors.headerText);
-    strokeWeight(2);
-    
-    // Se il bottone è "?", disegna un cerchio invece di un rettangolo
-    if (button.label === "?") {
-        const circleDiameter = min(CONFIG.layout.button.width, CONFIG.layout.button.height);
-        ellipse(button.x, button.y, circleDiameter, circleDiameter);
-    } else {
-        // Per gli altri bottoni, usa il rettangolo normale
-        rect(button.x - CONFIG.layout.button.width/2, button.y - CONFIG.layout.button.height/2, 
-             CONFIG.layout.button.width, CONFIG.layout.button.height, CONFIG.layout.button.radius);
-    }
-    
-    fill(CONFIG.colors.button.text);
-    noStroke();
-    textAlign(CENTER, CENTER);
-    text(button.label, button.x, button.y);
 }
 
 function drawSlider() {
@@ -305,7 +272,6 @@ function drawDecorativeImages() {
     
     pop();
 }
-
 
 function updateSliderThumb() {
     const percent = (currentYear - yearRange.min) / (yearRange.max - yearRange.min);
@@ -646,4 +612,29 @@ function checkCombination(country, commodity, year) {
         return true;
     }
     return false;
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'ArrowLeft') {
+        // Anno precedente
+        if (currentYear > yearRange.min) {
+            currentYear--;
+            updateYear();
+        }
+    } else if (event.key === 'ArrowRight') {
+        // Anno successivo
+        if (currentYear < yearRange.max) {
+            currentYear++;
+            updateYear();
+        }
+    }
+}
+
+function updateYear() {
+    updateSliderThumb();
+    combinationCache = {};
+    currentCacheYear = null;
+    sortCountriesByCommodities(currentYear);
+    calculateCellSize();
+    redraw();
 }
