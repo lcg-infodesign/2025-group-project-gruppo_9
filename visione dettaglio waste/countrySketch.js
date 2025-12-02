@@ -25,10 +25,10 @@ let commodityImgs = {};
 const COLS = 4;                     
 const INTERNAL_NOMINAL_W = 90;      
 const INTERNAL_NOMINAL_H = 112;     
-const CELL_GAP = 50;                
+const CELL_GAP = 30;                
 const CELL_PADDING = 30;            
 const LEVEL2_COLOR = [220, 60, 90, 220];
-const SIDE_MARGIN = 60;             
+const SIDE_MARGIN = 30;             
 
 // ===== FUNZIONI DI UTILITÀ =====
 
@@ -287,8 +287,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
   rect(x, y, w, h, 8);
 
   const pb = CELL_PADDING;
-  const availW = w - pb * 2;
-  const availH = h - pb * 2;
+  const availW = w - pb * 4;
+  const availH = h - pb * 4;
 
   let baseW = availW;
   let baseH = availH;
@@ -298,7 +298,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
     baseH = Math.round(img_empty.height * scale);
   }
   const baseX = x + (w - baseW) / 2;
-  const baseY = y + (h - baseH) / 2 + 6;
+  const baseY = y + (h - baseH) / 2;
 
   const rowData = data.find(d => d.country === selectedCountry && d.year === selectedYear && d.commodity === commodityName);
 
