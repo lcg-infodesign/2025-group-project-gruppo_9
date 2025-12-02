@@ -48,6 +48,11 @@
     white-space: nowrap;
 }
 
+.logo-light {
+    opacity: 0.3; /* si può regolare tra 0 e 1 */
+    font-weight: 600; /* mantiene lo stesso peso del logo */
+}
+
 /* HOME BUTTON */
 .nav-btn {
     font-family: 'Inter', sans-serif;
