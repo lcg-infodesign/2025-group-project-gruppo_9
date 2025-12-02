@@ -67,6 +67,7 @@ let slider = {
 };
 let matrixY = 0; 
 let commodityImages = []; 
+let commodityOutlineImages = []; // Immagini contorno per commodity senza dati
 let basketImage = null;
 
 // ===== CACHE =====
@@ -122,6 +123,9 @@ function setup() {
         commodityName = normalizeFilename(commodities[i]);
         commodityImages.push(loadImage('../assets/img/' + commodityName+  '.png'));
         console.log('../assets/img/' + commodityName+  '.png');
+
+        commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.png'));
+        console.log('Caricato: ../assets/img/outline/' + commodityName + '.png');
     }
 
     const totalHeight = calculateTotalHeight();
@@ -480,9 +484,7 @@ function drawCell(row, col, year, matrixY) {
 
     setCellStyle(exists, isHovered, isClicked);
     
-    if (exists) {
-        drawCellDot(x, y, isClicked, col);
-    }
+    drawCellDot(x, y, isClicked, col, exists); 
 }
 
 
@@ -514,12 +516,20 @@ function drawCellRect(x, y) {
     rect(x, y, cellWidth, cellHeight);
 }
 
-function drawCellDot(x, y, isClicked, col) {
+function drawCellDot(x, y, isClicked, col, exists) {
     //const dotImage = dotImage;
+    let img;
+
+    if (exists) {
+        // Usa immagine normale
+        img = commodityImages[col];
+    } else {
+        // Usa immagine contorno (outline)
+        img = commodityOutlineImages[col]; 
+    }
     
-    if (commodityImages[col] && commodityImages[col].width > 0) {
+    if (img && img.width  > 0) {
         // Calcola la dimensione dell'immagine
-        const img = commodityImages[col];
         const maxSize = min(cellWidth *0.9, cellHeight*0.9) ;
         const aspectRatio = img.width / img.height;
         let w, h;
@@ -538,11 +548,20 @@ function drawCellDot(x, y, isClicked, col) {
         image(commodityImages[col], x + cellWidth/2, y + cellHeight/2,  w, h);
         pop();
     } else {
-        // Fallback: disegna il puntino se l'immagine non è disponibile
-        fill(isClicked ? CONFIG.colors.cell.clicked : CONFIG.colors.cell.dot);
+        // Fallback: disegna forme diverse
+        fill(exists ? color(100, 200, 100) : color(200, 200, 200));
         noStroke();
-        ellipse(x + cellWidth / 2, y + cellHeight / 2, min(cellWidth, cellHeight) * 0.4);
-    }
+        
+        if (exists) {
+            // Cerchio pieno per dati esistenti
+            ellipse(x + cellWidth/2, y + cellHeight/2, min(cellWidth, cellHeight) * 0.4);
+        } else {
+            // Cerchio vuoto per dati mancanti
+            stroke(150);
+            strokeWeight(1);
+            noFill();
+            ellipse(x + cellWidth/2, y + cellHeight/2, min(cellWidth, cellHeight) * 0.4);
+        }    }
 }
 
 function mouseClicked() {
