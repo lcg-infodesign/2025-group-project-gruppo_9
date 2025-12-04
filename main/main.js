@@ -78,7 +78,7 @@ let currentCacheYear = null;
 function preload() {
     dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
 
-    basketImage = loadImage('../assets/img/basket.png');
+    basketImage = loadImage('../assets/img/basket.svg');
 }
 
 function initializeData() {
@@ -124,8 +124,8 @@ function setup() {
         commodityImages.push(loadImage('../assets/img/cibi/' + commodityName+  '.png'));
         console.log('../assets/img/cibi/' + commodityName+  '.png');
 
-        commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.png'));
-        console.log('Caricato: ../assets/img/outline/' + commodityName + '.png');
+        commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.svg'));
+        console.log('Caricato: ../assets/img/outline/' + commodityName + '.svg');
     }
 
     const totalHeight = calculateTotalHeight();
@@ -517,51 +517,63 @@ function drawCellRect(x, y) {
 }
 
 function drawCellDot(x, y, isClicked, col, exists) {
-    //const dotImage = dotImage;
     let img = null;
 
     if (exists) {
-        // Usa immagine normale
         img = commodityImages[col];
     } else {
-        // Usa immagine contorno (outline)
         img = commodityOutlineImages[col]; 
     }
     
-    if (img && img.width  > 0) {
-        // Calcola la dimensione dell'immagine
-        const maxSize = min(cellWidth *0.9, cellHeight*0.9) ;
-        const aspectRatio = img.width / img.height;
-        let w, h;
-        if (aspectRatio > 1) {
-            // Immagine larga
-            w = maxSize;
-            h = maxSize / aspectRatio;
-        } else {
-            // Immagine alta
-            h = maxSize;
-            w = maxSize * aspectRatio;
-        }
-        
+    if (img && img.width > 0) {
         push();
         imageMode(CENTER);
-        image(img, x + cellWidth/2, y + cellHeight/2,  w, h);
-        pop();
-    } else {
-        // Fallback: disegna forme diverse
-        fill(exists ? color(100, 200, 100) : color(200, 200, 200));
-        noStroke();
         
+        // 1. DISABILITA INTERPOLAZIONE per immagini nitide
+        noSmooth(); // ← QUESTO È IMPORTANTE!
+        
+        // 2. Disegna alla dimensione NATURALE (o multiplo intero)
+        const naturalWidth = img.width;
+        const naturalHeight = img.height;
+        
+        // 3. Calcola dimensione target (mantieni proporzioni)
+        const targetMax = min(cellWidth * 0.9, cellHeight * 0.9);
+        
+        // 4. Calcola scala che mantenga proporzioni e sia multiplo intero se possibile
+        let scale = 1;
+        if (naturalWidth > targetMax || naturalHeight > targetMax) {
+            // Riduci
+            const widthScale = targetMax / naturalWidth;
+            const heightScale = targetMax / naturalHeight;
+            scale = min(widthScale, heightScale);
+        }
+        
+        // 5. Arrotonda a 2 decimali per evitare scaling frazionario
+        scale = Math.round(scale * 100) / 100;
+        
+        const w = naturalWidth * scale;
+        const h = naturalHeight * scale;
+        
+        // 6. Disegna
+        image(img, x + cellWidth/2, y + cellHeight/2, w, h);
+        pop();
+        
+        // 7. Riabilita smooth per il resto del disegno (opzionale)
+        smooth();
+        
+    } else {
+        // Fallback
         if (exists) {
-            // Cerchio pieno per dati esistenti
+            fill(100, 200, 100);
+            noStroke();
             ellipse(x + cellWidth/2, y + cellHeight/2, min(cellWidth, cellHeight) * 0.4);
         } else {
-            // Cerchio vuoto per dati mancanti
             stroke(150);
             strokeWeight(1);
             noFill();
             ellipse(x + cellWidth/2, y + cellHeight/2, min(cellWidth, cellHeight) * 0.4);
-        }    }
+        }
+    }
 }
 
 function mouseClicked() {
