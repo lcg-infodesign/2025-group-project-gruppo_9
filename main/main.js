@@ -121,8 +121,8 @@ function setup() {
     let commodityName;
     for(let i=0; i<commodities.length; i++){
         commodityName = normalizeFilename(commodities[i]);
-        commodityImages.push(loadImage('../assets/img/' + commodityName+  '.png'));
-        console.log('../assets/img/' + commodityName+  '.png');
+        commodityImages.push(loadImage('../assets/img/cibi/' + commodityName+  '.png'));
+        console.log('../assets/img/cibi/' + commodityName+  '.png');
 
         commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.png'));
         console.log('Caricato: ../assets/img/outline/' + commodityName + '.png');
@@ -518,7 +518,7 @@ function drawCellRect(x, y) {
 
 function drawCellDot(x, y, isClicked, col, exists) {
     //const dotImage = dotImage;
-    let img;
+    let img = null;
 
     if (exists) {
         // Usa immagine normale
@@ -545,7 +545,7 @@ function drawCellDot(x, y, isClicked, col, exists) {
         
         push();
         imageMode(CENTER);
-        image(commodityImages[col], x + cellWidth/2, y + cellHeight/2,  w, h);
+        image(img, x + cellWidth/2, y + cellHeight/2,  w, h);
         pop();
     } else {
         // Fallback: disegna forme diverse
