@@ -2,15 +2,6 @@
 const CONFIG = {
     colors: {
         background: '#FBEFD3',
-        cell: {
-            active: '#ffffff',        // Bianco
-            inactive: '#d6d6d6',      // Grigio medio-chiaro
-            hoverActive: '#f0f0f0',   // Grigio molto chiaro al hover
-            hoverInactive: '#a8a8a8', // Grigio medio al hover
-            clicked: '#404040',       // Grigio scuro
-            dot: '#000000',           // Nero per il "dot"
-            stroke: '#808080'         // Grigio medio
-        },
         text: {
             primary: '#283618',
             tooltip: '#283618'
@@ -20,9 +11,14 @@ const CONFIG = {
             border: '#adb5bd'
         },
         slider: {
-            track: '#4A4458',
-            thumb: '#D0BCFF',
-            text: '#331a05'
+            track: '#415E5A',
+            thumb: '#FBEFD3',
+            text: '#16201f'
+        },
+        legend: {
+            background: '#415E5A', // Colore di sfondo della legenda
+            border: '#415E5A',
+            circle: '#FBEFD3' // Colore dei pallini (stesso sfondo del sito)
         }
     },
     layout: {
@@ -39,7 +35,18 @@ const CONFIG = {
             size: 80, 
             opacity: 150 
         },
-        basketOffset: 60
+        basketOffset: 60,
+        // Aggiungi queste configurazioni per il ridimensionamento immagini
+        imageSizing: {
+            min: 20,  // Dimensione minima in pixel
+            max: 50   // Dimensione massima in pixel
+        },
+        legend: {
+            width: 180, // Leggermente più larga
+            height: 140, // Più alta per ospitare l'immagine
+            marginRight: 50, // Più vicina al centro
+            padding: 15
+        }
     },
     typography: {
         titleSize: 48,
@@ -49,7 +56,8 @@ const CONFIG = {
         sliderValueSize: 18,
         maxCountryChars: 18,
         fontFamily: 'Roboto',
-        titleFont: 'Roboto'
+        titleFont: 'Roboto',
+        legendSize: 11
     }
 };
 
@@ -69,6 +77,11 @@ let matrixY = 0;
 let commodityImages = []; 
 let commodityOutlineImages = []; // Immagini contorno per commodity senza dati
 let basketImage = null;
+let legendImage = null;
+
+// Variabili per il ridimensionamento immagini
+let wastePercentages = { min: Infinity, max: -Infinity }; // Min e max delle percentuali
+let imageSizeRange = { min: 20, max: 50 }; // Range dimensioni immagini
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -77,14 +90,15 @@ let currentCacheYear = null;
 // ===== INIZIALIZZAZIONE =====
 function preload() {
     dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
-
     basketImage = loadImage('../assets/img/basket.svg');
+    legendImage = loadImage('../assets/img/legenda.png');
 }
 
 function initializeData() {
     commodities = getUniqueValues('commodity');
     countries = getUniqueValues('country');
     calculateYearRange();
+    calculateWastePercentageRange(currentYear); // Calcola il range delle percentuali
     sortCountriesByCommodities(yearRange.max);
 }
 
@@ -100,6 +114,28 @@ function calculateYearRange() {
     currentYear = yearRange.max;
 }
 
+function calculateWastePercentageRange(year) {
+    wastePercentages.min = Infinity;
+    wastePercentages.max = -Infinity;
+    
+    // Trova la percentuale minima e massima per l'anno corrente
+    for (let i = 0; i < dataset.getRowCount(); i++) {
+        if (dataset.getNum(i, 'year') === year) {
+            const percentage = dataset.getNum(i, 'loss_percentage');
+            if (percentage > 0) { // Considera solo valori positivi
+                wastePercentages.min = min(wastePercentages.min, percentage);
+                wastePercentages.max = max(wastePercentages.max, percentage);
+            }
+        }
+    }
+    
+    // Se non ci sono dati validi, usa valori di default
+    if (wastePercentages.min === Infinity) wastePercentages.min = 0;
+    if (wastePercentages.max === -Infinity) wastePercentages.max = 100;
+    
+    console.log(`Anno ${year}: Min percentage=${wastePercentages.min}, Max=${wastePercentages.max}`);
+}
+
 function getUniqueValues(columnName) {
     const values = new Set();
     for (let i = 0; i < dataset.getRowCount(); i++) {
@@ -109,25 +145,41 @@ function getUniqueValues(columnName) {
 }
 
 function normalizeFilename(name) {
-  if (!name) return "";
-  return name.toLowerCase().trim()
-    .replace(/\s+/g, "")                          
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-    .replace(/[^a-z0-9*-]/g, "");                 
+    if (!name) return "";
+    return name.toLowerCase().trim()
+        .replace(/\s+/g, "")                          
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+        .replace(/[^a-z0-9*-]/g, "");                 
+}
+
+function calculateImageSize(percentage) {
+    // Mappa la percentuale al range delle dimensioni
+    if (percentage <= 0 || wastePercentages.max <= wastePercentages.min) {
+        return imageSizeRange.min; // Dimensione minima per dati nulli o negativi
+    }
+    
+    // Normalizza la percentuale tra 0 e 1
+    const normalized = (percentage - wastePercentages.min) / (wastePercentages.max - wastePercentages.min);
+    
+    // Calcola la dimensione usando il range
+    const size = imageSizeRange.min + normalized * (imageSizeRange.max - imageSizeRange.min);
+    
+    return constrain(size, imageSizeRange.min, imageSizeRange.max);
 }
 
 function setup() {
-    // Calcola l'altezza totale necessaria per tutte le righe
+    // Carica tutte le immagini delle commodity
     let commodityName;
-    for(let i=0; i<commodities.length; i++){
+    for(let i = 0; i < commodities.length; i++){
         commodityName = normalizeFilename(commodities[i]);
-        commodityImages.push(loadImage('../assets/img/cibi/' + commodityName+  '.png'));
-        console.log('../assets/img/cibi/' + commodityName+  '.png');
-
+        commodityImages.push(loadImage('../assets/img/cibi/' + commodityName + '.png'));
         commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.svg'));
-        console.log('Caricato: ../assets/img/outline/' + commodityName + '.svg');
     }
-
+    
+    // Inizializza il range delle dimensioni immagini dal CONFIG
+    imageSizeRange.min = CONFIG.layout.imageSizing.min;
+    imageSizeRange.max = CONFIG.layout.imageSizing.max;
+    
     const totalHeight = calculateTotalHeight();
     const canvas = createCanvas(windowWidth, totalHeight);
     canvas.parent('p5-container');
@@ -164,7 +216,7 @@ function setupUI() {
 }
 
 function calculateCellSize() {
-    const basketSpace = 40; // Spazio per il cestino
+    const basketSpace = 40;
     const availableW = width - CONFIG.layout.margin.horizontal * 2 - basketSpace;
     
     // Per l'altezza, usa tutto lo spazio disponibile nel canvas
@@ -195,16 +247,17 @@ function draw() {
     background(CONFIG.colors.background);
     
     drawSlider();
-    //drawDecorativeImages();
     
     if (commodities.length === 0 || sortedCountries.length === 0) {
         drawLoadingMessage();
         return;
     }
 
-    //drawColumnLabels();
     drawRowLabels();
     drawMatrix(currentYear);
+    
+    // Disegna la legenda delle dimensioni
+    drawSizeLegend();
     
     if (isValidCell(hoveredRow, hoveredCol)) {
         drawTooltip();
@@ -218,8 +271,11 @@ function drawSlider() {
     rect(slider.x, slider.y, slider.width, 20, 5);
     
     // Slider thumb
+    stroke(CONFIG.colors.slider.track);
+    strokeWeight(2);
     fill(CONFIG.colors.slider.thumb);
-    ellipse(slider.thumb.x, slider.y +10, slider.thumb.width);
+    ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
+    noStroke();
     
     // Year value
     fill(CONFIG.colors.slider.text);
@@ -232,59 +288,6 @@ function drawSlider() {
     textSize(12);
     text(yearRange.min, slider.x, slider.y + 40);
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
-}
-
-function drawDecorativeImages() {
-    if (decorativeImages.length === 0) return;
-    
-    const imgSize = CONFIG.layout.decorativeImages.size;
-    
-    // Crea più posizioni - aumentato il numero per coprire l'altezza della tabella
-    const positions = [
-        // Colonna destra
-        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.05 },
-        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.2 },
-        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.4 },
-        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.6 },
-        { x: width - CONFIG.layout.margin.horizontal * 0.4, y: height * 0.8 },
-
-        // Colonna sinistra
-        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.1 },
-        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.3 },
-        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.5 },
-        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.7 },
-        { x: CONFIG.layout.margin.horizontal * 0.2, y: height * 0.9 }
-    ];
-    
-    push();
-    
-    for (let i = 0; i < positions.length; i++) {
-        const pos = positions[i];
-        
-        // Usa l'operatore modulo per ciclare attraverso le immagini
-        const imgIndex = i % decorativeImages.length;
-        const img = decorativeImages[imgIndex];
-        
-        if (img && img.width > 0) {
-            imageMode(CENTER);
-            
-            // Calcola l'animazione "tic-tac"
-            const time = millis() / 1000; // tempo in secondi
-            const animationDuration = 2 + (i % 3) * 0.5; // durate diverse: 2s, 2.5s, 3s
-            const cycle = (time / animationDuration) % 1;
-            
-            const rotation = cycle < 0.5 ? -0.052 : 0.052;
-            
-            push();
-            translate(pos.x, pos.y);
-            rotate(rotation);
-        
-            image(img, 0, 0, imgSize, imgSize * (img.height / img.width));
-            pop();
-        }
-    }
-    
-    pop();
 }
 
 function updateSliderThumb() {
@@ -323,6 +326,9 @@ function updateYearFromSlider(x) {
     currentYear = yearRange.min + round(percent * (yearRange.max - yearRange.min));
     updateSliderThumb();
     
+    // Calcola il range delle percentuali per il nuovo anno
+    calculateWastePercentageRange(currentYear);
+    
     // Riordina le nazioni per il nuovo anno
     combinationCache = {};
     currentCacheYear = null;
@@ -346,7 +352,6 @@ function resizeCanvasForCurrentData() {
         console.log(`Canvas ridimensionato: ${windowWidth}x${newHeight}, Paesi: ${sortedCountries.length}`);
     }
 }
-
 
 // ===== ORDINAMENTO NAZIONI =====
 function sortCountriesByCommodities(year) {
@@ -394,15 +399,6 @@ function updateHoveredCell() {
     hoveredRow = floor((mouseY - matrixY) / cellHeight);
 }
 
-function drawColumnLabels() {
-    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
-    drawLabels(commodities, CONFIG.typography.columnSize, (i) => ({
-        x: CONFIG.layout.margin.horizontal + i * cellWidth + 5,
-        y: matrixY - 15,
-        rotation: -PI / 4
-    }));
-}
-
 function drawRowLabels() {
     const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     drawLabels(sortedCountries, CONFIG.typography.rowSize, (i) => ({
@@ -414,7 +410,7 @@ function drawRowLabels() {
     // Disegna i cestini
     if (basketImage && basketImage.width > 0) {
         for (let i = 0; i < sortedCountries.length; i++) {
-            const x = CONFIG.layout.margin.horizontal +10; // Posizione a destra delle label
+            const x = CONFIG.layout.margin.horizontal + 10; // Posizione a destra delle label
             const y = matrixY + i * cellHeight + cellHeight / 2;
             const size = 40; // Dimensione del cestino
             
@@ -473,7 +469,7 @@ function drawMatrix(currentYear) {
 
 function drawCell(row, col, year, matrixY) {
     // Aggiungi un offset per far spazio al cestino
-    const basketSpace = 40; // Spazio per il cestino
+    const basketSpace = 40;
     const x = CONFIG.layout.margin.horizontal + basketSpace + col * cellWidth;
     const y = matrixY + row * cellHeight;
     
@@ -482,11 +478,9 @@ function drawCell(row, col, year, matrixY) {
     const isHovered = (row === hoveredRow || col === hoveredCol);
     const isClicked = (row === clickedRow && col === clickedCol);
 
-    setCellStyle(exists, isHovered, isClicked);
-    
-    drawCellDot(x, y, isClicked, col, exists); 
+    // Rimuovi completamente lo sfondo della cella - solo immagini!
+    drawCellDot(row, col, x, y, exists, country, year);
 }
-
 
 function checkCombinationCached(country, commodity, year) {
     const cacheKey = `${country}-${commodity}-${year}`;
@@ -498,25 +492,7 @@ function checkCombinationCached(country, commodity, year) {
     return combinationCache[cacheKey];
 }
 
-function setCellStyle(exists, isHovered, isClicked) {
-    if (exists) {
-        if (isClicked) {
-            fill(CONFIG.colors.cell.clicked);
-        } else {
-            fill(isHovered ? CONFIG.colors.cell.hoverActive : CONFIG.colors.cell.active);
-        }
-    } else {
-        fill(isHovered ? CONFIG.colors.cell.hoverInactive : CONFIG.colors.cell.inactive);
-    }
-    stroke(CONFIG.colors.cell.stroke);
-    strokeWeight(0.5);
-}
-
-function drawCellRect(x, y) {
-    rect(x, y, cellWidth, cellHeight);
-}
-
-function drawCellDot(x, y, isClicked, col, exists) {
+function drawCellDot(row, col, x, y, exists, country, year) {
     let img = null;
 
     if (exists) {
@@ -528,41 +504,66 @@ function drawCellDot(x, y, isClicked, col, exists) {
     if (img && img.width > 0) {
         push();
         imageMode(CENTER);
+        noSmooth(); // Disabilita interpolazione per immagini nitide
         
-        // 1. DISABILITA INTERPOLAZIONE per immagini nitide
-        noSmooth(); // ← QUESTO È IMPORTANTE!
-        
-        // 2. Disegna alla dimensione NATURALE (o multiplo intero)
         const naturalWidth = img.width;
         const naturalHeight = img.height;
         
-        // 3. Calcola dimensione target (mantieni proporzioni)
-        const targetMax = min(cellWidth * 0.9, cellHeight * 0.9);
-        
-        // 4. Calcola scala che mantenga proporzioni e sia multiplo intero se possibile
-        let scale = 1;
-        if (naturalWidth > targetMax || naturalHeight > targetMax) {
-            // Riduci
-            const widthScale = targetMax / naturalWidth;
-            const heightScale = targetMax / naturalHeight;
-            scale = min(widthScale, heightScale);
+        // Calcola la dimensione target in base alla percentuale
+        let targetSize;
+        if (exists) {
+            const percentage = getWastePercentage(country, commodities[col], year);
+            targetSize = calculateImageSize(percentage);
+        } else {
+            // Per le immagini outline usa la dimensione originale del tuo codice precedente
+            // Non ridimensionare le outline - mantieni come erano
+            const targetMax = min(cellWidth * 0.9, cellHeight * 0.9);
+            
+            // Calcola scala che mantenga proporzioni
+            let scale = 1;
+            if (naturalWidth > targetMax || naturalHeight > targetMax) {
+                // Riduci
+                const widthScale = targetMax / naturalWidth;
+                const heightScale = targetMax / naturalHeight;
+                scale = min(widthScale, heightScale);
+            }
+            
+            // Arrotonda a 2 decimali per evitare scaling frazionario
+            scale = Math.round(scale * 100) / 100;
+            
+            const w = naturalWidth * scale;
+            const h = naturalHeight * scale;
+            
+            // Disegna l'immagine outline con la vecchia logica
+            image(img, x + cellWidth/2, y + cellHeight/2, w, h);
+            pop();
+            smooth();
+            return; // Esci dalla funzione dopo aver disegnato l'outline
         }
         
-        // 5. Arrotonda a 2 decimali per evitare scaling frazionario
+        // Solo per immagini normali (esistono): calcola scala in base alla percentuale
+        let scale;
+        if (naturalWidth > naturalHeight) {
+            // Immagine più larga che alta
+            scale = targetSize / naturalWidth;
+        } else {
+            // Immagine più alta che larga
+            scale = targetSize / naturalHeight;
+        }
+        
+        // Arrotonda per evitare scaling frazionario
         scale = Math.round(scale * 100) / 100;
         
         const w = naturalWidth * scale;
         const h = naturalHeight * scale;
         
-        // 6. Disegna
+        // Disegna l'immagine
         image(img, x + cellWidth/2, y + cellHeight/2, w, h);
         pop();
-        
-        // 7. Riabilita smooth per il resto del disegno (opzionale)
-        smooth();
+        smooth(); // Riabilita smooth per il resto
         
     } else {
-        // Fallback
+        // Fallback (solo per debug)
         if (exists) {
             fill(100, 200, 100);
             noStroke();
@@ -622,7 +623,6 @@ function drawTooltip() {
         if (wastePercentage !== null) {
             tooltipText += `\n${wastePercentage.toFixed(1)}% waste`;
         }
-        //tooltipText += '\nClick for details →';
     } else {
         tooltipText += '\nNo data available';
     }
@@ -669,23 +669,115 @@ function drawTooltip() {
     strokeWeight(1);
     rect(tooltipX, tooltipY, w, h, 5);
     
-    // Testo del tooltip - ALLINEATO CORRETTAMENTE
+    // Testo del tooltip
     noStroke();
     fill(CONFIG.colors.text.tooltip);
     textAlign(LEFT, TOP);
     
     for (let i = 0; i < lines.length; i++) {
         const yPos = tooltipY + padding + i * lineHeight;
+        text(lines[i], tooltipX + padding, yPos);
+    }
+    pop();
+}
+
+function drawSizeLegend() {
+    const legendX = width - CONFIG.layout.margin.horizontal + 50;
+    const legendY = matrixY + 20;
+    const legendWidth = CONFIG.layout.legend.width;
+    const legendHeight = CONFIG.layout.legend.height;
+    const padding = CONFIG.layout.legend.padding;
+    
+    push();
+    
+    // Sfondo della legenda
+    fill(CONFIG.colors.legend.background);
+    noStroke();
+    rect(legendX, legendY, legendWidth, legendHeight, 8);
+    
+    // Pallini sovrapposti per min e max
+    const circleY = legendY + 35;
+    const smallCircleX = legendX + 20;
+    const bigCircleX = legendX + legendWidth - 30;
+    
+    // Disegna i pallini senza contorno, con trasparenza e che si intersecano
+    fill(CONFIG.colors.legend.circle + 'CC');
+    noStroke();
+    
+    // Calcola l'intersezione - posiziona i cerchi in modo che si sovrappongano
+    const overlap = 15;
+    const smallSize = imageSizeRange.min * 1.5;
+    const bigSize = imageSizeRange.max * 1.2;
+    
+    // Calcola la distanza tra i due cerchi principali
+    const distance = bigCircleX - smallCircleX;
+    
+    // Numero di cerchi intermedi desiderati
+    const intermediateCircles = 3;
+    
+    // Disegna il cerchio grande (max)
+    ellipse(bigCircleX - overlap/2, circleY, bigSize);
+    
+    // Disegna cerchi intermedi (CORRETTO)
+    for (let i = 1; i <= intermediateCircles; i++) {
+        // Calcola la posizione proporzionale tra i due cerchi
+        const t = i / (intermediateCircles + 1);
+        const x = smallCircleX + (distance * t);
         
-        if (i === lines.length - 1 && exists && lines[i].includes('Click')) {
+        // Calcola la dimensione proporzionale
+        const size = smallSize + (bigSize - smallSize) * t;
+        
+        ellipse(x, circleY, size);
+    }
+    
+    // Disegna il cerchio piccolo (min) che si sovrappone
+    ellipse(smallCircleX + overlap/2, circleY, smallSize);
+    
+    // Testo per min e max
+    fill(CONFIG.colors.legend.background);
+    noStroke();
+    textSize(CONFIG.typography.legendSize);
+    textAlign(CENTER, CENTER);
+    
+    // Testo per min
+    text(`${wastePercentages.min.toFixed(1)}%`, smallCircleX + overlap/2, circleY);
+    
+    // Testo per max
+    text(`${wastePercentages.max.toFixed(1)}%`, bigCircleX - overlap/2, circleY);
+    
+    // Linea separatrice
+    stroke(CONFIG.colors.background + '99');
+    strokeWeight(1);
+    line(legendX + padding, legendY + 80, legendX + legendWidth - padding, legendY + 80);
+    
+    // Immagine outline e testo "dato non presente"
+    const outlineImageY = legendY + 110;
+    
+    if (legendImage && legendImage.width > 0) {
+        const outlineImg = legendImage;
+        if (outlineImg && outlineImg.width > 0) {
             push();
-            textStyle(BOLD);
-            text(lines[i], tooltipX + padding, yPos);
+            imageMode(CENTER);
+            noSmooth();
+            
+            const imgSize = 35;
+            const scale = imgSize / max(outlineImg.width, outlineImg.height);
+            const w = outlineImg.width * scale;
+            const h = outlineImg.height * scale;
+            
+            image(outlineImg, legendX + 40, outlineImageY, w, h);
             pop();
-        } else {
-            text(lines[i], tooltipX + padding, yPos);
+            smooth();
         }
     }
+    
+    // Testo "dato non presente"
+    fill(CONFIG.colors.background);
+    noStroke();
+    textSize(CONFIG.typography.legendSize);
+    textAlign(LEFT, CENTER);
+    text("dato non presente", legendX + 60, outlineImageY);
+    
     pop();
 }
 
@@ -723,6 +815,7 @@ function updateYear() {
     updateSliderThumb();
     combinationCache = {};
     currentCacheYear = null;
+    calculateWastePercentageRange(currentYear); // Aggiorna il range delle percentuali
     sortCountriesByCommodities(currentYear);
     
     // Ridimensiona il canvas prima di ridisegnare
