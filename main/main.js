@@ -4,16 +4,17 @@ const CONFIG = {
         background: '#FBEFD3',
         text: {
             primary: '#283618',
-            tooltip: '#283618'
+            tooltip: '#FBEFD3'
         },
         tooltip: {
-            background: '#ffffff',
-            border: '#adb5bd'
+            background: '#415E5A',
+            border: '#283618'
         },
         slider: {
             track: '#415E5A',
             thumb: '#FBEFD3',
-            text: '#16201f'
+            text: '#16201f',
+            wave: '#415E5A' // Colore per il grafico a onda
         },
         legend: {
             background: '#415E5A', // Colore di sfondo della legenda
@@ -26,17 +27,12 @@ const CONFIG = {
         sliderHeight: 100,
         margin: {
             horizontal: 350,
-            vertical: 100
+            vertical: 60
         },
         minCellHeight: 50,
         maxCellHeight: 100,
         maxCellWidth: 120,
-        decorativeImages: {
-            size: 80, 
-            opacity: 150 
-        },
         basketOffset: 60,
-        // Aggiungi queste configurazioni per il ridimensionamento immagini
         imageSizing: {
             min: 20,  // Dimensione minima in pixel
             max: 50   // Dimensione massima in pixel
@@ -83,6 +79,11 @@ let legendImage = null;
 let wastePercentages = { min: Infinity, max: -Infinity }; // Min e max delle percentuali
 let imageSizeRange = { min: 20, max: 50 }; // Range dimensioni immagini
 
+// Variabili per l'effetto slider tipo YouTube
+let yearDataCounts = {}; // Conterrà il numero di righe per ogni anno
+let isHoveringSlider = false; // Per sapere se siamo sopra lo slider
+let hoveredYear = null; // L'anno su cui siamo con il mouse
+
 // ===== CACHE =====
 let combinationCache = {};
 let currentCacheYear = null;
@@ -98,8 +99,30 @@ function initializeData() {
     commodities = getUniqueValues('commodity');
     countries = getUniqueValues('country');
     calculateYearRange();
+    calculateYearDataCounts(); // CALCOLA I DATI PER ANNO
     calculateWastePercentageRange(currentYear); // Calcola il range delle percentuali
     sortCountriesByCommodities(yearRange.max);
+}
+
+// Calcola il numero di righe (dati) per ogni anno
+function calculateYearDataCounts() {
+    yearDataCounts = {};
+    
+    for (let i = 0; i < dataset.getRowCount(); i++) {
+        const year = dataset.getNum(i, 'year');
+        if (!yearDataCounts[year]) {
+            yearDataCounts[year] = 0;
+        }
+        yearDataCounts[year]++;
+    }
+    
+    // Normalizza i valori tra 0 e 1 per l'altezza
+    const maxCount = Math.max(...Object.values(yearDataCounts));
+    for (let year in yearDataCounts) {
+        yearDataCounts[year] = yearDataCounts[year] / maxCount;
+    }
+    
+    console.log("Year data counts calculated:", yearDataCounts);
 }
 
 function calculateYearRange() {
@@ -172,7 +195,7 @@ function setup() {
     let commodityName;
     for(let i = 0; i < commodities.length; i++){
         commodityName = normalizeFilename(commodities[i]);
-        commodityImages.push(loadImage('../assets/img/cibi/' + commodityName + '.png'));
+        commodityImages.push(loadImage('../assets/img/cibi/' + commodityName + '.svg'));
         commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.svg'));
     }
     
@@ -264,11 +287,25 @@ function draw() {
     }
 }
 
+// Funzione helper per ottenere l'anno da una coordinata X
+function getYearFromX(x) {
+    const percent = constrain((x - slider.x) / slider.width, 0, 1);
+    return yearRange.min + round(percent * (yearRange.max - yearRange.min));
+}
+
 function drawSlider() {
+    // Disegna prima il grafico sotto la track (se siamo in hover)
+    if (isHoveringSlider && hoveredYear) {
+        drawSliderWaveGraph();
+    }
+    
     // Slider track
     fill(CONFIG.colors.slider.track);
     noStroke();
     rect(slider.x, slider.y, slider.width, 20, 5);
+    
+    // Disegna i punti del grafico sulla track
+    drawSliderDataPoints();
     
     // Slider thumb
     stroke(CONFIG.colors.slider.track);
@@ -290,35 +327,141 @@ function drawSlider() {
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
 }
 
+// Disegna i punti dati sulla slider track
+function drawSliderDataPoints() {
+    const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+    const trackHeight = 20;
+    
+    for (let year of years) {
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        
+        // Altezza del punto in base alla quantità di dati
+        const pointHeight = 3 + (dataRatio * 7); // Da 3px a 10px
+        
+        // Colore basato sulla quantità di dati
+        const colorValue = map(dataRatio, 0, 1, 150, 255);
+        fill(colorValue, colorValue * 0.8, colorValue * 0.6);
+        
+        // Disegna un punto per ogni anno con dati
+        ellipse(x, slider.y + trackHeight/2, pointHeight);
+    }
+}
+
+// Disegna il grafico a onda quando in hover (simile a YouTube)
+function drawSliderWaveGraph() {
+    const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+    const graphHeight = 30;
+    const graphY = slider.y - graphHeight;
+    
+    push();
+    noFill();
+    
+    // Disegna il grafico a linea
+    beginShape();
+    stroke(CONFIG.colors.slider.wave);
+    strokeWeight(2);
+    fill(CONFIG.colors.slider.wave + '30'); // Trasparenza 30%
+
+    vertex(slider.x + slider.width, graphY + graphHeight + slider.height/2); // basso a destra
+    vertex(slider.x, graphY + graphHeight + slider.height/2 ); // basso a sinistra   
+    for (let i = 0; i < years.length; i++) {
+        const year = years[i];
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        const y = graphY + graphHeight - (dataRatio * graphHeight);
+
+        vertex(x, y);
+    }
+    endShape(CLOSE);
+    
+    // Punti sul grafico
+    for (let year of years) {
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        const y = graphY + graphHeight - (dataRatio * graphHeight);
+        
+        fill(CONFIG.colors.slider.wave);
+        noStroke();
+        ellipse(x, y, 6);
+    }
+    
+    pop();
+}
+
 function updateSliderThumb() {
     const percent = (currentYear - yearRange.min) / (yearRange.max - yearRange.min);
     slider.thumb.x = slider.x + percent * slider.width;
 }
 
+function mouseMoved() {
+    // Controlla se siamo sopra lo slider
+    isHoveringSlider = (
+        mouseX >= slider.x - 20 && 
+        mouseX <= slider.x + slider.width + 20 &&
+        mouseY >= slider.y - 60 && 
+        mouseY <= slider.y + 40
+    );
+    
+    if (isHoveringSlider) {
+        hoveredYear = getYearFromX(mouseX);
+        // Cambia il cursore a "pointer" quando siamo sopra lo slider
+        document.body.style.cursor = 'pointer';
+    } else {
+        hoveredYear = null;
+        document.body.style.cursor = 'default';
+    }
+    
+    // Mantieni anche l'update della cella hovered per la matrice
+    updateHoveredCell();
+    
+    return false;
+}
+
 function mousePressed() {
-    // Check slider
+    // Check slider thumb
     if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
         slider.thumb.dragging = true;
+        document.body.style.cursor = 'grabbing';
         return;
     }
     
-    // Check slider track
+    // Check slider track o area hover
     if (mouseX >= slider.x && mouseX <= slider.x + slider.width &&
         mouseY >= slider.y - 10 && mouseY <= slider.y + 20) {
         updateYearFromSlider(mouseX);
         slider.thumb.dragging = true;
+        document.body.style.cursor = 'grabbing';
         return;
     }
+    
+    // Se clicchi nell'area del grafico hover
+    if (isHoveringSlider) {
+        updateYearFromSlider(mouseX);
+        slider.thumb.dragging = true;
+        document.body.style.cursor = 'grabbing';
+        return;
+    }
+    
+    return true;
 }
 
 function mouseDragged() {
     if (slider.thumb.dragging) {
         updateYearFromSlider(mouseX);
+        document.body.style.cursor = 'grabbing';
     }
+    return false;
 }
 
 function mouseReleased() {
     slider.thumb.dragging = false;
+    if (isHoveringSlider) {
+        document.body.style.cursor = 'pointer';
+    } else {
+        document.body.style.cursor = 'default';
+    }
+    return false;
 }
 
 function updateYearFromSlider(x) {
@@ -718,7 +861,7 @@ function drawSizeLegend() {
     // Disegna il cerchio grande (max)
     ellipse(bigCircleX - overlap/2, circleY, bigSize);
     
-    // Disegna cerchi intermedi (CORRETTO)
+    // Disegna cerchi intermedi
     for (let i = 1; i <= intermediateCircles; i++) {
         // Calcola la posizione proporzionale tra i due cerchi
         const t = i / (intermediateCircles + 1);
