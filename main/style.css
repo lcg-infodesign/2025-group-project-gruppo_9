@@ -148,16 +148,3 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
-
-@media (max-width: 900px) {
-    .team-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
