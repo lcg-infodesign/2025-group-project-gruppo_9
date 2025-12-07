@@ -1,9 +1,24 @@
-/* Stili specifici per la pagina dataset */
+/* ROOT E BODY: allineati al colore di header e footer */
+:root {
+    --bg: #F5F3EE; /* Colore base (header/footer/sfondo about US) */
+    --dark: #20332B;
+    --accent: #E6C031;
+    --highlight: #B64939;
+    --text-color: #283618; /* Colore scuro per i paragrafi */
+}
 
 html, body {
     scroll-behavior: smooth;
 }
 
+body {
+    /* IMPOSTATO SU VAR(--bg) PER UNIFORMARE LO SFONDO SUPERIORE */
+    background-color: var(--bg); 
+    margin: 0;
+    padding: 0;
+}
+
+/* SEZIONI CONTENUTO GENERICHE */
 .content-block {
     max-width: 1200px;
     margin: 0 auto;
@@ -18,6 +33,51 @@ html, body {
     flex-direction: row-reverse;
 }
 
+/* FONT GENERALI PER IL CONTENUTO */
+h2 {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 20px;
+    color: #415E5A;
+    margin-bottom: 30px;
+}
+
+p {
+    /* TUTTI I PARAGRAFI: ROBOTO MONO */
+    font-family: 'Roboto Mono', monospace; 
+    font-size: 14px;
+    line-height: 1.8;
+    color: #415E5A;
+    margin-bottom: 20px;
+}
+
+p.underline {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+ul {
+    /* LISTE: ROBOTO MONO */
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #415E5A;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+li {
+    /* LISTE: ROBOTO MONO */
+    font-family: 'Roboto Mono', monospace;
+    margin-bottom: 8px;
+}
+
+.bullet-points {
+    list-style-type: disc;
+    margin-left: 30px;
+}
+
+
+/* SEZIONI FLEX */
 .text-content {
     flex: 1;
     min-width: 300px;
@@ -30,6 +90,7 @@ html, body {
     align-items: center;
 }
 
+/* ANIMAZIONI (NON MODIFICATE) */
 .tic-tac-image1{
     height: auto;
     animation-name: tic-tac;
@@ -54,7 +115,6 @@ html, body {
     animation-duration: 1.8s;
 }
 
-/* Animazione tic-tac (solo rotazione sinistra-destra) */
 @keyframes tic-tac {
     0%, 100% {
         transform: rotate(-3deg);
@@ -64,43 +124,6 @@ html, body {
     }
 }
 
-h2 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: #000000;
-    margin-bottom: 30px;
-}
-
-p {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #283618;
-    margin-bottom: 20px;
-}
-
-p.underline {
-    text-decoration: underline;
-    font-weight: 600;
-}
-
-ul {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #283618;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-li {
-    margin-bottom: 8px;
-}
-
-.bullet-points {
-    list-style-type: disc;
-    margin-left: 30px;
-}
 
 @media (max-width: 768px) {
     .content-block {
@@ -118,15 +141,8 @@ li {
     }
 }
 
-/* Stili per l'header */
-:root {
-    --bg: #F5F3EE;
-    --dark: #20332B;
-    --accent: #E6C031;
-    --highlight: #B64939;
-}
 
-/* HEADER */
+/* STILI HEADER */
 #headerBar {
     width: 100vw;
     height: 60px;
@@ -135,48 +151,56 @@ li {
     padding: 14px 32px;
 
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Sinistra - centro - destra */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-    white-space: nowrap;   /* Evita che i link vadano a capo */
-    overflow-x: hidden;    /* Previene qualsiasi scroll orizzontale */
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 
-/* COLONNE */
+/* COLONNE HEADER */
 .header-left {
     justify-self: start;
 }
 
-/* LOGO CENTRALE — SEMPRE CENTRATO */
 .header-center {
     justify-self: center;
 }
 
-/* DESTRA */
 .header-right {
     justify-self: end;
     display: flex;
     gap: 20px;
 }
 
+/* STILE LOGO MULTI-LINEA E CENTRATURA */
 #siteLogo {
-    font-family: 'Spectral', serif;
-    font-size: 1.25rem;
+    /* CAMBIATO DA 'Spectral' A 'Roboto' */
+    font-family: 'Roboto', sans-serif; 
+    font-size: 1.5rem; 
     font-weight: 600;
     color: var(--dark);
     text-decoration: none;
-    white-space: nowrap;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    line-height: 1.1;
 }
 
-.logo-light {
-    opacity: 0.3; /* si può regolare tra 0 e 1 */
-    font-weight: 600; /* mantiene lo stesso peso del logo */
+/* STILE SOTTOTITOLO */
+.subtitle {
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-top: 2px;
 }
 
 /* HOME BUTTON */
 .nav-btn {
-    font-family: 'Inter', sans-serif;
+    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
+    font-family: 'Roboto Mono', monospace; 
     font-weight: 500;
     font-size: 0.9rem;
 
@@ -198,7 +222,8 @@ li {
 
 /* MENU LINK */
 .nav-link {
-    font-family: 'Inter', sans-serif;
+    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
+    font-family: 'Roboto Mono', monospace;
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -223,45 +248,66 @@ li {
 }
 
 
-/* TITOLO ABOUT US */
+/* TITOLO PAGINA (about US) */
 .about-title {
+    /* SETTATO SU VAR(--bg) PER UNIFORMARE LO SFONDO SUPERIORE */
+    background-color: var(--bg); 
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
     padding: 80px 40px 40px;
 }
 
-.about-title h1, 
-.about-heading, 
-.about-word, 
-.us-word {
-    font-family: 'Spectral', serif;
-}
-
+/* CONTENITORE H1 */
 .about-title h1, 
 .about-heading {
     font-size: 3rem;
-    color: #415E5A;
     letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+    color: #415E5A;
+    display: block; /* Mantiene h1 come blocco */
 }
 
+/* ELEMENTI about e US - FORZATI SULLA STESSA RIGA */
+.about-word, 
+.us-word {
+    /* Rimuove qualsiasi ereditarietà di display: block */
+    display: inline-block; 
+    vertical-align: top;
+    font-family: 'Roboto', sans-serif;
+    color: #415E5A;
+}
+
+/* Titolo "about" (Roboto Medium Italic) */
+.about-word {
+    font-weight: 500;     /* medium */
+    font-style: italic;
+    font-size: 4rem;
+    margin-right: 15px; /* Spazio tra le due parole */
+}
+
+/* Titolo "US" (Roboto Semibold) */
+.us-word {
+    font-weight: 600;     /* semibold */
+    font-style: normal;
+    font-size: 4rem;
+}
+
+/* TESTO INTRODUTTIVO SOTTO IL TITOLO (about US) */
 .about-intro {
-    width: 100%;               /* prende tutto lo schermo */
-    padding: 0 40px;           /* stesso padding del titolo */
-    margin-top: 20px;
+    font-family: 'Roboto Mono', monospace; 
+    
+    /* MODIFICA: Utilizziamo padding laterale per limitare la larghezza (10% su ciascun lato) */
+    padding: 0 10%; 
+    
+    /* Ridotto il margine superiore (era 40px) per avvicinarlo al titolo */
+    margin: 20px auto 0 auto; 
+    
+    /* Rimuove max-width non necessario */
     font-size: 0.9rem;
     color: #415E5A;
     line-height: 1.6;
-    text-align: left;
-}
-
-.about-word {
-    font-weight: 70;     /* medium */
-    font-style: italic;
-    font-size: 4rem;
-}
-
-.us-word {
-    font-weight: 700;     /* semibold */
-    font-size: 4rem;
+    text-align: center;
 }
 
 
@@ -288,48 +334,53 @@ li {
 .team-member img {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
-    background: var(--bg);
-    padding: 10px;
+    /* Rimosso il padding e il background che creavano il contorno */
+    border-radius: 50%; 
+    /* Rimuovi completamente o imposta a 0px il padding se l'immagine è già tonda */
+    padding: 0; 
 }
 
 /* Font per nomi e ruoli delle cards */
 .team-member h3,
 .team-member p {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Roboto Mono', monospace; 
 }
 /* nome */
 .team-member h3 {
     margin-top: 15px;
     font-size: 1rem;
+    font-weight: 600;
 }
 
 /* ruolo */
 .team-member p {
     font-size: 0.85rem;
     color: var(--bg);
+    font-weight: 400;
 }
 
 
+/* FOOTER */
 .footer {
     background: var(--bg);
     padding: 40px 60px;
     display: grid;
     grid-template-columns: 1.5fr 2px 1fr; /* sinistra | linea | destra */
     gap: 40px;
-    align-items: stretch; /* fondamentale per la linea verticale */
+    align-items: stretch;
 }
 
-/* Contatti */
+/* Contatti (FONT ROBOTO MONO) */
 .footer-contacts p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
+    font-family: 'Roboto Mono', monospace; 
 }
 
 .contacts-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* nomi | email */
+    grid-template-columns: 1fr 1.2fr;
     gap: 10px 30px;
     margin-top: 10px;
 }
@@ -338,6 +389,7 @@ li {
     margin: 3px 0;
     font-size: 0.9rem;
     color: #415E5A;
+    font-family: 'Roboto Mono', monospace;
 }
 
 /* LINEA VERTICALE */
@@ -345,14 +397,15 @@ li {
     background: #415E5A;
     opacity: 0.35;
     width: 2px;
-    height: 100%;     /* ora funziona */
+    height: 100%;
 }
 
-/* Parte destra */
+/* Parte destra (FONT ROBOTO MONO) */
 .footer-right p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
+    font-family: 'Roboto Mono', monospace;
 }
 
 .footer-right img {
@@ -360,7 +413,6 @@ li {
     margin-top: 20px;
     display: block;
 }
-
 
 
 @media (max-width: 900px) {
@@ -374,4 +426,3 @@ li {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-

@@ -1,10 +1,10 @@
 // ===== CONFIGURAZIONE COMPLETA =====
 const CONFIG = {
     colors: {
-        background: '#FBEFD3',
+        background: '#F5F3EE',
         text: {
             primary: '#283618',
-            tooltip: '#FBEFD3'
+            tooltip: '#F5F3EE'
         },
         tooltip: {
             background: '#415E5A',
@@ -12,14 +12,14 @@ const CONFIG = {
         },
         slider: {
             track: '#415E5A',
-            thumb: '#FBEFD3',
+            thumb: '#F5F3EE',
             text: '#16201f',
             wave: '#415E5A' // Colore per il grafico a onda
         },
         legend: {
             background: '#415E5A', // Colore di sfondo della legenda
             border: '#415E5A',
-            circle: '#FBEFD3' // Colore dei pallini (stesso sfondo del sito)
+            circle: '#F5F3EE' // Colore dei pallini (stesso sfondo del sito)
         }
     },
     layout: {

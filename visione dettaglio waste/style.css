@@ -22,16 +22,27 @@ html, body {
 
 /* ---------------- HEADER ---------------- */
 
+/* Stili per l'header */
+:root {
+    --bg: #F5F3EE;
+    --dark: #20332B;
+    --accent: #E6C031;
+    --highlight: #B64939;
+}
+
+body {
+    background-color: #FBEFD3;
+    margin: 0;
+    padding: 0;
+}
+
+/* HEADER */
 #headerBar {
     width: 100vw;
     height: 60px;
     background: var(--bg);
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
     padding: 14px 32px;
-    z-index: 999;
-  
-
-    position: fixed;
 
     display: grid;
     grid-template-columns: 1fr auto 1fr; /* Sinistra - centro - destra */
@@ -42,37 +53,50 @@ html, body {
     overflow-x: hidden;    /* Previene qualsiasi scroll orizzontale */
 }
 
-.header-center {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  
-}
+/* COLONNE */
 .header-left {
     justify-self: start;
 }
-#headerBar h1 {
-  font-family: 'Spectral', serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--dark);
-    text-decoration: none;
-    white-space: nowrap;
+
+/* LOGO CENTRALE — SEMPRE CENTRATO */
+.header-center {
+    justify-self: center;
 }
 
-
-
+/* DESTRA */
 .header-right {
     justify-self: end;
     display: flex;
     gap: 20px;
 }
 
+/* STILE LOGO MULTI-LINEA E CENTRATURA */
+#siteLogo {
+    /* CAMBIATO DA 'Spectral' A 'Roboto' */
+    font-family: 'Roboto', sans-serif; 
+    font-size: 1.5rem; 
+    font-weight: 600;
+    color: var(--dark);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    line-height: 1.1;
+}
+
+/* STILE SOTTOTITOLO */
+.subtitle {
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-top: 2px;
+}
+
 /* HOME BUTTON */
 .nav-btn {
-    font-family: 'Inter', sans-serif;
+    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
+    font-family: 'Roboto Mono', monospace; 
     font-weight: 500;
     font-size: 0.9rem;
 
@@ -94,7 +118,8 @@ html, body {
 
 /* MENU LINK */
 .nav-link {
-    font-family: 'Inter', sans-serif;
+    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
+    font-family: 'Roboto Mono', monospace;
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -272,25 +297,28 @@ html, body {
   background-position: center;
   background-attachment: fixed;
 }*/
+
+/* FOOTER */
 .footer {
     background: var(--bg);
     padding: 40px 60px;
     display: grid;
-    grid-template-columns: 1.5fr 2px 1fr; 
+    grid-template-columns: 1.5fr 2px 1fr; /* sinistra | linea | destra */
     gap: 40px;
-    align-items: stretch; 
+    align-items: stretch;
 }
 
-/* Contatti */
+/* Contatti (FONT ROBOTO MONO) */
 .footer-contacts p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
+    font-family: 'Roboto Mono', monospace; 
 }
 
 .contacts-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* nomi | email */
+    grid-template-columns: 1fr 1.2fr;
     gap: 10px 30px;
     margin-top: 10px;
 }
@@ -299,6 +327,7 @@ html, body {
     margin: 3px 0;
     font-size: 0.9rem;
     color: #415E5A;
+    font-family: 'Roboto Mono', monospace;
 }
 
 /* LINEA VERTICALE */
@@ -306,18 +335,32 @@ html, body {
     background: #415E5A;
     opacity: 0.35;
     width: 2px;
-    height: 100%;     /* ora funziona */
+    height: 100%;
 }
 
-/* Parte destra */
+/* Parte destra (FONT ROBOTO MONO) */
 .footer-right p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
+    font-family: 'Roboto Mono', monospace;
 }
 
 .footer-right img {
     width: 140px;
     margin-top: 20px;
     display: block;
+}
+
+
+@media (max-width: 900px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

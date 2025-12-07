@@ -1,8 +1,67 @@
-/* Stili specifici per la pagina dataset */
+/* Stili globali e variabili */
+:root {
+    --bg: #F5F3EE; /* Colore base (header/footer/sfondo) */
+    --dark: #20332B;
+    --accent: #E6C031;
+    --highlight: #B64939;
+    --text-color: #283618; /* Colore scuro per i paragrafi */
+}
 
 html, body {
     scroll-behavior: smooth;
 }
+
+body {
+    /* Uniformato lo sfondo al colore di header e footer */
+    background-color: var(--bg); 
+    margin: 0;
+    padding: 0;
+}
+
+/* FONT GENERALI PER IL CONTENUTO */
+h2 {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 20px;
+    color: var(--dark);
+    margin-bottom: 30px;
+}
+
+p {
+    /* TUTTI I PARAGRAFI: ROBOTO MONO */
+    font-family: 'Roboto Mono', monospace; 
+    font-size: 14px;
+    line-height: 1.8;
+    color: #415E5A; /* Colore scuro per il testo normale */
+    margin-bottom: 20px;
+}
+
+p.underline {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+ul {
+    /* LISTE: ROBOTO MONO */
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #415E5A;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+li {
+    font-family: 'Roboto Mono', monospace;
+    margin-bottom: 8px;
+}
+
+.bullet-points {
+    list-style-type: disc;
+    margin-left: 30px;
+}
+
+
+/* SEZIONI CONTENUTO GENERICHE */
 .content-block {
     max-width: 1200px;
     margin: 0 auto;
@@ -13,113 +72,126 @@ html, body {
     min-height: 60vh;
 }
 
-/* Secondo blocco invertito e sfondo verde a tutta larghezza */
-.content-block.green-bg {
-    flex-direction: row-reverse;  /* testo a destra, immagini a sinistra */
-    background: #415E5A;          /* verde scuro */
-    padding: 60px 20px 100px;
-    gap: 40px;                     /* distanza tra testo e immagini */
-    width: 100vw;                  /* copre tutta la larghezza dello schermo */
-    box-sizing: border-box;        /* include padding nella larghezza */
+.content-block:nth-child(even) {
+    flex-direction: row-reverse;
 }
 
-/* Centrare e limitare la larghezza del contenuto */
-.content-block.green-bg .text-content,
-.content-block.green-bg .image-content {
-    max-width: 550px; /* puoi cambiare come preferisci */
-}
-
-/* Colore del testo */
-.content-block.green-bg p,
-.content-block.green-bg ul,
-.content-block.green-bg li,
-.content-block.green-bg h2 {
-    color: var(--bg); 
-}
-
+/* SEZIONI FLEX */
 .text-content {
-    flex: 1;
+    flex: 1.5; /* Più spazio per il testo */
     min-width: 300px;
 }
 
 .image-content {
-    flex: 1;
+    flex: 1; /* Meno spazio per le immagini */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.tic-tac-image1{
+/* IMPOSTAZIONI SPECIFICHE PER IMMAGINI MULTIPLE */
+
+/* BLOCCHI IMMAGINI MULTIPLE (per Blocco 1: Banana e Sacco) */
+/* BLOCCHI IMMAGINI MULTIPLE (per Blocco 1: Banana e Sacco) */
+.content-block .image-content {
+    /* Il contenitore deve essere relativo per posizionare gli elementi assoluti */
+    position: relative; 
+    display: flex; /* Manteniamo flex per centrare il contenitore */
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Diamo altezza sufficiente per la sovrapposizione */
+}
+
+/* Stili specifici per le singole immagini nel Blocco 1 */
+.content-block .image-content img:nth-child(1) { /* Banana */
+    position: absolute;
+    max-width: 350px !important; 
+    top: 50px; /* Posizionata in alto */
+    left: 50%; /* Centrata orizzontalmente */
+    transform: translateX(-50%);
+    z-index: 10; /* La banana sta sopra il sacco */
+}
+.content-block .image-content img:nth-child(2) { /* Sacco */
+    position: absolute;
+    max-width: 250px !important; /* Leggermente più grande del tuo 200px precedente */
+    bottom: 0; /* Posizionato in basso */
+    left: 50%; /* Centrato orizzontalmente */
+    transform: translateX(-50%);
+    z-index: 5; /* Il sacco sta sotto la banana */
+}
+
+/* Blocco 2: Sezione verde a tutta larghezza (how does it work?) */
+.green-section {
+    flex-direction: row-reverse;
+    background: #415E5A; /* verde scuro */
+    padding: 60px 20px 100px;
+    gap: 40px;
+    width: 100vw;
+    box-sizing: border-box;
+    margin: 0; 
+    
+    display: flex; 
+    justify-content: center;
+}
+
+/* Contenuto del blocco verde */
+.green-section .text-content,
+.green-section .image-content {
+    max-width: 550px;
+    margin: 0; 
+}
+
+/* Colore del testo nel blocco verde (bianco/chiaro) */
+.green-section p,
+.green-section ul,
+.green-section li,
+.green-section h2 {
+    color: var(--bg); 
+}
+
+/* BLOCCHI IMMAGINI MULTIPLE (per Blocco 2: Mela e Cestino) */
+.green-section .image-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 350px; /* Aumenta l'altezza del contenitore per posizionare la mela */
+}
+
+/* Stili specifici per le singole immagini nel Blocco 2 (Mela e Cestino) */
+.green-section .image-content img:nth-child(2) { /* Cestino */
+    max-width: 280px !important;
+    position: absolute;
+    bottom: 0;
+    right: 50px;
+}
+.green-section .image-content img:nth-child(1) { /* Mela */
+    max-width: 100px !important;
+    position: absolute;
+    top: 150px;
+    left: 200px;
+    z-index: 10;
+    animation-duration: 2.5s;
+}
+
+
+/* ANIMAZIONI (NON MODIFICATE) */
+.tic-tac-image1, .tic-tac-image2, .tic-tac-image3 {
     height: auto;
     animation-name: tic-tac;
     animation-timing-function: steps(1, end);
     animation-iteration-count: infinite;
-    animation-duration: 2s;
 }
 
-.tic-tac-image2{
-    height: auto;
-    animation-name: tic-tac;
-    animation-timing-function: steps(1, end);
-    animation-iteration-count: infinite;
-    animation-duration: 2.3s;
-}
+.tic-tac-image1 { animation-duration: 2s; }
+.tic-tac-image2 { animation-duration: 2.3s; }
+.tic-tac-image3 { animation-duration: 1.8s; }
 
-.tic-tac-image3{
-    height: auto;
-    animation-name: tic-tac;
-    animation-timing-function: steps(1, end);
-    animation-iteration-count: infinite;
-    animation-duration: 1.8s;
-}
-
-/* Animazione tic-tac (solo rotazione sinistra-destra) */
 @keyframes tic-tac {
-    0%, 100% {
-        transform: rotate(-3deg);
-    }
-    50% {
-        transform: rotate(3deg);
-    }
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
 }
 
-h2 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: #000000;
-    margin-bottom: 30px;
-}
-
-p {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #283618;
-    margin-bottom: 20px;
-}
-
-p.underline {
-    text-decoration: underline;
-    font-weight: 600;
-}
-
-ul {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #283618;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-li {
-    margin-bottom: 8px;
-}
-
-.bullet-points {
-    list-style-type: disc;
-    margin-left: 30px;
-}
 
 @media (max-width: 768px) {
     .content-block {
@@ -137,75 +209,66 @@ li {
     }
 }
 
-/* Stili per l'header */
-:root {
-    --bg: #F5F3EE;
-    --dark: #20332B;
-    --accent: #E6C031;
-    --highlight: #B64939;
-}
 
-/* HEADER */
+/* STILI HEADER */
 #headerBar {
     width: 100vw;
     height: 60px;
     background: var(--bg);
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
     padding: 14px 32px;
-
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Sinistra - centro - destra */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-    white-space: nowrap;   /* Evita che i link vadano a capo */
-    overflow-x: hidden;    /* Previene qualsiasi scroll orizzontale */
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 
-/* COLONNE */
-.header-left {
-    justify-self: start;
-}
-
-/* LOGO CENTRALE: SEMPRE CENTRATO */
-.header-center {
-    justify-self: center;
-}
-
-/* DESTRA */
+.header-left { justify-self: start; }
+.header-center { justify-self: center; }
 .header-right {
     justify-self: end;
     display: flex;
     gap: 20px;
 }
 
+/* STILE LOGO MULTI-LINEA (ROBOTO) */
 #siteLogo {
-    font-family: 'Spectral', serif;
-    font-size: 1.25rem;
+    font-family: 'Roboto', sans-serif; 
+    font-size: 1.5rem; 
     font-weight: 600;
     color: var(--dark);
     text-decoration: none;
-    white-space: nowrap;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    line-height: 1.1;
 }
 
-.logo-light {
-    opacity: 0.3; /* si può regolare tra 0 e 1 */
-    font-weight: 600; /* mantiene lo stesso peso del logo */
+.subtitle {
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-top: 2px;
 }
 
-/* HOME BUTTON */
-.nav-btn {
-    font-family: 'Inter', sans-serif;
+/* LINK NAVIGAZIONE (ROBOTO MONO) */
+.nav-btn, .nav-link {
+    font-family: 'Roboto Mono', monospace; 
     font-weight: 500;
     font-size: 0.9rem;
+    color: var(--dark);
+    text-decoration: none;
+}
 
+.nav-btn {
     padding: 10px 18px;
     border-radius: 20px;
     border: 2px solid var(--dark);
     background: transparent;
-    color: var(--dark);
-    text-decoration: none;
-
     transition: all 0.25s ease;
 }
 
@@ -215,17 +278,10 @@ li {
     transform: translateY(-2px);
 }
 
-/* MENU LINK */
 .nav-link {
-    font-family: 'Inter', sans-serif;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: var(--dark);
     position: relative;
 }
 
-/* underline animata */
 .nav-link::after {
     content: "";
     position: absolute;
@@ -241,85 +297,91 @@ li {
     width: 100%;
 }
 
-/* TITOLO */
+/* TITOLI DI SEZIONE (es. focus on THE DATASET) */
 .about-title {
+    background-color: var(--bg); 
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
     padding: 80px 40px 40px;
 }
 
 .about-title h1, 
-.about-heading, 
-.about-word, 
-.us-word {
-    font-family: 'Spectral', serif;
-}
-
-.about-title h1, 
 .about-heading {
     font-size: 3rem;
-    color: #415E5A;
     letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--dark);
+    display: block;
 }
 
+/* Titolo "focus on" / "how does it work" (Roboto Medium Italic) */
 .about-word {
-    font-weight: 70;     /* medium */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;     /* medium */
     font-style: italic;
     font-size: 4rem;
+    color: #415E5A; 
+    display: block;
 }
 
+/* Titolo "THE DATASET" / "PROJECT AND VISUALIZATION" (Roboto Semibold) */
 .us-word {
-    font-weight: 700;     /* semibold */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;     /* semibold */
+    font-style: normal;
     font-size: 4rem;
-     display: block;
+    color: #415E5A; 
+    display: block;
 }
 
 
+/* FOOTER (FONT ROBOTO MONO) */
 .footer {
     background: var(--bg);
     padding: 40px 60px;
     display: grid;
-    grid-template-columns: 1.5fr 2px 1fr; /* sinistra | linea | destra */
+    grid-template-columns: 1.5fr 2px 1fr;
     gap: 40px;
-    align-items: stretch; /* fondamentale per la linea verticale */
+    align-items: stretch;
 }
 
-/* Contatti */
-.footer-contacts p {
+.footer-contacts p, .contacts-grid p, .footer-right p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
+    font-family: 'Roboto Mono', monospace; 
 }
 
 .contacts-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* nomi | email */
+    grid-template-columns: 1fr 1.2fr;
     gap: 10px 30px;
     margin-top: 10px;
 }
 
-.contacts-grid p {
-    margin: 3px 0;
-    font-size: 0.9rem;
-    color: #415E5A;
-}
-
-/* LINEA VERTICALE */
 .footer-divider {
     background: #415E5A;
     opacity: 0.35;
     width: 2px;
-    height: 100%;     /* ora funziona */
-}
-
-/* Parte destra */
-.footer-right p {
-    font-size: 0.9rem;
-    color: #415E5A;
-    margin: 4px 0;
+    height: 100%;
 }
 
 .footer-right img {
     width: 140px;
     margin-top: 20px;
     display: block;
+}
+
+
+@media (max-width: 900px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
