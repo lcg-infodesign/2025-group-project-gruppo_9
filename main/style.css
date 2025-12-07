@@ -11,43 +11,32 @@ body {
     padding: 0;
 }
 
-/* HEADER */
+/* STILI HEADER */
 #headerBar {
     width: 100vw;
     height: 60px;
     background: var(--bg);
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
     padding: 14px 32px;
-
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Sinistra - centro - destra */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-    white-space: nowrap;   /* Evita che i link vadano a capo */
-    overflow-x: hidden;    /* Previene qualsiasi scroll orizzontale */
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 
-/* COLONNE */
-.header-left {
-    justify-self: start;
-}
-
-/* LOGO CENTRALE — SEMPRE CENTRATO */
-.header-center {
-    justify-self: center;
-}
-
-/* DESTRA */
+.header-left { justify-self: start; }
+.header-center { justify-self: center; }
 .header-right {
     justify-self: end;
     display: flex;
     gap: 20px;
 }
 
-/* STILE LOGO MULTI-LINEA E CENTRATURA */
+/* STILE LOGO MULTI-LINEA (ROBOTO) */
 #siteLogo {
-    /* CAMBIATO DA 'Spectral' A 'Roboto' */
     font-family: 'Roboto', sans-serif; 
     font-size: 1.5rem; 
     font-weight: 600;
@@ -59,7 +48,6 @@ body {
     line-height: 1.1;
 }
 
-/* STILE SOTTOTITOLO */
 .subtitle {
     font-size: 0.85rem;
     font-weight: 400;
@@ -68,20 +56,20 @@ body {
     margin-top: 2px;
 }
 
-/* HOME BUTTON */
-.nav-btn {
-    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
+/* LINK NAVIGAZIONE (ROBOTO MONO) */
+.nav-btn, .nav-link {
     font-family: 'Roboto Mono', monospace; 
     font-weight: 500;
     font-size: 0.9rem;
+    color: var(--dark);
+    text-decoration: none;
+}
 
+.nav-btn {
     padding: 10px 18px;
     border-radius: 20px;
     border: 2px solid var(--dark);
     background: transparent;
-    color: var(--dark);
-    text-decoration: none;
-
     transition: all 0.25s ease;
 }
 
@@ -91,18 +79,10 @@ body {
     transform: translateY(-2px);
 }
 
-/* MENU LINK */
 .nav-link {
-    /* CAMBIATO DA 'Inter' A 'Roboto Mono' */
-    font-family: 'Roboto Mono', monospace;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: var(--dark);
     position: relative;
 }
 
-/* underline animata */
 .nav-link::after {
     content: "";
     position: absolute;
@@ -118,18 +98,18 @@ body {
     width: 100%;
 }
 
-/* FOOTER */
+
+/* FOOTER (FONT ROBOTO MONO) */
 .footer {
     background: var(--bg);
     padding: 40px 60px;
     display: grid;
-    grid-template-columns: 1.5fr 2px 1fr; /* sinistra | linea | destra */
+    grid-template-columns: 1.5fr 2px 1fr;
     gap: 40px;
     align-items: stretch;
 }
 
-/* Contatti (FONT ROBOTO MONO) */
-.footer-contacts p {
+.footer-contacts p, .contacts-grid p, .footer-right p {
     font-size: 0.9rem;
     color: #415E5A;
     margin: 4px 0;
@@ -143,14 +123,6 @@ body {
     margin-top: 10px;
 }
 
-.contacts-grid p {
-    margin: 3px 0;
-    font-size: 0.9rem;
-    color: #415E5A;
-    font-family: 'Roboto Mono', monospace;
-}
-
-/* LINEA VERTICALE */
 .footer-divider {
     background: #415E5A;
     opacity: 0.35;
@@ -158,18 +130,23 @@ body {
     height: 100%;
 }
 
-/* Parte destra (FONT ROBOTO MONO) */
-.footer-right p {
-    font-size: 0.9rem;
-    color: #415E5A;
-    margin: 4px 0;
-    font-family: 'Roboto Mono', monospace;
-}
-
 .footer-right img {
     width: 140px;
     margin-top: 20px;
     display: block;
+}
+
+
+@media (max-width: 900px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 
