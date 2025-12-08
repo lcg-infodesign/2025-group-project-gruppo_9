@@ -1,5 +1,5 @@
 :root {
-  --ui-bg: rgba(255,255,255,0.95);
+  --ui-bg: #F5F3EE;
   --accent: #222;
   
   --bg: #F5F3EE;
@@ -17,7 +17,7 @@ html, body {
   padding: 0;
   background: #415E5A;
   font-family: Inter, Arial, sans-serif;
-  overflow-x: hidden;
+  
 }
 
 /* ---------------- HEADER ---------------- */
@@ -31,14 +31,14 @@ html, body {
 }
 
 body {
-    background-color: #FBEFD3;
+    background-color: #F5F3EE;
     margin: 0;
     padding: 0;
 }
 
 /* HEADER */
 #headerBar {
-    width: 100vw;
+    width: 100%;
     height: 60px;
     background: var(--bg);
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
@@ -178,11 +178,11 @@ body {
 /* ---------------- CANVAS ---------------- */
 
 #canvasContainer {
-  width: 100%;
+  width:100%;
   display: flex;
-  justify-content: center;
+  
   margin-top:0;   
-  padding-bottom: 100px;
+  
   overflow: scroll;
   overflow-x: hidden;
   
@@ -195,12 +195,6 @@ body {
 
 /* ---------------- BACKGROUND ---------------- */
 
-/*body {
-  background-image: url("assets/sfondo.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}*/
 
 /* FOOTER */
 .footer {
@@ -210,6 +204,7 @@ body {
     grid-template-columns: 1.5fr 2px 1fr; /* sinistra | linea | destra */
     gap: 40px;
     align-items: stretch;
+    
 }
 
 /* Contatti (FONT ROBOTO MONO) */

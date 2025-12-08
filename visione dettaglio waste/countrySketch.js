@@ -568,7 +568,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
 
 // ===== RESIZE =====
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth, height);
   setupSliderDimensions();
   updateSliderThumb();
 }
