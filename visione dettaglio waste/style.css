@@ -144,37 +144,15 @@ body {
 }
 
 
-/* ---------------- TIMELINE ---------------- */
 
-
-#timelineWrapper {
-  width: 80%;
-  align-self: center;          
-  display: flex; 
-  padding-top: 100px; 
-}
-
-
-#timelineContainer {
-  width: 100%;
-  display: flex;
-  align-self: center; 
-  
- 
-  
-  color: #f7030300;
-  
-  
-
-}
 #topControls {
-  position: fixed;
+  position: relative;
                  
   width: 100%;
   background: transparent;
   
   padding-top: 0px;
-  padding-bottom: 15px;
+  
   display: flex;
   flex-direction: column;
   
@@ -182,10 +160,10 @@ body {
 }
 
 #dropdownContainer {
-  width: 89%;               
-  padding: 20px;
+  width: 90%;               
+  padding-top: 55px;
   display:flex;
-  
+  position:absolute;
   justify-content: flex-end; 
   
 }
@@ -195,81 +173,7 @@ body {
   border-radius: 6px;
 }
 
-/* Rimuove lo stile nativo */
-#yearSlider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 20px;
-  align-self: center;
-  background: #4A4458;
-  cursor: pointer;
-}
 
-/* TRACK — Chrome/Safari/Edge */
-#yearSlider::-webkit-slider-runnable-track {
-  height: 6px;
-  background: #4A4458;       /* colore linea */
-  border-radius: 60%;
-}
-
-/* THUMB — Chrome/Safari/Edge */
-#yearSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 30px;
-  width: 3px;
-  background: #D0BCFF;       /* colore thumb */
-  border-radius: 20%;        /* forma → cerchio */
-  border: 3px solid #D0BCFF;   /* bordo */
-  margin-top: -12px;          /* centra il thumb sul track */
-  transition: 0.25s;
-}
-
-/* Effetto hover */
-#yearSlider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-/* ACTIVE (mentre si trascina) */
-#yearSlider:active::-webkit-slider-thumb {
-  background: #20332B;
-}
-
-/* ------------------- FIREFOX ------------------- */
-
-#yearSlider::-moz-range-track {
-  height: 6px;
-  background: #BDBDBD;
-  border-radius: 10px;
-}
-
-#yearSlider::-moz-range-thumb {
-  height: 22px;
-  width: 22px;
-  background: #EC3434;
-  border-radius: 50%;
-  border: 3px solid white;
-  transition: 0.25s;
-}
-
-#yearSlider::-moz-range-thumb:hover {
-  transform: scale(1.2);
-}
-#yearLableWrap {
-  
-  
-  align-self: center;
-  color: #ed1212;
-
-}
-
-#yearLable {
-  
-  align-self: center;
-  color: #ed1212;
-  font-weight: 1rem;
-
-}
 
 /* ---------------- CANVAS ---------------- */
 
@@ -277,7 +181,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 190px;   
+  margin-top:0;   
   padding-bottom: 100px;
   overflow: scroll;
   overflow-x: hidden;

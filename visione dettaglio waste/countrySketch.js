@@ -1,3 +1,20 @@
+// ===== CONFIGURAZIONE STILE (da Codice B) =====
+const CONFIG = {
+  colors: {
+      background: '#FFFFFF', // O quello che preferisci per il canvas
+      slider: {
+          track: '#415E5A',
+          thumb: '#F5F3EE',
+          text: '#16201f',
+          wave: '#415E5A' // Colore per il grafico a onda
+      }
+  },
+  typography: {
+      fontFamily: 'Inter, Arial, sans-serif',
+      sliderValueSize: 18
+  }
+};
+
 // ===== VARIABILI GLOBALI E CONFIGURAZIONE =====
 
 // Riferimento canvas
@@ -13,6 +30,17 @@ let commodities = [];
 let selectedCountry = "";
 let selectedYear = null;
 
+// Variabili per lo Slider (Timeline)
+let yearDataCounts = {}; // Per il grafico a onda
+let slider = {
+  x: 0, y: 0, width: 0, height: 30,
+  thumb: { x: 0, width: 28, dragging: false }
+};
+let isHoveringSlider = false;
+let hoveredYear = null;
+let yearRange = { min: 0, max: 0 };
+
+
 // Immagini
 const ASSETS_BASE = "assets/img/";
 let img_empty = null;
@@ -21,16 +49,20 @@ let img_basket = null;
 let img_nodata = null;
 let commodityImgs = {};
 
-// Parametri visivi
+// Parametri visivi griglia
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 112;
-
-// Nuovo layout semplificato
 const TARGET_CELL_WIDTH = 300;
 const CELL_SPACING = 25;
 const SIDE_MARGIN = 30;
 
-// Colore riempimento
+// Layout Verticale
+const TOP_TEXT_MARGIN = 20; 
+const HEADER_HEIGHT_DOM = 0; // Se hai un header HTML, metti qui l'altezza stimata
+let SLIDER_Y_POS = 80;       // Posizione verticale dello slider
+let GRID_START_Y = 180;      // Dove inizia la griglia
+
+// Colore riempimento commodity
 const LEVEL2_COLOR = [220, 60, 90, 220];
 
 
@@ -72,11 +104,14 @@ function setup() {
 
   clear();
   noStroke();
-  textFont("Inter, Arial, sans-serif");
+  textFont(CONFIG.typography.fontFamily);
 
   parseCSV();
   setupCountrySelect();
-  setupTimelineUI();
+  
+  // Setup Slider
+  calculateYearDataCounts(); // Calcola dati per la wave
+  setupSliderDimensions();
 
   // carica icone commodity
   for (let c of commodities) {
@@ -86,6 +121,7 @@ function setup() {
 
   applyUrlParams();
 
+  // Inizializzazioni default
   if (!selectedCountry && countries.length > 0) {
     selectedCountry = countries[0];
     const sel = document.getElementById("countrySelect");
@@ -93,11 +129,10 @@ function setup() {
   }
 
   if (!selectedYear) {
-    const sl = document.getElementById("yearSlider");
-    if (sl) selectedYear = parseInt(sl.value);
+    selectedYear = yearRange.max; // Default all'anno più recente
   }
-
-  updateVisualization();
+  
+  updateSliderThumb(); // Posiziona il thumb corretto
 }
 
 
@@ -126,10 +161,37 @@ function parseCSV() {
 
   countries.sort();
   commodities.sort();
+
+  // Calcola range anni
+  const years = data.map(d => d.year).filter(y => !isNaN(y));
+  if (years.length > 0) {
+    yearRange.min = Math.min(...years);
+    yearRange.max = Math.max(...years);
+  }
+}
+
+// Calcola densità dati per la "Wave" della timeline
+function calculateYearDataCounts() {
+    yearDataCounts = {};
+    
+    // Conta quante entry ci sono per ogni anno
+    for (let d of data) {
+        const y = d.year;
+        if (!isNaN(y)) {
+            if (!yearDataCounts[y]) yearDataCounts[y] = 0;
+            yearDataCounts[y]++;
+        }
+    }
+    
+    // Normalizza tra 0 e 1
+    const maxCount = Math.max(...Object.values(yearDataCounts), 1);
+    for (let year in yearDataCounts) {
+        yearDataCounts[year] = yearDataCounts[year] / maxCount;
+    }
 }
 
 
-// ===== UI =====
+// ===== UI LOGIC =====
 function setupCountrySelect() {
   const sel = document.getElementById("countrySelect");
   if (!sel) return;
@@ -144,77 +206,230 @@ function setupCountrySelect() {
 
   sel.addEventListener("change", () => {
     selectedCountry = sel.value;
-    updateVisualization();
+    // Non serve chiamare updateVisualization esplicitamente perché draw() è in loop
   });
 
   if (countries.length > 0) sel.value = countries[0];
 }
 
-function setupTimelineUI() {
-  const slider = document.getElementById("yearSlider");
-  if (!slider) return;
-
-  const years = Array.from(new Set(data.map(d => d.year)))
-    .filter(y => !isNaN(y))
-    .sort((a, b) => a - b);
-
-  if (years.length > 0) {
-    slider.min = Math.min(...years);
-    slider.max = Math.max(...years);
-    if (!slider.value) slider.value = slider.max;
-  }
-
-  slider.addEventListener("input", e => {
-    selectedYear = parseInt(e.target.value);
-    const lab = document.getElementById("yearLabel");
-    if (lab) lab.textContent = selectedYear;
-    updateVisualization();
-  });
-
-  setupKeyboardNavigation(slider);
+function setupSliderDimensions() {
+    slider.width = Math.min(windowWidth * 0.8, 800); // Max width 800px
+    slider.x = (windowWidth - slider.width) / 2;
+    
+    // Posizionamento verticale layout
+    const headerH = document.getElementById("headerBar") ? document.getElementById("headerBar").getBoundingClientRect().height : 0;
+    
+    // Definiamo le altezze
+    const textY = headerH + 20;
+    SLIDER_Y_POS = textY + 50; // Slider sotto il testo
+    GRID_START_Y = SLIDER_Y_POS + 80; // Griglia sotto lo slider
+    
+    slider.y = SLIDER_Y_POS;
 }
 
-function setupKeyboardNavigation(slider) {
-  window.addEventListener("keydown", e => {
-    const minY = parseInt(slider.min);
-    const maxY = parseInt(slider.max);
-
-    if (e.key === "ArrowLeft") selectedYear = Math.max(minY, selectedYear - 1);
-    else if (e.key === "ArrowRight") selectedYear = Math.min(maxY, selectedYear + 1);
-    else return;
-
-    slider.value = selectedYear;
-    const lab = document.getElementById("yearLabel");
-    if (lab) lab.textContent = selectedYear;
-    updateVisualization();
-  });
+function updateSliderThumb() {
+    if (!selectedYear) return;
+    const percent = (selectedYear - yearRange.min) / (yearRange.max - yearRange.min);
+    slider.thumb.x = slider.x + percent * slider.width;
 }
 
-function updateVisualization() {
-  const t = document.getElementById("title");
-  if (t) t.textContent = `${selectedCountry || "—"} ${selectedYear || ""}`;
+// Funzione helper slider
+function getYearFromX(x) {
+    const percent = constrain((x - slider.x) / slider.width, 0, 1);
+    return yearRange.min + round(percent * (yearRange.max - yearRange.min));
+}
+
+// ===== INTERAZIONE MOUSE (P5.JS) =====
+
+function mouseMoved() {
+    // Gestione hover slider
+    isHoveringSlider = (
+        mouseX >= slider.x - 20 && 
+        mouseX <= slider.x + slider.width + 20 &&
+        mouseY >= slider.y - 60 && 
+        mouseY <= slider.y + 40
+    );
+    
+    if (isHoveringSlider) {
+        hoveredYear = getYearFromX(mouseX);
+        cursor('pointer');
+    } else {
+        hoveredYear = null;
+        cursor('default');
+    }
+    return false;
+}
+
+function mousePressed() {
+    // Click sul pallino (Thumb)
+    if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
+        slider.thumb.dragging = true;
+        cursor('grabbing');
+        return;
+    }
+    
+    // Click sulla track
+    if (isHoveringSlider) {
+        updateYearFromSlider(mouseX);
+        slider.thumb.dragging = true;
+        cursor('grabbing');
+        return;
+    }
+}
+
+function mouseDragged() {
+    if (slider.thumb.dragging) {
+        updateYearFromSlider(mouseX);
+        cursor('grabbing');
+    }
+    return false;
+}
+
+function mouseReleased() {
+    slider.thumb.dragging = false;
+    if (isHoveringSlider) cursor('pointer');
+    else cursor('default');
+}
+
+function updateYearFromSlider(x) {
+    const newYear = getYearFromX(x);
+    if (newYear !== selectedYear) {
+        selectedYear = newYear;
+        updateSliderThumb();
+        
+        // Aggiorna label HTML se esiste ancora
+        const lab = document.getElementById("yearLabel");
+        if (lab) lab.textContent = selectedYear;
+        
+        updateVisualization(); // Aggiorna titolo HTML
+    }
 }
 
 
-// ===== DRAW =====
+// ===== DRAW MAIN =====
 function draw() {
   if (!img_empty) return;
 
   clear();
+  
+  // 1. Disegna Titolo (Nazione - Anno)
+  drawHeaderInfo();
 
-  const header = document.getElementById("headerBar");
-  const headerHeight = header ? header.getBoundingClientRect().height : 0;
-  const topY = headerHeight + 20;
+  // 2. Disegna Slider
+  drawTimeline();
 
-  drawFlexGrid(commodities, topY);
+  // 3. Disegna Griglia
+  drawFlexGrid(commodities, GRID_START_Y);
+}
+
+function drawHeaderInfo() {
+    push();
+    fill(0);
+    noStroke();
+    textAlign(CENTER, TOP);
+    textSize(40);
+    
+    const textToDisplay = `${selectedCountry || "Seleziona Nazione"}`;
+    
+    // Posiziona sopra lo slider, allineato a sinistra del layout
+    text(textToDisplay, 735, 40 );
+    pop();
+}
+
+function drawTimeline() {
+    // --- Wave Graph (Hover) ---
+    if (isHoveringSlider && hoveredYear) {
+        drawSliderWaveGraph();
+    }
+    
+    // --- Track ---
+    fill(CONFIG.colors.slider.track);
+    noStroke();
+    rect(slider.x, slider.y, slider.width, 20, 5);
+    
+    // --- Data Points ---
+    drawSliderDataPoints();
+    
+    // --- Thumb ---
+    stroke(CONFIG.colors.slider.track);
+    strokeWeight(2);
+    fill(CONFIG.colors.slider.thumb);
+    ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
+    noStroke();
+    
+    // --- Text Labels ---
+    fill(CONFIG.colors.slider.text);
+    textAlign(CENTER, CENTER);
+    textSize(CONFIG.typography.sliderValueSize);
+    
+    // Anno corrente sotto il pallino
+    text(selectedYear, slider.x + slider.width / 2, slider.y + 45);
+    
+    // Range min/max
+    textSize(12);
+    textAlign(LEFT);
+    text(yearRange.min, slider.x, slider.y + 45);
+    textAlign(RIGHT);
+    text(yearRange.max, slider.x + slider.width, slider.y + 45);
+}
+
+function drawSliderDataPoints() {
+    const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+    
+    for (let year of years) {
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        
+        // Dimensione e colore punto
+        const pointHeight = 3 + (dataRatio * 7); 
+        const colorValue = map(dataRatio, 0, 1, 150, 255);
+        fill(colorValue, colorValue * 0.8, colorValue * 0.6);
+        
+        ellipse(x, slider.y + 10, pointHeight);
+    }
+}
+
+function drawSliderWaveGraph() {
+    const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+    const graphHeight = 30;
+    const graphY = slider.y - graphHeight;
+    
+    push();
+    // Linea
+    beginShape();
+    stroke(CONFIG.colors.slider.wave);
+    strokeWeight(2);
+    fill(CONFIG.colors.slider.wave + '30'); // Hex opacity
+    
+    vertex(slider.x + slider.width, graphY + graphHeight + 10);
+    vertex(slider.x, graphY + graphHeight + 10);
+    
+    for (let year of years) {
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        const y = graphY + graphHeight - (dataRatio * graphHeight);
+        vertex(x, y);
+    }
+    endShape(CLOSE);
+    
+    // Pallini sulla wave
+    noStroke();
+    fill(CONFIG.colors.slider.wave);
+    for (let year of years) {
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        const y = graphY + graphHeight - (dataRatio * graphHeight);
+        ellipse(x, y, 4);
+    }
+    pop();
 }
 
 
-// ===== FLEX GRID SEMPLIFICATO =====
+// ===== FLEX GRID (Mantenuta dal codice A) =====
 function drawFlexGrid(items, startY) {
   let x = SIDE_MARGIN;
   let y = startY;
-  const maxW = width - SIDE_MARGIN -10;
+  const maxW = width - SIDE_MARGIN - 10;
 
   for (let item of items) {
     const w = TARGET_CELL_WIDTH;
@@ -230,11 +445,12 @@ function drawFlexGrid(items, startY) {
     x += w + CELL_SPACING;
   }
 
-  if (height < y + 300) resizeCanvas(windowWidth, y + 300);
+  // Resize se il contenuto eccede
+  if (height < y + 100) resizeCanvas(windowWidth, y + 100);
 }
 
 
-// ===== DRAW COMPLEX CELL =====
+// ===== DRAW COMPLEX CELL (Mantenuta dal codice A) =====
 function drawComplexCell(commodityName, x, y, w, h) {
 
   push();
@@ -353,6 +569,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
 // ===== RESIZE =====
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  setupSliderDimensions();
+  updateSliderThumb();
 }
 
 
@@ -370,21 +588,18 @@ function getUrlParams() {
 
 function applyUrlParams() {
   const params = getUrlParams();
-
   if (params.country) {
     selectedCountry = params.country;
     const countrySelect = document.getElementById("countrySelect");
     if (countrySelect) countrySelect.value = selectedCountry;
   }
-
   if (params.year) {
     selectedYear = params.year;
-    const yearSlider = document.getElementById("yearSlider");
-    const yearLabel = document.getElementById("yearLabel");
-
-    if (yearSlider) yearSlider.value = selectedYear;
-    if (yearLabel) yearLabel.innerText = selectedYear;
   }
-
   updateVisualization();
+}
+
+function updateVisualization() {
+  const t = document.getElementById("title");
+  if (t) t.textContent = `${selectedCountry || "—"} ${selectedYear || ""}`;
 }
