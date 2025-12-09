@@ -26,7 +26,7 @@ const CONFIG = {
         headerHeight: 0,
         sliderHeight: 100,
         margin: {
-            horizontal: 350,
+            horizontal: 300,
             vertical: 60
         },
         minCellHeight: 50,
@@ -656,54 +656,53 @@ function drawCellDot(row, col, x, y, exists, country, year) {
         let targetSize;
         if (exists) {
             const percentage = getWastePercentage(country, commodities[col], year);
-            targetSize = calculateImageSize(percentage);
-        } else {
-            // Per le immagini outline usa la dimensione originale del tuo codice precedente
-            // Non ridimensionare le outline - mantieni come erano
-            const targetMax = min(cellWidth * 0.9, cellHeight * 0.9);
-            
-            // Calcola scala che mantenga proporzioni
-            let scale = 1;
-            if (naturalWidth > targetMax || naturalHeight > targetMax) {
-                // Riduci
-                const widthScale = targetMax / naturalWidth;
-                const heightScale = targetMax / naturalHeight;
-                scale = min(widthScale, heightScale);
+            targetSize = calculateImageSize(percentage)* 1.2; // Scala leggermente più grande per immagini piene
+            let scale;
+            if (naturalWidth > naturalHeight) {
+                // Immagine più larga che alta
+                scale = targetSize / naturalWidth;
+            } else {
+                // Immagine più alta che larga
+                scale = targetSize / naturalHeight;
             }
             
-            // Arrotonda a 2 decimali per evitare scaling frazionario
+            // Arrotonda per evitare scaling frazionario
             scale = Math.round(scale * 100) / 100;
             
+    const smallSize = imageSizeRange.min * 1.5;
+    const bigSize = imageSizeRange.max * 1.2;
+
             const w = naturalWidth * scale;
             const h = naturalHeight * scale;
-            
-            // Disegna l'immagine outline con la vecchia logica
-            image(img, x + cellWidth/2, y + cellHeight/2, w, h);
-            pop();
-            smooth();
-            return; // Esci dalla funzione dopo aver disegnato l'outline
+
+            fill(CONFIG.colors.legend.background+'cc'); // Colore di sfondo leggero
+            circle(x + cellWidth/2, y + cellHeight/2, max(w, h)); // Cerchio di sfondo leggero
+        } 
+        
+
+        // Per le immagini outline usa la dimensione originale del tuo codice precedente
+        const targetMax = min(cellWidth * 0.7, cellHeight * 0.7);
+        
+        // Calcola scala che mantenga proporzioni
+        let scale = 1;
+        if (naturalWidth > targetMax || naturalHeight > targetMax) {
+            // Riduci
+            const widthScale = targetMax / naturalWidth;
+            const heightScale = targetMax / naturalHeight;
+            scale = min(widthScale, heightScale);
         }
         
-        // Solo per immagini normali (esistono): calcola scala in base alla percentuale
-        let scale;
-        if (naturalWidth > naturalHeight) {
-            // Immagine più larga che alta
-            scale = targetSize / naturalWidth;
-        } else {
-            // Immagine più alta che larga
-            scale = targetSize / naturalHeight;
-        }
-        
-        // Arrotonda per evitare scaling frazionario
+        // Arrotonda a 2 decimali per evitare scaling frazionario
         scale = Math.round(scale * 100) / 100;
         
         const w = naturalWidth * scale;
         const h = naturalHeight * scale;
         
-        // Disegna l'immagine
+        // Disegna l'immagine outline con la vecchia logica
         image(img, x + cellWidth/2, y + cellHeight/2, w, h);
         pop();
-        smooth(); // Riabilita smooth per il resto
+        smooth();
+        return; // Esci dalla funzione dopo aver disegnato l'outline
         
     } else {
         // Fallback (solo per debug)
