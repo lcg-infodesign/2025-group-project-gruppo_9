@@ -3,7 +3,7 @@
   --accent: #222;
   
   --bg: #F5F3EE;
-  --dark: #20332B;
+  
   --accent: #E6C031;
   --highlight: #B64939;
 
@@ -15,7 +15,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #415E5A;
+  
   font-family: Inter, Arial, sans-serif;
   
 }

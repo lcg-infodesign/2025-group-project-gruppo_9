@@ -54,7 +54,7 @@ const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 112;
 const TARGET_CELL_WIDTH = 300;
 const CELL_SPACING = 25;
-const SIDE_MARGIN = 30;
+const SIDE_MARGIN = 100;
 
 // Layout Verticale
 const TOP_TEXT_MARGIN = 20; 
@@ -70,7 +70,7 @@ const LEVEL2_COLOR = [220, 60, 90, 220];
 function normalizeFilename(name) {
   if (!name) return "";
   return name.toLowerCase().trim()
-    .replace(/\s+/g, "*")
+    .replace(/\s+/g, "_")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9*-]/g, "");
 }
@@ -99,7 +99,7 @@ function preload() {
 
 // ===== SETUP =====
 function setup() {
-  cnv = createCanvas(windowWidth, windowHeight);
+  cnv = createCanvas(windowWidth, windowHeight+1000);
   cnv.parent("canvasContainer");
 
   clear();
@@ -133,6 +133,7 @@ function setup() {
   }
   
   updateSliderThumb(); // Posiziona il thumb corretto
+  document.addEventListener('keydown',handleKeyPress);
 }
 
 
@@ -213,7 +214,7 @@ function setupCountrySelect() {
 }
 
 function setupSliderDimensions() {
-    slider.width = Math.min(windowWidth * 0.8, 800); // Max width 800px
+    slider.width = Math.min(windowWidth * 0.8); // Max width 800px
     slider.x = (windowWidth - slider.width) / 2;
     
     // Posizionamento verticale layout
@@ -426,12 +427,13 @@ function drawSliderWaveGraph() {
 
 
 // ===== FLEX GRID (Mantenuta dal codice A) =====
-function drawFlexGrid(items, startY) {
+/*function drawFlexGrid(items, startY) {
   let x = SIDE_MARGIN;
   let y = startY;
   const maxW = width - SIDE_MARGIN - 10;
 
   for (let item of items) {
+    //const w= maxW/4 - (CELL_SPACING*3);
     const w = TARGET_CELL_WIDTH;
     const h = Math.round(w * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
 
@@ -439,6 +441,9 @@ function drawFlexGrid(items, startY) {
       x = SIDE_MARGIN;
       y += h + CELL_SPACING;
     }
+   circle(SIDE_MARGIN,startY,10);
+   circle(maxW,startY,10);
+
 
     drawComplexCell(item, x, y, w, h);
 
@@ -447,11 +452,74 @@ function drawFlexGrid(items, startY) {
 
   // Resize se il contenuto eccede
   if (height < y + 100) resizeCanvas(windowWidth, y + 100);
+}*/
+
+
+const COLUMNS = 4; // Fissiamo il numero di colonne desiderato
+
+function drawFlexGrid(items, startY) {
+    
+    // 1. CALCOLO DIMENSIONI FISSE PER LA RIGA
+    
+    // Larghezza utilizzabile (escludendo i margini del canvas)
+    const availableW = width - (SIDE_MARGIN * 2); 
+    
+    // Calcoliamo la larghezza di una singola cella. 
+    // LarghezzaTotale = (LarghezzaCellax4) + (SpazioTraCelle x 3)
+    // LarghezzaCellax4 = LarghezzaTotale - SpazioTotaleTraCelle
+    // LarghezzaCella = (LarghezzaTotale - SpazioTotaleTraCelle) / 4
+    
+    const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
+    const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
+    
+    // Altezza proporzionale della cella
+    const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
+
+    // 2. CALCOLO DELL'OFFSET DI CENTRATURA
+    
+    // Larghezza totale effettiva occupata dalla griglia (comprese spaziature)
+    const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
+    
+    // Spazio rimanente da dividere a metà (per centrare)
+    const centeringOffset = floor((width - gridTotalWidth) / 2);
+    
+    
+    // 3. DISEGNO DELLA GRIGLIA
+    
+    let currentX = centeringOffset; // Iniziamo dal margine calcolato
+    let currentY = startY;
+    
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        
+        // Se siamo sulla quinta cella (o multipli di 4), andiamo a capo
+        if (i > 0 && i % COLUMNS === 0) {
+            currentX = centeringOffset; // Reimposta X al margine di centratura
+            currentY += cellHeight + CELL_SPACING;
+        }
+
+        // Disegna la cella
+        drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
+        
+        // Sposta X per la prossima cella
+        currentX += cellWidth + CELL_SPACING;
+    }
+
+    // Resize se il contenuto eccede
+    // Aggiungiamo un buffer più grande per il footer
+    const footerBuffer = 150; 
+    if (height < currentY + cellHeight + footerBuffer) {
+         resizeCanvas(windowWidth, currentY + cellHeight + footerBuffer);
+    }
 }
 
 
 // ===== DRAW COMPLEX CELL (Mantenuta dal codice A) =====
 function drawComplexCell(commodityName, x, y, w, h) {
+ /*fill("black");
+ circle(x,y,10);
+ fill("red");
+  circle(x+w,y+h-1,10);*/
 
   push();
   noFill();
@@ -508,9 +576,9 @@ function drawComplexCell(commodityName, x, y, w, h) {
   }
 
   // === BASKET EMPTY BASE ===
-  imageMode(CORNER);
+  /*imageMode(CORNER);
   if (img_empty && img_empty.width)
-    image(img_empty, baseX, baseY, baseW, baseH);
+    image(img_empty, baseX, baseY, baseW, baseH);*/
 
 
   // === FILL LEVEL ===
@@ -597,6 +665,21 @@ function applyUrlParams() {
     selectedYear = params.year;
   }
   updateVisualization();
+}
+function handleKeyPress(event) {
+    if (event.key === 'ArrowLeft') {
+        // Anno precedente
+        if (currentYear > yearRange.min) {
+            currentYear--;
+            updateYear();
+        }
+    } else if (event.key === 'ArrowRight') {
+        // Anno successivo
+        if (currentYear < yearRange.max) {
+            currentYear++;
+            updateYear();
+        }
+    }
 }
 
 function updateVisualization() {
