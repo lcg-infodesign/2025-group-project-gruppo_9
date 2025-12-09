@@ -672,14 +672,16 @@ function applyUrlParams() {
 function handleKeyPress(event) {
     if (event.key === 'ArrowLeft') {
         // Anno precedente
-        if (currentYear > yearRange.min) {
-            currentYear--;
+        if (selectedYear > yearRange.min) {
+            selectedYear--;
+            updateSliderThumb();
             updateYear();
         }
     } else if (event.key === 'ArrowRight') {
         // Anno successivo
-        if (currentYear < yearRange.max) {
-            currentYear++;
+        if (selectedYear < yearRange.max) {
+            selectedYear++;
+            updateSliderThumb();
             updateYear();
         }
     }
