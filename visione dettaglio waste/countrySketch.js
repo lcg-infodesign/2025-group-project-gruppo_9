@@ -601,9 +601,12 @@ function drawComplexCell(commodityName, x, y, w, h) {
   push();
   noStroke();
   fill(...LEVEL2_COLOR);
-  rect(innerX, fillY, innerW, fillH, 4);
-  pop();
+  rect(innerX+1, fillY-8, innerW-3, fillH+8, 4);
 
+  pop();
+  push();
+  fill('#F5F3EE');
+  circle(innerX+70, fillY-143, 300);
 
   // === BASKET OVERLAY ===
   if (img_over && img_over.width)
