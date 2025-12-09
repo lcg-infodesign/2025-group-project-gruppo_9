@@ -4,7 +4,8 @@ const CONFIG = {
         background: '#F5F3EE',
         text: {
             primary: '#283618',
-            tooltip: '#F5F3EE'
+            tooltip: '#F5F3EE',
+            hover: '#F5F3EE' // Bianco per testo in hover
         },
         tooltip: {
             background: '#415E5A',
@@ -20,6 +21,10 @@ const CONFIG = {
             background: '#415E5A', // Colore di sfondo della legenda
             border: '#415E5A',
             circle: '#F5F3EE' // Colore dei pallini (stesso sfondo del sito)
+        },
+        row: {
+            hover: '#415E5A', // Verde per l'hover della riga
+            circle: '#ffffffff' // Bianco per i cerchi in hover
         }
     },
     layout: {
@@ -29,7 +34,7 @@ const CONFIG = {
             horizontal: 300,
             vertical: 60
         },
-        minCellHeight: 50,
+        minCellHeight: 70,
         maxCellHeight: 100,
         maxCellWidth: 120,
         basketOffset: 60,
@@ -83,6 +88,11 @@ let imageSizeRange = { min: 20, max: 50 }; // Range dimensioni immagini
 let yearDataCounts = {}; // Conterrà il numero di righe per ogni anno
 let isHoveringSlider = false; // Per sapere se siamo sopra lo slider
 let hoveredYear = null; // L'anno su cui siamo con il mouse
+
+// Variabili per hover sulla riga
+let hoveredRowData = null; // Dati della riga in hover
+let isHoveringBasket = false; // Se siamo sopra un cestino
+let isHoveringCountry = false; // Se siamo sopra il nome di un paese
 
 // ===== CACHE =====
 let combinationCache = {};
@@ -276,8 +286,16 @@ function draw() {
         return;
     }
 
-    drawRowLabels();
+    // Prima disegna il rettangolo di hover se necessario
+    if (hoveredRowData) {
+        drawRowHoverBackground();
+    }
+
+    // Disegna prima la matrice
     drawMatrix(currentYear);
+    
+    // Poi le label (così sono sopra il rettangolo di hover)
+    drawRowLabels();
     
     // Disegna la legenda delle dimensioni
     drawSizeLegend();
@@ -405,17 +423,89 @@ function mouseMoved() {
     
     if (isHoveringSlider) {
         hoveredYear = getYearFromX(mouseX);
-        // Cambia il cursore a "pointer" quando siamo sopra lo slider
         document.body.style.cursor = 'pointer';
     } else {
         hoveredYear = null;
-        document.body.style.cursor = 'default';
     }
+    
+    // Aggiorna hover sulla riga, cestino e paese
+    updateRowHover();
     
     // Mantieni anche l'update della cella hovered per la matrice
     updateHoveredCell();
     
     return false;
+}
+
+// Aggiorna hover sulla riga, cestino e paese
+function updateRowHover() {
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
+    
+    // Controlla se siamo sopra una riga
+    hoveredRowData = null;
+    isHoveringBasket = false;
+    isHoveringCountry = false;
+    
+    for (let i = 0; i < sortedCountries.length; i++) {
+        const rowY = matrixY + i * cellHeight;
+        
+        // Area del cestino
+        const basketX = CONFIG.layout.margin.horizontal + 10;
+        const basketY = rowY + cellHeight / 2;
+        const basketSize = 40;
+        
+        if (dist(mouseX, mouseY, basketX, basketY) < basketSize / 2) {
+            isHoveringBasket = true;
+            hoveredRowData = {
+                row: i,
+                country: sortedCountries[i],
+                y: rowY,
+                height: cellHeight
+            };
+            document.body.style.cursor = 'pointer';
+            return;
+        }
+        
+        // Area del nome del paese
+        const countryX = CONFIG.layout.margin.horizontal - 140;
+        const countryY = rowY + cellHeight / 2;
+        const countryWidth = 130;
+        const countryHeight = cellHeight;
+        
+        if (mouseX >= countryX && mouseX <= countryX + countryWidth &&
+            mouseY >= rowY && mouseY <= rowY + cellHeight) {
+            isHoveringCountry = true;
+            hoveredRowData = {
+                row: i,
+                country: sortedCountries[i],
+                y: rowY,
+                height: cellHeight
+            };
+            document.body.style.cursor = 'pointer';
+            return;
+        }
+        
+        // Area della riga (tutta la larghezza della matrice)
+        const rowStartX = CONFIG.layout.margin.horizontal + 40; // Dopo il cestino
+        const rowEndX = CONFIG.layout.margin.horizontal + 40 + (commodities.length * cellWidth);
+        
+        if (mouseX >= rowStartX && mouseX <= rowEndX &&
+            mouseY >= rowY && mouseY <= rowY + cellHeight) {
+            hoveredRowData = {
+                row: i,
+                country: sortedCountries[i],
+                y: rowY,
+                height: cellHeight
+            };
+            document.body.style.cursor = 'pointer';
+            return;
+        }
+    }
+    
+    // Se non siamo su niente di speciale, reset cursor
+    if (!isHoveringSlider && !isHoveringBasket && !isHoveringCountry && !hoveredRowData) {
+        document.body.style.cursor = 'default';
+    }
 }
 
 function mousePressed() {
@@ -443,6 +533,17 @@ function mousePressed() {
         return;
     }
     
+    // Se clicchi sul cestino o sul nome del paese
+    if (isHoveringBasket || isHoveringCountry) {
+        clickedRow = hoveredRowData.row;
+        const countryName = hoveredRowData.country;
+        
+        // Reindirizza alla pagina del paese
+        window.location.href = `../visione%20dettaglio%20waste/country.html?country=${encodeURIComponent(countryName)}&year=${currentYear}`;
+        
+        return false;
+    }
+    
     return true;
 }
 
@@ -456,7 +557,7 @@ function mouseDragged() {
 
 function mouseReleased() {
     slider.thumb.dragging = false;
-    if (isHoveringSlider) {
+    if (isHoveringSlider || isHoveringBasket || isHoveringCountry || hoveredRowData) {
         document.body.style.cursor = 'pointer';
     } else {
         document.body.style.cursor = 'default';
@@ -544,11 +645,35 @@ function updateHoveredCell() {
 
 function drawRowLabels() {
     const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
-    drawLabels(sortedCountries, CONFIG.typography.rowSize, (i) => ({
-        x: CONFIG.layout.margin.horizontal - 100,
-        y: matrixY + i * cellHeight + cellHeight / 2,
-        truncate: CONFIG.typography.maxCountryChars
-    }), false);
+    
+
+    
+    // Poi disegna i nomi dei paesi (sopra il rettangolo)
+    for (let i = 0; i < sortedCountries.length; i++) {
+        const x = CONFIG.layout.margin.horizontal - 140;
+        const y = matrixY + i * cellHeight + cellHeight / 2;
+        let labelText = sortedCountries[i];
+        
+        // Tronca il testo se troppo lungo
+        if (labelText.length > CONFIG.typography.maxCountryChars) {
+            labelText = labelText.slice(0, CONFIG.typography.maxCountryChars) + '…';
+        }
+        
+        push();
+        textAlign(LEFT, CENTER);
+        textSize(CONFIG.typography.rowSize);
+        textFont(CONFIG.typography.fontFamily);
+        
+        // Se questa riga è in hover, usa testo bianco
+        if (hoveredRowData && hoveredRowData.row === i) {
+            fill(CONFIG.colors.text.hover);
+        } else {
+            fill(CONFIG.colors.text.primary);
+        }
+        
+        text(labelText, x, y);
+        pop();
+    }
     
     // Disegna i cestini
     if (basketImage && basketImage.width > 0) {
@@ -559,10 +684,39 @@ function drawRowLabels() {
             
             push();
             imageMode(CENTER);
+            
+            // Se questa riga è in hover, applica un filtro bianco al cestino
+            if (hoveredRowData && hoveredRowData.row === i) {
+                tint(CONFIG.colors.text.hover);
+            }
+            
             image(basketImage, x, y, size, size);
+            noTint(); // Rimuovi il tint per le prossime immagini
             pop();
         }
     }
+}
+
+// Disegna il rettangolo di hover per la riga
+function drawRowHoverBackground() {
+    const rowY = hoveredRowData.y;
+    const rowHeight = hoveredRowData.height;
+    
+    push();
+    
+    // Rettangolo con punte arrotondate
+    fill(CONFIG.colors.row.hover ); // 80 = 50% trasparenza
+    noStroke();
+    
+    // Calcola le coordinate
+    const startX = CONFIG.layout.margin.horizontal - 150; // Inizia dal testo del paese
+    const endX = CONFIG.layout.margin.horizontal + 40 + (commodities.length * cellWidth); // Finisce dopo tutte le commodity
+    const width = endX - startX;
+    
+    // Disegna rettangolo con angoli arrotondati
+    rect(startX, rowY, width, rowHeight, 15);
+    
+    pop();
 }
 
 function drawLabels(items, fontSize, positionCallback, rotated = true) {
@@ -669,14 +823,17 @@ function drawCellDot(row, col, x, y, exists, country, year) {
             // Arrotonda per evitare scaling frazionario
             scale = Math.round(scale * 100) / 100;
             
-            const smallSize = imageSizeRange.min * 1.5;
-            const bigSize = imageSizeRange.max * 1.2;
-
             let w = naturalWidth * scale;
             let h = naturalHeight * scale;
 
-            fill(CONFIG.colors.legend.background+'cc'); // Colore di sfondo leggero
-            circle(x + cellWidth/2, y + cellHeight/2, max(w, h)); // Cerchio di sfondo leggero
+            // Se la riga è in hover, usa cerchio bianco
+            if (hoveredRowData && hoveredRowData.row === row) {
+                fill(CONFIG.colors.row.circle); // Bianco con trasparenza
+            } else {
+                fill(CONFIG.colors.legend.background+'cc'); // Colore normale
+            }
+            
+            circle(x + cellWidth/2, y + cellHeight/2, max(w, h)); // Cerchio di sfondo
             w = w * 0.7; // Riduci leggermente per adattarsi al cerchio
             h = h * 0.7;
             image(img, x + cellWidth/2, y + cellHeight/2, w, h);
@@ -775,7 +932,7 @@ function drawTooltip() {
     
     const lines = tooltipText.split('\n');
     const lineHeight = 16;
-    const padding = 12;
+    const padding = 8;
     
     // Calcola la larghezza massima del tooltip
     let maxWidth = 0;
@@ -866,7 +1023,7 @@ function drawSizeLegend() {
     
     // Disegna cerchi intermedi
     for (let i = 1; i <= intermediateCircles; i++) {
-        // Calcola la posizione proporzionale tra i due cerchi
+        // Calcola la posizione proporzionale entre i due cerchi
         const t = i / (intermediateCircles + 1);
         const x = smallCircleX + (distance * t);
         
