@@ -47,9 +47,9 @@ const CONFIG = {
     typography: {
         titleSize: 48,
         columnSize: 11,
-        rowSize: 10,
+        rowSize: 14,
         tooltipSize: 12,
-        sliderValueSize: 18,
+        sliderValueSize: 20,
         maxCountryChars: 18,
         fontFamily: 'Roboto',
         titleFont: 'Roboto',
@@ -322,7 +322,7 @@ function drawSlider() {
     text(currentYear, slider.x + slider.width / 2, slider.y + 40);
     
     // Year range labels
-    textSize(12);
+    textSize(14);
     text(yearRange.min, slider.x, slider.y + 40);
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
 }
@@ -669,14 +669,18 @@ function drawCellDot(row, col, x, y, exists, country, year) {
             // Arrotonda per evitare scaling frazionario
             scale = Math.round(scale * 100) / 100;
             
-    const smallSize = imageSizeRange.min * 1.5;
-    const bigSize = imageSizeRange.max * 1.2;
+            const smallSize = imageSizeRange.min * 1.5;
+            const bigSize = imageSizeRange.max * 1.2;
 
-            const w = naturalWidth * scale;
-            const h = naturalHeight * scale;
+            let w = naturalWidth * scale;
+            let h = naturalHeight * scale;
 
             fill(CONFIG.colors.legend.background+'cc'); // Colore di sfondo leggero
             circle(x + cellWidth/2, y + cellHeight/2, max(w, h)); // Cerchio di sfondo leggero
+            w = w * 0.7; // Riduci leggermente per adattarsi al cerchio
+            h = h * 0.7;
+            image(img, x + cellWidth/2, y + cellHeight/2, w, h);
+            return;
         } 
         
 
