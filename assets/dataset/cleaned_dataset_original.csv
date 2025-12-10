@@ -5162,5 +5162,5 @@ country,commodity,year,loss_percentage,food_supply_stage,cause_of_loss,original_
 "Taiwan","CEREALI",2022,2,"Processing","",2
 "United Kingdom of Great Britain and Northern Ireland","CEREALI",2022,6,"Processing","",1
 "United States of America","CEREALI",2022,0.8,"Processing","",1
-"Thailand","ORTAGGI",2023,12.03,"Farm","",1
-"Liberia","CEREALI",2024,5.57,"Harvest","",6
+"Thailand","ORTAGGI",2022,12.03,"Farm","",1
+"Liberia","CEREALI",2022,5.57,"Harvest","",6

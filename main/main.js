@@ -101,7 +101,7 @@ let currentCacheYear = null;
 
 // ===== INIZIALIZZAZIONE =====
 function preload() {
-    dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
+    dataset = loadTable('../assets/dataset/cleaned_dataset_original.csv', 'csv', 'header', initializeData);
     basketImage = loadImage('../assets/img/basket.svg');
     legendImage = loadImage('../assets/img/legenda.svg');
 }
@@ -336,13 +336,16 @@ function drawSlider() {
     
     // Year value
     fill(CONFIG.colors.slider.text);
+    textStyle(BOLD);
     textFont(CONFIG.typography.fontFamily);
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
     text(currentYear, slider.x + slider.width / 2, slider.y + 40);
     
     // Year range labels
+    textStyle(NORMAL);
     textSize(14);
+    textFont(CONFIG.typography.fontFamily);
     text(yearRange.min, slider.x, slider.y + 40);
     text(yearRange.max, slider.x + slider.width, slider.y + 40);
 }
@@ -630,6 +633,7 @@ function sortCountriesByCommodities(year) {
 function drawLoadingMessage() {
     push();
     textAlign(CENTER, CENTER);
+    textFont(CONFIG.typography.fontFamily);
     textSize(16);
     fill(CONFIG.colors.text.primary);
     text("Loading data...", width / 2, height / 2);
@@ -652,7 +656,7 @@ function drawRowLabels() {
     
     // Poi disegna i nomi dei paesi (sopra il rettangolo)
     for (let i = 0; i < sortedCountries.length; i++) {
-        const x = CONFIG.layout.margin.horizontal - 76;
+        const x = CONFIG.layout.margin.horizontal - 80;
         const y = matrixY + i * cellHeight + cellHeight / 2;
         let labelText = sortedCountries[i];
         
@@ -680,7 +684,7 @@ function drawRowLabels() {
     // Disegna i cestini
     if (basketImage && basketImage.width > 0) {
         for (let i = 0; i < sortedCountries.length; i++) {
-            const x = CONFIG.layout.margin.horizontal - 110; // Posizione a destra delle label
+            const x = CONFIG.layout.margin.horizontal - 115; // Posizione a destra delle label
             const y = matrixY + i * cellHeight + cellHeight / 2;
             const targetWidth = 50; // Larghezza target
             const targetHeight = 50; // Altezza target
@@ -736,34 +740,6 @@ function drawRowHoverBackground() {
     // Disegna rettangolo con angoli arrotondati
     rect(startX, rowY, width, rowHeight, 15);
     
-    pop();
-}
-
-function drawLabels(items, fontSize, positionCallback, rotated = true) {
-    push();
-    textAlign(LEFT, CENTER);
-    textSize(fontSize);
-    textFont(CONFIG.typography.fontFamily);
-    fill(CONFIG.colors.text.primary);
-
-    for (let i = 0; i < items.length; i++) {
-        const pos = positionCallback(i);
-        let labelText = items[i];
-        
-        if (pos.truncate && labelText.length > pos.truncate) {
-            labelText = labelText.slice(0, pos.truncate) + '…';
-        }
-
-        if (rotated) {
-            push();
-            translate(pos.x, pos.y);
-            rotate(pos.rotation);
-            text(labelText, 0, 0);
-            pop();
-        } else {
-            text(labelText, pos.x, pos.y);
-        }
-    }
     pop();
 }
 
@@ -1064,6 +1040,7 @@ function drawSizeLegend() {
     fill(CONFIG.colors.legend.background);
     noStroke();
     textSize(CONFIG.typography.legendSize);
+    textFont(CONFIG.typography.fontFamily);
     textAlign(CENTER, CENTER);
     
     // Testo per min
@@ -1092,7 +1069,7 @@ function drawSizeLegend() {
             const w = outlineImg.width * scale;
             const h = outlineImg.height * scale;
             
-            image(outlineImg, legendX + 40, outlineImageY, w, h);
+            image(outlineImg, legendX + 50, outlineImageY, w, h);
             pop();
             smooth();
         }
@@ -1102,8 +1079,9 @@ function drawSizeLegend() {
     fill(CONFIG.colors.background);
     noStroke();
     textSize(CONFIG.typography.legendSize);
+    textFont(CONFIG.typography.fontFamily);
     textAlign(LEFT, CENTER);
-    text("Data not found", legendX + 60, outlineImageY+5);
+    text("Data not found", legendX + 70, outlineImageY+3);
     
     pop();
 }
