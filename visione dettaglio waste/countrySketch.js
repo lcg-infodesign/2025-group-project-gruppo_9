@@ -48,7 +48,7 @@ let img_over = null;
 let img_basket = null;
 let img_nodata = null;
 let commodityImgs = {};
-
+let commodityOutline = {};
 // Parametri visivi griglia
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 112;
@@ -117,6 +117,13 @@ function setup() {
   for (let c of commodities) {
     const norm = normalizeFilename(c);
     loadImageSafe(ASSETS_BASE + norm + ".png", img => commodityImgs[norm] = img || null);
+  }
+
+
+  // carica outline commodity
+  for (let c of commodities) {
+    const norm = normalizeFilename(c);
+    loadImageSafe("assets/img/outline/" + norm + ".png", img => commodityOutline[norm] = img || null);
   }
 
   applyUrlParams();
@@ -426,33 +433,7 @@ function drawSliderWaveGraph() {
 }
 
 
-// ===== FLEX GRID (Mantenuta dal codice A) =====
-/*function drawFlexGrid(items, startY) {
-  let x = SIDE_MARGIN;
-  let y = startY;
-  const maxW = width - SIDE_MARGIN - 10;
 
-  for (let item of items) {
-    //const w= maxW/4 - (CELL_SPACING*3);
-    const w = TARGET_CELL_WIDTH;
-    const h = Math.round(w * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
-
-    if (x + w > maxW) {
-      x = SIDE_MARGIN;
-      y += h + CELL_SPACING;
-    }
-   circle(SIDE_MARGIN,startY,10);
-   circle(maxW,startY,10);
-
-
-    drawComplexCell(item, x, y, w, h);
-
-    x += w + CELL_SPACING;
-  }
-
-  // Resize se il contenuto eccede
-  if (height < y + 100) resizeCanvas(windowWidth, y + 100);
-}*/
 
 
 const COLUMNS = 4; // Fissiamo il numero di colonne desiderato
@@ -549,30 +530,42 @@ function drawComplexCell(commodityName, x, y, w, h) {
     d.commodity === commodityName
   );
 
-  // === NO DATA ===
+// === NO DATA ===
   if (!rowData) {
-    if (img_basket && img_basket.width) {
-      const s = Math.min(availW / img_basket.width, availH / img_basket.height);
-      const bw = Math.round(img_basket.width * s);
-      const bh = Math.round(img_basket.height * s);
-      image(img_basket, x + (w - bw)/2, y + (h - bh)/2, bw, bh);
+    // 1. Disegna l'immagine di base (img_over) come contenitore comune
+    if (img_over && img_over.width) {
+      const s = Math.min(availW / img_over.width, availH / img_over.height);
+      const bw = Math.round(img_over.width * s);
+      const bh = Math.round(img_over.height * s);
+      // image(img_over, x + (w - bw)/2, y + (h - bh)/2, bw, bh); // Uso img_over
+      image(img_over, baseX, baseY, baseW, baseH); // Usando le variabili base già calcolate
     }
-
-    if (img_nodata && img_nodata.width) {
-      const s2 = Math.min(baseW / img_nodata.width, baseH / img_nodata.height);
-      const nw = Math.round(img_nodata.width * s2);
-      const nh = Math.round(img_nodata.height * s2);
-      image(img_nodata, x + w/2 - nw/2, y + h/2 - nh/2);
+    
+    // 2. Disegna l'Outline della commodity (QUI UTILIZZIAMO commodityOutline)
+    const norm = normalizeFilename(commodityName);
+    const iconImg = commodityOutline[norm] || null; 
+    
+    if (iconImg && iconImg.width) {
+      const maxIconW = Math.round(w * 0.36);
+      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height);
+      const iw = Math.round(iconImg.width * iconScale);
+      const ih = Math.round(iconImg.height * iconScale);
+      imageMode(CENTER);
+      image(iconImg, x + w/2, baseY+ih, iw, ih);
     } else {
-      fill(100);
+      push();
+      fill(0, 120);
       noStroke();
+      textSize(12);
       textAlign(CENTER, CENTER);
-      textSize(14);
-      text("No data", x + w/2, y + h/2);
+      text(commodityName, x + w/2, baseY - 12);
+      pop();
     }
+    
+    
 
-    pop();
-    return;
+    pop(); // Chiude il push iniziale della cella
+    return; // Termina la funzione
   }
 
   // === BASKET EMPTY BASE ===
@@ -605,24 +598,26 @@ function drawComplexCell(commodityName, x, y, w, h) {
 
   pop();
   push();
+  //fill('#F5F3EE');
   fill('#F5F3EE');
-  circle(innerX+70, fillY-143, 300);
+  //circle(innerX+70, fillY-143, 300);
+  ellipse(innerX+70,fillY-37, 180, 80 )
+  pop();
 
-  // === BASKET OVERLAY ===
+// === BASKET OVERLAY ===
   if (img_over && img_over.width)
-    image(img_over, baseX, baseY, baseW, baseH);
+    image(img_over, baseX, baseY, baseW, baseH); // Uso img_over
 
-
-  // === ICONA ===
+  // === ICONA (Piena - DATA PRESENTE) ===
   const norm = normalizeFilename(commodityName);
-  const iconImg = commodityImgs[norm] || null;
+  const iconImg = commodityImgs[norm] || null; // <--- QUI UTILIZZIAMO commodityImgs
   if (iconImg && iconImg.width) {
     const maxIconW = Math.round(w * 0.36);
     const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height);
     const iw = Math.round(iconImg.width * iconScale);
     const ih = Math.round(iconImg.height * iconScale);
     imageMode(CENTER);
-    image(iconImg, x + w/2, baseY - ih * 0.28, iw, ih);
+    image(iconImg, x + w/2, baseY + ih , iw, ih);
   } else {
     push();
     fill(0, 120);
@@ -635,6 +630,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
 
   pop();
 }
+
+ 
 
 
 // ===== RESIZE =====
