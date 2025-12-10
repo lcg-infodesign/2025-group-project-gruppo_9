@@ -77,6 +77,7 @@ let slider = {
 let matrixY = 0; 
 let commodityImages = []; 
 let commodityOutlineImages = []; // Immagini contorno per commodity senza dati
+let commodityOutlineImagesHover = []; // Immagini contorno bianco per commodity senza dati in hover
 let basketImage = null;
 let legendImage = null;
 
@@ -102,7 +103,7 @@ let currentCacheYear = null;
 function preload() {
     dataset = loadTable('../assets/dataset/cleaned_dataset.csv', 'csv', 'header', initializeData);
     basketImage = loadImage('../assets/img/basket.svg');
-    legendImage = loadImage('../assets/img/legenda.png');
+    legendImage = loadImage('../assets/img/legenda.svg');
 }
 
 function initializeData() {
@@ -207,6 +208,7 @@ function setup() {
         commodityName = normalizeFilename(commodities[i]);
         commodityImages.push(loadImage('../assets/img/cibi/' + commodityName + '.svg'));
         commodityOutlineImages.push(loadImage('../assets/img/outline/' + commodityName + '.svg'));
+        commodityOutlineImagesHover.push(loadImage('../assets/img/outlineBianchi/' + commodityName + '.svg'));
     }
     
     // Inizializza il range delle dimensioni immagini dal CONFIG
@@ -650,7 +652,7 @@ function drawRowLabels() {
     
     // Poi disegna i nomi dei paesi (sopra il rettangolo)
     for (let i = 0; i < sortedCountries.length; i++) {
-        const x = CONFIG.layout.margin.horizontal - 140;
+        const x = CONFIG.layout.margin.horizontal - 76;
         const y = matrixY + i * cellHeight + cellHeight / 2;
         let labelText = sortedCountries[i];
         
@@ -678,23 +680,41 @@ function drawRowLabels() {
     // Disegna i cestini
     if (basketImage && basketImage.width > 0) {
         for (let i = 0; i < sortedCountries.length; i++) {
-            const x = CONFIG.layout.margin.horizontal + 10; // Posizione a destra delle label
+            const x = CONFIG.layout.margin.horizontal - 110; // Posizione a destra delle label
             const y = matrixY + i * cellHeight + cellHeight / 2;
-            const size = 40; // Dimensione del cestino
+            const targetWidth = 50; // Larghezza target
+            const targetHeight = 50; // Altezza target
             
             push();
             imageMode(CENTER);
+            
+            // Calcola le proporzioni corrette mantenendo l'aspect ratio originale
+            const imgRatio = basketImage.width / basketImage.height;
+            const targetRatio = targetWidth / targetHeight;
+            
+            let displayWidth, displayHeight;
+            
+            if (imgRatio > targetRatio) {
+                // L'immagine è più larga che alta rispetto al target
+                displayWidth = targetWidth;
+                displayHeight = targetWidth / imgRatio;
+            } else {
+                // L'immagine è più alta che larga rispetto al target
+                displayHeight = targetHeight;
+                displayWidth = targetHeight * imgRatio;
+            }
             
             // Se questa riga è in hover, applica un filtro bianco al cestino
             if (hoveredRowData && hoveredRowData.row === i) {
                 tint(CONFIG.colors.text.hover);
             }
             
-            image(basketImage, x, y, size, size);
+            image(basketImage, x, y, displayWidth, displayHeight);
             noTint(); // Rimuovi il tint per le prossime immagini
             pop();
         }
     }
+
 }
 
 // Disegna il rettangolo di hover per la riga
@@ -795,7 +815,11 @@ function drawCellDot(row, col, x, y, exists, country, year) {
     if (exists) {
         img = commodityImages[col];
     } else {
-        img = commodityOutlineImages[col]; 
+        if(hoveredRowData && hoveredRowData.row === row) {
+            img = commodityOutlineImagesHover[col]; 
+        } else {
+            img = commodityOutlineImages[col]; 
+        }
     }
     
     if (img && img.width > 0) {
@@ -1079,7 +1103,7 @@ function drawSizeLegend() {
     noStroke();
     textSize(CONFIG.typography.legendSize);
     textAlign(LEFT, CENTER);
-    text("dato non presente", legendX + 60, outlineImageY);
+    text("Data not found", legendX + 60, outlineImageY+5);
     
     pop();
 }
