@@ -10,8 +10,10 @@ const CONFIG = {
       }
   },
   typography: {
-      fontFamily: 'Inter, Arial, sans-serif',
-      sliderValueSize: 18
+      fontFamily:'Roboto',
+      titleFont: 'Roboto',
+      sliderValueSize: 20,
+      tooltipSize: 12,
   }
 };
 
@@ -25,6 +27,11 @@ let table;
 let data = [];
 let countries = [];
 let commodities = [];
+
+// Variabili per il Tooltip
+let tooltipData = null; // Contiene l'oggetto con i dati completi per il tooltip
+
+
 
 // Stato
 let selectedCountry = "";
@@ -53,7 +60,7 @@ let commodityOutline = {};
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 112;
 const TARGET_CELL_WIDTH = 300;
-const CELL_SPACING = 25;
+const CELL_SPACING = 5;
 const SIDE_MARGIN = 100;
 
 // Layout Verticale
@@ -63,7 +70,7 @@ let SLIDER_Y_POS = 80;       // Posizione verticale dello slider
 let GRID_START_Y = 180;      // Dove inizia la griglia
 
 // Colore riempimento commodity
-const LEVEL2_COLOR = [220, 60, 90, 220];
+const LEVEL2_COLOR = ['#EDC69A'];
 
 
 // ===== Utility =====
@@ -79,11 +86,40 @@ function loadImageSafe(path, cb) {
   loadImage(path, img => cb && cb(img), () => cb && cb(null));
 }
 
+// Funzione helper per trovare tutti i dati originali del CSV
+function getFullDataRow(country, year, commodity) {
+  if (!table) return null;
+
+  // Cerchiamo direttamente nella tabella originale (più lento, ma necessario)
+  for (let i = 0; i < table.getRowCount(); i++) {
+    const row = table.getRow(i);
+    if (
+      row.getString("country") === country &&
+      parseInt(row.getString("year")) === year &&
+      row.getString("commodity") === commodity
+    ) {
+      // Trovata la riga, estraiamo tutte le info necessarie
+      return {
+        commodity: commodity,
+        lossPercentage: parseFloat(String(row.getString("loss_percentage")).replace(",", ".")),
+        supplyChainPhase: row.getString("food_supply_stage"),
+        mainCauseOfWaste: row.getString("cause_of_loss"),
+        hasData: true // Flag per indicare che i dati ci sono
+      };
+    }
+  }
+
+  // Se non ci sono dati, torniamo un oggetto minimale per il 'No Data'
+  return {
+      commodity: commodity,
+      hasData: false
+  };
+}
 
 // ===== PRELOAD =====
 function preload() {
   table = loadTable(
-    "cleaned_dataset.csv",
+    "cleaned_dataset_original.csv",
     "csv",
     "header",
     () => console.log("CSV caricato", table.getRowCount()),
@@ -265,6 +301,40 @@ function mouseMoved() {
         hoveredYear = null;
         cursor('default');
     }
+
+    // --- Nuova Gestione hover Cella Griglia (Tooltip) ---
+    tooltipData = null; // Resetta ad ogni movimento
+    cursor('default'); // Default (verrà sovrascritto se si è su slider o cella)
+
+    if (!slider.thumb.dragging) {
+      // Rilevamento hover sullo slider (codice esistente)
+      isHoveringSlider = (
+          mouseX >= slider.x - 20 && 
+          mouseX <= slider.x + slider.width + 20 &&
+          mouseY >= slider.y - 60 && 
+          mouseY <= slider.y + 40
+      );
+    }
+
+    if (isHoveringSlider && !slider.thumb.dragging) {
+        hoveredYear = getYearFromX(mouseX);
+        cursor('pointer');
+    } else {
+        hoveredYear = null;
+        
+        // Se non siamo sullo slider, controlliamo le celle della griglia
+        const hoverResult = checkGridHover(commodities, GRID_START_Y);
+
+        if (hoverResult) {
+            cursor('pointer');
+            tooltipData = getFullDataRow(selectedCountry, selectedYear, hoverResult.commodity);
+            // Salviamo anche le coordinate della cella per il posizionamento del tooltip
+            tooltipData.x = hoverResult.x;
+            tooltipData.y = hoverResult.y;
+            tooltipData.w = hoverResult.w;
+            tooltipData.h = hoverResult.h;
+        }
+    }
     return false;
 }
 
@@ -328,12 +398,18 @@ function draw() {
 
   // 3. Disegna Griglia
   drawFlexGrid(commodities, GRID_START_Y);
+
+  
+
+  // 4. Disegna Tooltip 
+  drawTooltip();
 }
 
 function drawHeaderInfo() {
     push();
     fill(0);
     noStroke();
+    textFont('Roboto');
     textAlign(CENTER, TOP);
     textSize(40);
     
@@ -369,10 +445,11 @@ function drawTimeline() {
     fill(CONFIG.colors.slider.text);
     textAlign(CENTER, CENTER);
     textSize(CONFIG.typography.sliderValueSize);
+    textFont('Roboto');
     
     // Anno corrente sotto il pallino
     text(selectedYear, slider.x + slider.width / 2, slider.y + 45);
-    
+    textFont('Roboto');
     // Range min/max
     textSize(12);
     textAlign(LEFT);
@@ -432,7 +509,56 @@ function drawSliderWaveGraph() {
     pop();
 }
 
+// Funzione per controllare se il mouse è sopra una cella e quale
+function checkGridHover(items, startY) {
+    
+    // 1. CALCOLO DIMENSIONI FISSE PER LA RIGA (Replicato da drawFlexGrid)
+    const availableW = width - (SIDE_MARGIN * 2); 
+    const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
+    const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
+    const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
+    
+    // 2. CALCOLO DELL'OFFSET DI CENTRATURA (Replicato da drawFlexGrid)
+    const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
+    const centeringOffset = floor((width - gridTotalWidth) / 2);
+    
+    
+    // 3. CHECK POSIZIONE
+    
+    let currentX = centeringOffset; 
+    let currentY = startY;
+    
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        
+        if (i > 0 && i % COLUMNS === 0) {
+            currentX = centeringOffset; 
+            currentY += cellHeight - 80 + CELL_SPACING; // Deve usare lo stesso 'a capo' di drawFlexGrid
+        }
 
+        // Controllo se il mouse è all'interno della cella (con un leggero buffer)
+        if (
+            mouseX >= currentX &&
+            mouseX <= currentX + cellWidth &&
+            mouseY >= currentY &&
+            mouseY <= currentY + cellHeight
+        ) {
+            // Mouse sopra questa cella!
+            return {
+                commodity: item,
+                x: currentX,
+                y: currentY,
+                w: cellWidth,
+                h: cellHeight,
+                index: i // <-- AGGIUNGI QUESTO!
+            };
+        }
+        
+        currentX += cellWidth + CELL_SPACING;
+    }
+    
+    return null; // Nessuna cella trovata
+}
 
 
 
@@ -476,7 +602,7 @@ function drawFlexGrid(items, startY) {
         // Se siamo sulla quinta cella (o multipli di 4), andiamo a capo
         if (i > 0 && i % COLUMNS === 0) {
             currentX = centeringOffset; // Reimposta X al margine di centratura
-            currentY += cellHeight + CELL_SPACING;
+            currentY += cellHeight-80 + CELL_SPACING;
         }
 
         // Disegna la cella
@@ -493,6 +619,164 @@ function drawFlexGrid(items, startY) {
          resizeCanvas(windowWidth, currentY + cellHeight + footerBuffer);
     }
 }
+// ===== DRAW TOOLTIP MODIFICATA =====
+function drawTooltip() {
+    if (!tooltipData) return;
+
+    const TOOLTIP_CONFIG = {
+        w: 500,
+        h_data: 200,
+        h_nodata: 80,
+        bgColor: '#415E5A',
+        textColor: '#F5F3EE',
+        fontFamily: 'Roboto',
+        radius: 12,
+        pad: 20,
+        offset: 15,
+    };
+    
+    const { 
+        x, y, w, h, // Posizione della cella
+        commodity, 
+        lossPercentage, 
+        supplyChainPhase, 
+        mainCauseOfWaste,
+        hasData,
+        index // Nuovo parametro recuperato
+    } = tooltipData;
+
+    const tooltipW = TOOLTIP_CONFIG.w;
+    const tooltipH = hasData ? TOOLTIP_CONFIG.h_data : TOOLTIP_CONFIG.h_nodata;
+    const pad = TOOLTIP_CONFIG.pad;
+    const offset = TOOLTIP_CONFIG.offset;
+
+    // 1. Calcolo della Colonna (COLUMNS è fissato a 4)
+    const column = index % COLUMNS; 
+    
+    let ttX;
+    
+    // --- NUOVA LOGICA DI POSIZIONAMENTO ORIZZONTALE CORRETTA ---
+    
+    // Calcola la posizione ideale a DESTRA della cella
+    const rightX = x + w + offset; 
+    
+    // Calcola la posizione ideale a SINISTRA della cella
+    const leftX = x - tooltipW - offset;
+    
+    // Flag che indica se il tooltip può stare a destra
+    const canFitRight = (rightX + tooltipW) <= (width - pad);
+    
+    // Flag che indica se il tooltip può stare a sinistra
+    const canFitLeft = leftX >= pad; 
+
+    // Regola 1: Prima colonna (Column 0). Deve stare a destra.
+    if (column === 0) {
+        ttX = rightX;
+        // Se non ci sta a destra (caso raro in Column 0), lo forziamo a sinistra, ma controllando che non esca dal bordo sinistro
+        if (!canFitRight) {
+             ttX = leftX; 
+        }
+    }
+    // Regola 2: Ultima colonna (Column COLUMNS-1). Deve stare a sinistra.
+    else if (column === COLUMNS - 1) {
+        ttX = leftX;
+        // Se non ci sta a sinistra, lo forziamo a destra, ma controllando che non esca dal bordo destro
+        if (!canFitLeft) {
+             ttX = rightX;
+        }
+    }
+    // Regola 3: Colonne centrali (Column 1 e 2). Preferiamo a sinistra se possibile.
+    else {
+        // Tentiamo di posizionare a sinistra (migliore per la visualizzazione generale)
+        if (canFitLeft) {
+            ttX = leftX;
+        } 
+        // Altrimenti, usiamo la posizione a destra (che dovrebbe essere quasi sempre possibile)
+        else {
+            ttX = rightX;
+        }
+    }
+    
+    // --- FINE NUOVA LOGICA ---
+    // Posizionamento verticale: Centrato verticalmente rispetto alla cella
+   let ttY = y + (h / 2) - (tooltipH / 2);
+    
+    // --- Gestione Bordi (Facoltativa ma consigliata) ---
+    // Non strettamente necessario con l'offset laterale, ma buono per sicurezza.
+    
+    // Controllo che non vada fuori dalla cima del canvas
+    if (ttY < pad) {
+        ttY = pad;
+    }
+    // Controllo che non vada fuori dal fondo del canvas
+    if (ttY + tooltipH > height - pad) {
+        ttY = height - tooltipH - pad;
+    }
+    
+    // --- Inizio disegno ---
+    push();
+    
+   // Ombra (Leggera)
+    drawingContext.shadowOffsetX = 2;
+    drawingContext.shadowOffsetY = 2;
+    drawingContext.shadowBlur = 8;
+    drawingContext.shadowColor = 'rgba(0, 0, 0, 0.3)';
+
+    // Sfondo del tooltip
+    fill(TOOLTIP_CONFIG.bgColor); // Nuovo colore di sfondo
+    noStroke();
+    rect(ttX, ttY, tooltipW, tooltipH, TOOLTIP_CONFIG.radius); // Nuovo raggio
+    
+    // Rimuovi ombra per il testo
+    drawingContext.shadowBlur = 0;
+    drawingContext.shadowOffsetX = 0;
+    drawingContext.shadowOffsetY = 0;
+    
+    fill(TOOLTIP_CONFIG.textColor); // Nuovo colore del testo
+    textAlign(LEFT, TOP);
+    
+    let textY = ttY + pad;
+
+    // --- Contenuto del Tooltip ---
+    
+    // Titolo
+    textSize(20);
+    textStyle(BOLD);
+    textFont('Roboto');
+    text(commodity, ttX + pad, textY);
+    textY += 30;
+
+    if (hasData) {
+        // Dati disponibili
+        textStyle(NORMAL);
+        textSize(16);
+
+        // Loss
+        const lossText = `Perdita: ${nf(lossPercentage, 0, 1)}%`;
+        text(lossText, ttX + pad, textY);
+        textY += 24;
+        
+        // Fase
+        text(`Fase: ${supplyChainPhase}`, ttX + pad, textY);
+        textY += 24;
+        
+        // Causa
+        text(`Causa: ${mainCauseOfWaste}`, ttX + pad, textY);
+        
+    } else {
+        // No Data
+        textSize(16);
+        fill('#EDC69A'); // Rosso chiaro sul fondo scuro
+        text("No data found.", ttX + pad, textY + 5);
+    }
+    
+    pop();
+}
+
+
+
+
+
 
 
 // ===== DRAW COMPLEX CELL (Mantenuta dal codice A) =====
@@ -558,6 +842,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
       noStroke();
       textSize(12);
       textAlign(CENTER, CENTER);
+      textFont(CONFIG.typography.fontFamily);
       text(commodityName, x + w/2, baseY - 12);
       pop();
     }
@@ -623,6 +908,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
     fill(0, 120);
     noStroke();
     textSize(12);
+    textFont(CONFIG.typography.fontFamily);
     textAlign(CENTER, CENTER);
     text(commodityName, x + w/2, baseY - 12);
     pop();
