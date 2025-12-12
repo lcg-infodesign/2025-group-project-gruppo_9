@@ -10,8 +10,10 @@ const CONFIG = {
       }
   },
   typography: {
-      fontFamily: 'Roboto, sans-serif',
-      sliderValueSize: 18
+      fontFamily:'Roboto',
+      titleFont: 'Roboto',
+      sliderValueSize: 20,
+      tooltipSize: 12,
   }
 };
 
@@ -117,7 +119,7 @@ function getFullDataRow(country, year, commodity) {
 // ===== PRELOAD =====
 function preload() {
   table = loadTable(
-    "cleaned_dataset.csv",
+    "cleaned_dataset_original.csv",
     "csv",
     "header",
     () => console.log("CSV caricato", table.getRowCount()),
@@ -407,7 +409,7 @@ function drawHeaderInfo() {
     push();
     fill(0);
     noStroke();
-    
+    textFont('Roboto');
     textAlign(CENTER, TOP);
     textSize(40);
     
@@ -443,10 +445,11 @@ function drawTimeline() {
     fill(CONFIG.colors.slider.text);
     textAlign(CENTER, CENTER);
     textSize(CONFIG.typography.sliderValueSize);
+    textFont('Roboto');
     
     // Anno corrente sotto il pallino
     text(selectedYear, slider.x + slider.width / 2, slider.y + 45);
-    
+    textFont('Roboto');
     // Range min/max
     textSize(12);
     textAlign(LEFT);
@@ -626,6 +629,7 @@ function drawTooltip() {
         h_nodata: 80,
         bgColor: '#415E5A',
         textColor: '#F5F3EE',
+        fontFamily: 'Roboto',
         radius: 12,
         pad: 20,
         offset: 15,
@@ -738,6 +742,7 @@ function drawTooltip() {
     // Titolo
     textSize(20);
     textStyle(BOLD);
+    textFont('Roboto');
     text(commodity, ttX + pad, textY);
     textY += 30;
 
@@ -837,6 +842,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
       noStroke();
       textSize(12);
       textAlign(CENTER, CENTER);
+      textFont(CONFIG.typography.fontFamily);
       text(commodityName, x + w/2, baseY - 12);
       pop();
     }
@@ -902,6 +908,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
     fill(0, 120);
     noStroke();
     textSize(12);
+    textFont(CONFIG.typography.fontFamily);
     textAlign(CENTER, CENTER);
     text(commodityName, x + w/2, baseY - 12);
     pop();
