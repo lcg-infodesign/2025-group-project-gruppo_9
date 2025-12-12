@@ -7,8 +7,7 @@ const CONFIG = {
           thumb: '#F5F3EE',
           text: '#16201f',
           wave: '#415E5A' // Colore per il grafico a onda
-      },
-      overlay: '#415E5A' // AGGIUNTO: Verde per l'overlay
+      }
   },
   typography: {
       fontFamily:'Roboto',
@@ -48,16 +47,13 @@ let isHoveringSlider = false;
 let hoveredYear = null;
 let yearRange = { min: 0, max: 0 };
 
-// AGGIUNTO: Variabile per hover cella
-let isHoveringCell = false;
-let hoveredCellIndex = -1;
-
 
 // Immagini
-const ASSETS_BASE = "../assets/img/";
+const ASSETS_BASE = "assets/img/";
 let img_empty = null;
 let img_over = null;
 let img_basket = null;
+let img_nodata = null;
 let commodityImgs = {};
 let commodityOutline = {};
 // Parametri visivi griglia
@@ -75,10 +71,6 @@ let GRID_START_Y = 180;      // Dove inizia la griglia
 
 // Colore riempimento commodity
 const LEVEL2_COLOR = ['#EDC69A'];
-
-// AGGIUNTO: Costante per altezza minima riempimento
-const MIN_FILL_HEIGHT = 20; // Altezza minima in pixel
-const MIN_FILL_PERCENTAGE = 3; // Percentuale minima visibile
 
 
 // ===== Utility =====
@@ -127,7 +119,7 @@ function getFullDataRow(country, year, commodity) {
 // ===== PRELOAD =====
 function preload() {
   table = loadTable(
-    "../assets/dataset/cleaned_dataset_original.csv",
+    "cleaned_dataset_original.csv",
     "csv",
     "header",
     () => console.log("CSV caricato", table.getRowCount()),
@@ -135,8 +127,9 @@ function preload() {
   );
 
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_empty = img);
-  loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_over = img);
+  loadImageSafe(ASSETS_BASE + "over.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
+  loadImageSafe(ASSETS_BASE + "nodatafound.png", img => img_nodata = img);
 }
 
 
@@ -159,14 +152,14 @@ function setup() {
   // carica icone commodity
   for (let c of commodities) {
     const norm = normalizeFilename(c);
-    loadImageSafe(ASSETS_BASE + '/cibi/' + norm + ".png", img => commodityImgs[norm] = img || null);
+    loadImageSafe(ASSETS_BASE + norm + ".png", img => commodityImgs[norm] = img || null);
   }
 
 
   // carica outline commodity
   for (let c of commodities) {
     const norm = normalizeFilename(c);
-    loadImageSafe("../assets/img/outline/" + norm + "vuoto.png", img => commodityOutline[norm] = img || null);
+    loadImageSafe("assets/img/outline/" + norm + ".png", img => commodityOutline[norm] = img || null);
   }
 
   applyUrlParams();
@@ -301,15 +294,28 @@ function getYearFromX(x) {
 // ===== INTERAZIONE MOUSE (P5.JS) =====
 
 function mouseMoved() {
-    // Reset hover states
-    isHoveringSlider = false;
-    isHoveringCell = false;
-    tooltipData = null;
-    hoveredCellIndex = -1;
-    cursor('default');
+    // Gestione hover slider
+    isHoveringSlider = (
+        mouseX >= slider.x - 20 && 
+        mouseX <= slider.x + slider.width + 20 &&
+        mouseY >= slider.y - 60 && 
+        mouseY <= slider.y + 40
+    );
+    
+    if (isHoveringSlider) {
+        hoveredYear = getYearFromX(mouseX);
+        cursor('pointer');
+    } else {
+        hoveredYear = null;
+        cursor('default');
+    }
+
+    // --- Nuova Gestione hover Cella Griglia (Tooltip) ---
+    tooltipData = null; // Resetta ad ogni movimento
+    cursor('default'); // Default (verrà sovrascritto se si è su slider o cella)
 
     if (!slider.thumb.dragging) {
-      // Rilevamento hover sullo slider
+      // Rilevamento hover sullo slider (codice esistente)
       isHoveringSlider = (
           mouseX >= slider.x - 20 && 
           mouseX <= slider.x + slider.width + 20 &&
@@ -328,17 +334,13 @@ function mouseMoved() {
         const hoverResult = checkGridHover(commodities, GRID_START_Y);
 
         if (hoverResult) {
-            isHoveringCell = true;
-            hoveredCellIndex = hoverResult.index;
             cursor('pointer');
             tooltipData = getFullDataRow(selectedCountry, selectedYear, hoverResult.commodity);
-            if (tooltipData) {
-                tooltipData.x = hoverResult.x;
-                tooltipData.y = hoverResult.y;
-                tooltipData.w = hoverResult.w;
-                tooltipData.h = hoverResult.h;
-                tooltipData.index = hoverResult.index;
-            }
+            // Salviamo anche le coordinate della cella per il posizionamento del tooltip
+            tooltipData.x = hoverResult.x;
+            tooltipData.y = hoverResult.y;
+            tooltipData.w = hoverResult.w;
+            tooltipData.h = hoverResult.h;
         }
     }
     return false;
@@ -372,7 +374,6 @@ function mouseDragged() {
 function mouseReleased() {
     slider.thumb.dragging = false;
     if (isHoveringSlider) cursor('pointer');
-    else if (isHoveringCell) cursor('pointer');
     else cursor('default');
 }
 
@@ -398,7 +399,7 @@ function draw() {
   clear();
   
   // 1. Disegna Titolo (Nazione - Anno)
-  //drawHeaderInfo();
+  drawHeaderInfo();
 
   // 2. Disegna Slider
   drawTimeline();
@@ -406,40 +407,21 @@ function draw() {
   // 3. Disegna Griglia
   drawFlexGrid(commodities, GRID_START_Y);
 
-  // 4. Disegna Overlay se c'è hover su cella
-  if (isHoveringCell && tooltipData) {
-    drawHoverOverlay();
-    
-    // 5. Ridisegna SOPRA l'overlay SOLO la cella hoverata
-    if (hoveredCellIndex !== -1) {
-      drawHoveredCell();
-    }
-  }
+  
 
-  // 6. Disegna Tooltip 
-  if (tooltipData && isHoveringCell) {
-    drawTooltip();
-  }
-}
-
-// AGGIUNTO: Funzione per disegnare overlay hover
-function drawHoverOverlay() {
-  push();
-  fill(CONFIG.colors.overlay + '80'); // Verde con trasparenza 50%
-  noStroke();
-  rect(0, 0, width, height);
-  pop();
+  // 4. Disegna Tooltip 
+  drawTooltip();
 }
 
 function drawHeaderInfo() {
     push();
     fill(0);
     noStroke();
-    textFont(CONFIG.typography.fontFamily);
+    textFont('Roboto');
     textAlign(CENTER, TOP);
     textSize(40);
     
-    const textToDisplay = `${selectedCountry || "Select Country"}`;
+    const textToDisplay = `${selectedCountry || "Seleziona Nazione"}`;
     
     // Posiziona sopra lo slider, allineato a sinistra del layout
     text(textToDisplay, 735, 40 );
@@ -471,11 +453,11 @@ function drawTimeline() {
     fill(CONFIG.colors.slider.text);
     textAlign(CENTER, CENTER);
     textSize(CONFIG.typography.sliderValueSize);
-    textFont(CONFIG.typography.fontFamily);
+    textFont('Roboto');
     
     // Anno corrente sotto il pallino
     text(selectedYear, slider.x + slider.width / 2, slider.y + 45);
-    textFont(CONFIG.typography.fontFamily);
+    textFont('Roboto');
     // Range min/max
     textSize(12);
     textAlign(LEFT);
@@ -506,7 +488,7 @@ function drawSliderWaveGraph() {
     
     // Se c'è un paese selezionato, ricalcola per quel paese
     if (selectedCountry) {
-        calculateYearDataCounts();
+        calculateYearDataCounts(selectedCountry);
     }
 
     // Crea un oggetto con TUTTI gli anni inizializzati a 0
@@ -580,25 +562,7 @@ function checkGridHover(items, startY) {
     let currentY = startY;
     
     for (let i = 0; i < items.length; i++) {
-        const commodity = items[i];
-        
-        // MODIFICA: Controlla prima se c'è un dato per questa commodity
-        const rowData = data.find(d =>
-            d.country === selectedCountry &&
-            d.year === selectedYear &&
-            d.commodity === commodity
-        );
-        
-        // Se non c'è dato, salta questa cella (nessun hover)
-        if (!rowData) {
-            // Aggiorna comunque la posizione per le celle successive
-            if (i > 0 && i % COLUMNS === 0) {
-                currentX = centeringOffset; 
-                currentY += cellHeight - 80 + CELL_SPACING;
-            }
-            currentX += cellWidth + CELL_SPACING;
-            continue;
-        }
+        const item = items[i];
         
         if (i > 0 && i % COLUMNS === 0) {
             currentX = centeringOffset; 
@@ -612,15 +576,14 @@ function checkGridHover(items, startY) {
             mouseY >= currentY &&
             mouseY <= currentY + cellHeight
         ) {
-            // Mouse sopra questa cella E c'è un dato!
+            // Mouse sopra questa cella!
             return {
-                commodity: commodity,
+                commodity: item,
                 x: currentX,
                 y: currentY,
                 w: cellWidth,
                 h: cellHeight,
-                index: i,
-                hasData: true // Aggiungi flag che c'è dato
+                index: i // <-- AGGIUNGI QUESTO!
             };
         }
         
@@ -675,14 +638,8 @@ function drawFlexGrid(items, startY) {
             currentY += cellHeight-80 + CELL_SPACING;
         }
 
-        // Se è la cella hoverata, la disegna sopra l'overlay
-        if (i === hoveredCellIndex && isHoveringCell) {
-            push();
-            drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
-            pop();
-        } else {
-            drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
-        }
+        // Disegna la cella
+        drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
         
         // Sposta X per la prossima cella
         currentX += cellWidth + CELL_SPACING;
@@ -700,8 +657,8 @@ function drawTooltip() {
     if (!tooltipData) return;
 
     const TOOLTIP_CONFIG = {
-        w: 400,
-        h_data: 130,
+        w: 500,
+        h_data: 200,
         h_nodata: 80,
         bgColor: '#415E5A',
         textColor: '#F5F3EE',
@@ -799,16 +756,16 @@ function drawTooltip() {
     drawingContext.shadowColor = 'rgba(0, 0, 0, 0.3)';
 
     // Sfondo del tooltip
-    fill(TOOLTIP_CONFIG.bgColor);
+    fill(TOOLTIP_CONFIG.bgColor); // Nuovo colore di sfondo
     noStroke();
-    rect(ttX, ttY, tooltipW, tooltipH, TOOLTIP_CONFIG.radius);
+    rect(ttX, ttY, tooltipW, tooltipH, TOOLTIP_CONFIG.radius); // Nuovo raggio
     
     // Rimuovi ombra per il testo
     drawingContext.shadowBlur = 0;
     drawingContext.shadowOffsetX = 0;
     drawingContext.shadowOffsetY = 0;
     
-    fill(TOOLTIP_CONFIG.textColor);
+    fill(TOOLTIP_CONFIG.textColor); // Nuovo colore del testo
     textAlign(LEFT, TOP);
     
     let textY = ttY + pad;
@@ -818,40 +775,50 @@ function drawTooltip() {
     // Titolo
     textSize(20);
     textStyle(BOLD);
-    textFont(CONFIG.typography.fontFamily);
+    textFont('Roboto');
     text(commodity, ttX + pad, textY);
     textY += 30;
 
     if (hasData) {
-        // Dati disponibili - TESTO IN INGLESE
+        // Dati disponibili
         textStyle(NORMAL);
         textSize(16);
 
         // Loss
-        const lossText = `Loss: ${nf(lossPercentage, 0, 1)}%`;
+        const lossText = `Perdita: ${nf(lossPercentage, 0, 1)}%`;
         text(lossText, ttX + pad, textY);
         textY += 24;
         
         // Fase
-        text(`Supply chain phase: ${supplyChainPhase}`, ttX + pad, textY);
+        text(`Fase: ${supplyChainPhase}`, ttX + pad, textY);
         textY += 24;
         
         // Causa
-        let cause = mainCauseOfWaste || "Data not available";
-        text(`Main cause: ${cause}`, ttX + pad, textY);
-
+        text(`Causa: ${mainCauseOfWaste}`, ttX + pad, textY);
+        
     } else {
-        // No Data - TESTO IN INGLESE
+        // No Data
         textSize(16);
-        fill('#EDC69A');
-        text("Data not available for this year", ttX + pad, textY + 5);
+        fill('#EDC69A'); // Rosso chiaro sul fondo scuro
+        text("No data found.", ttX + pad, textY + 5);
     }
     
     pop();
 }
 
+
+
+
+
+
+
 // ===== DRAW COMPLEX CELL (Mantenuta dal codice A) =====
 function drawComplexCell(commodityName, x, y, w, h) {
+ /*fill("black");
+ circle(x,y,10);
+ fill("red");
+  circle(x+w,y+h-1,10);*/
+
   push();
   noFill();
   stroke(0, 12);
@@ -866,7 +833,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   let baseH = availH;
 
   if (img_empty && img_empty.width) {
-    const scale = Math.min(availW / img_empty.width, availH / img_empty.height) * 0.8;
+    const scale = Math.min(availW / img_empty.width, availH / img_empty.height);
     baseW = Math.round(img_empty.width * scale);
     baseH = Math.round(img_empty.height * scale);
   }
@@ -887,21 +854,21 @@ function drawComplexCell(commodityName, x, y, w, h) {
       const s = Math.min(availW / img_over.width, availH / img_over.height);
       const bw = Math.round(img_over.width * s);
       const bh = Math.round(img_over.height * s);
-      image(img_over, baseX, baseY, baseW, baseH);
+      // image(img_over, x + (w - bw)/2, y + (h - bh)/2, bw, bh); // Uso img_over
+      image(img_over, baseX, baseY, baseW, baseH); // Usando le variabili base già calcolate
     }
     
-    // 2. Disegna l'Outline della commodity
+    // 2. Disegna l'Outline della commodity (QUI UTILIZZIAMO commodityOutline)
     const norm = normalizeFilename(commodityName);
     const iconImg = commodityOutline[norm] || null; 
     
     if (iconImg && iconImg.width) {
       const maxIconW = Math.round(w * 0.36);
-      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height)*0.8;
+      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height);
       const iw = Math.round(iconImg.width * iconScale);
       const ih = Math.round(iconImg.height * iconScale);
       imageMode(CENTER);
-      // MANTENUTO: stessa posizione originale
-      image(iconImg, x + w/2, baseY+ih * 1.3, iw, ih);
+      image(iconImg, x + w/2, baseY+ih, iw, ih);
     } else {
       push();
       fill(0, 120);
@@ -919,13 +886,14 @@ function drawComplexCell(commodityName, x, y, w, h) {
     return; // Termina la funzione
   }
 
+  // === BASKET EMPTY BASE ===
+  /*imageMode(CORNER);
+  if (img_empty && img_empty.width)
+    image(img_empty, baseX, baseY, baseW, baseH);*/
+
+
   // === FILL LEVEL ===
-  let pct = isNaN(rowData.loss) ? 0 : Math.max(0, Math.min(100, rowData.loss));
-  
-  // MODIFICA 1: Altezza minima garantita
-  if (pct > 0 && pct < MIN_FILL_PERCENTAGE) {
-    pct = MIN_FILL_PERCENTAGE;
-  }
+  const pct = isNaN(rowData.loss) ? 0 : Math.max(0, Math.min(100, rowData.loss));
 
   const nominalW = INTERNAL_NOMINAL_W+50;
   const nominalH = INTERNAL_NOMINAL_H + 50;
@@ -935,44 +903,39 @@ function drawComplexCell(commodityName, x, y, w, h) {
   const innerX = baseX + Math.round((baseW - innerW) / 2);
   const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+5;
 
-  // MODIFICA 2: Altezza minima garantita
-  const fillH = Math.max(MIN_FILL_HEIGHT, Math.round(innerH * (pct / 100)));
+  const fillH = Math.round(innerH * (pct / 100));
   let fillY = innerBottomY - fillH - 18;
 
   const innerTopY = innerBottomY - innerH;
   if (fillY < innerTopY) fillY = innerTopY;
 
-  // Riempiemento
   push();
   noStroke();
   fill(...LEVEL2_COLOR);
-  rect(innerX+1, fillY-8, innerW-3, fillH+8);
+  rect(innerX+1, fillY-8, innerW-3, fillH+8, 4);
+
+  pop();
+  push();
+  //fill('#F5F3EE');
+  fill('#F5F3EE');
+  //circle(innerX+70, fillY-143, 300);
+  ellipse(innerX+70,fillY-37, 180, 80 )
   pop();
 
-  // Parte superiore curva (bianca) - MANTENUTA COME ORIGINALE
-  const hoverResult = checkGridHover(commodities, GRID_START_Y);
-  if (!(hoverResult && hoverResult.commodity === commodityName)) {
-    push();
-    fill('#F5F3EE'); // Bianco normale
-    ellipse(innerX+70, fillY-37, 180, 80);
-    pop();
-  }
-
-  // === BASKET OVERLAY ===
+// === BASKET OVERLAY ===
   if (img_over && img_over.width)
-    image(img_over, baseX, baseY, baseW, baseH);
+    image(img_over, baseX, baseY, baseW, baseH); // Uso img_over
 
   // === ICONA (Piena - DATA PRESENTE) ===
   const norm = normalizeFilename(commodityName);
-  const iconImg = commodityImgs[norm] || null;
+  const iconImg = commodityImgs[norm] || null; // <--- QUI UTILIZZIAMO commodityImgs
   if (iconImg && iconImg.width) {
     const maxIconW = Math.round(w * 0.36);
-    const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height) * 0.8;
+    const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height);
     const iw = Math.round(iconImg.width * iconScale);
     const ih = Math.round(iconImg.height * iconScale);
     imageMode(CENTER);
-    // MANTENUTO: stessa posizione originale
-    image(iconImg, x + w/2, baseY + ih*1.3, iw, ih);
+    image(iconImg, x + w/2, baseY + ih , iw, ih);
   } else {
     push();
     fill(0, 120);
@@ -985,37 +948,6 @@ function drawComplexCell(commodityName, x, y, w, h) {
   }
 
   pop();
-}
-
-function drawHoveredCell() {
-  // Calcola la posizione della cella hoverata (simile a drawFlexGrid)
-  const availableW = width - (SIDE_MARGIN * 2); 
-  const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
-  const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
-  const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
-  const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
-  const centeringOffset = floor((width - gridTotalWidth) / 2);
-  
-  let currentX = centeringOffset;
-  let currentY = GRID_START_Y;
-  
-  // Trova la posizione della cella hoverata
-  for (let i = 0; i < commodities.length; i++) {
-    const commodity = commodities[i];
-    
-    if (i > 0 && i % COLUMNS === 0) {
-      currentX = centeringOffset;
-      currentY += cellHeight - 80 + CELL_SPACING;
-    }
-    
-    if (i === hoveredCellIndex) {
-      // Disegna SOLO questa cella (senza lo sfondo della cella)
-      drawComplexCell(commodity, currentX, currentY, cellWidth, cellHeight);
-      return;
-    }
-    
-    currentX += cellWidth + CELL_SPACING;
-  }
 }
 
  
@@ -1053,7 +985,6 @@ function applyUrlParams() {
   }
   updateVisualization();
 }
-
 function handleKeyPress(event) {
     if (event.key === 'ArrowLeft') {
         // Anno precedente

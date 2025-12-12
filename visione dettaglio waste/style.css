@@ -147,32 +147,89 @@ body {
 
 #topControls {
   position: relative;
-                 
   width: 100%;
   background: transparent;
-  
   padding-top: 0px;
-  
   display: flex;
   flex-direction: column;
-  
-  border-bottom: transparent;
+  align-items: center; /* CENTRA ORIZZONTALMENTE */
+  justify-content: flex-start; /* ALLINEA IN ALTO */
 }
 
 #dropdownContainer {
-  width: 90%;               
-  padding-top: 55px;
-  display:flex;
-  position:absolute;
-  justify-content: flex-end; 
-  
-}
-#countrySelect {
-  
-  font-size: 1 rem;
-  border-radius: 6px;
+  width: 300px; /* O un valore fisso tipo 300px */
+  padding-top: 25px; /* Ridotto da 35px */
+  display: flex;
+  position: absolute; /* Cambia da absolute a relative */
+  justify-content: center; /* Centro invece di flex-end */
 }
 
+/*nuove */
+/* Stile per il selettore paesi */
+#countrySelect {
+    /* Dimensioni e spaziatura */
+    padding: 12px 20px;
+    font-size: 24px;
+    width: 400px;
+    
+    /* Colori */
+    background-color: #F5F3EE;
+    color: #283618;
+    border: 2px solid #415E5A;
+    border-radius: 8px;
+    
+    /* Effetti */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    
+    /* Tipografia */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    
+    /* Rimuovi stile predefinito */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Icona freccia personalizzata */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='%23415E5A'%3E%3Cpath d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+    padding-right: 40px;
+}
+
+/* Hover state */
+#countrySelect:hover {
+    border-color: #283618;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus state */
+#countrySelect:focus {
+    outline: none;
+    border-color: #283618;
+    box-shadow: 0 0 0 3px rgba(65, 94, 90, 0.2);
+}
+
+/* Stile per le opzioni */
+#countrySelect option {
+    background-color: #F5F3EE;
+    color: #283618;
+    padding: 10px;
+    font-size: 15px;
+}
+
+/* Stile per l'opzione selezionata */
+#countrySelect option:checked {
+    background-color: #415E5A;
+    color: #F5F3EE;
+}
+
+/* Stile per le opzioni in hover (non supportato ovunque) */
+#countrySelect option:hover {
+    background-color: #EDC69A;
+}
 
 
 /* ---------------- CANVAS ---------------- */
