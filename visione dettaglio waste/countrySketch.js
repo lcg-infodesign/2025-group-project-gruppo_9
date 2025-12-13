@@ -946,7 +946,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   push();
   noStroke();
   fill(...LEVEL2_COLOR);
-  rect(innerX+1, fillY-8, innerW-3, fillH+8);
+  rect(innerX+4, fillY-8, innerW-10, fillH+8);
   pop();
 
   // Parte superiore curva (bianca) - MANTENUTA COME ORIGINALE
@@ -954,7 +954,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   if (!(hoverResult && hoverResult.commodity === commodityName)) {
     push();
     fill('#F5F3EE'); // Bianco normale
-    ellipse(innerX+70, fillY-37, 180, 80);
+    ellipse(innerX+70, fillY-37, 170, 80);
     pop();
   }
 
