@@ -27,7 +27,13 @@ body {
     overflow-x: hidden;
 }
 
-.header-left { justify-self: start; }
+.header-left { 
+    justify-self: start; 
+    /* Aggiungi queste righe per allineare i due bottoni */
+    display: flex;
+    gap: 12px; /* Spazio tra i due bottoni */
+    align-items: center;
+}
 .header-center { justify-self: center; }
 .header-right {
     justify-self: end;
@@ -98,53 +104,112 @@ body {
     width: 100%;
 }
 
-
-/* FOOTER (FONT ROBOTO MONO) */
-.footer {
-    background: var(--bg);
-    padding: 40px 60px;
-    display: grid;
-    grid-template-columns: 1.5fr 2px 1fr;
-    gap: 40px;
-    align-items: stretch;
+.nav-btn.btn-secondary {
+    border-color: transparent; /* Senza bordo */
+    background: rgba(32, 51, 43, 0.05); /* Sfondo leggerissimo */
+    color: var(--dark);
 }
 
-.footer-contacts p, .contacts-grid p, .footer-right p {
-    font-size: 0.9rem;
-    color: #415E5A;
+.nav-btn.btn-secondary:hover {
+    border-color: var(--dark);
+    background: transparent;
+}
+
+
+/* FOOTER */
+.footer {
+    background: var(--bg); /* O il tuo colore di sfondo es: #f0f0f0 */
+    padding: 50px 60px;
+    display: grid;
+    /* Struttura a 3 colonne: Sinistra larga, linea sottile, Destra */
+    grid-template-columns: 1.4fr 2px 1fr; 
+    gap: 50px;
+    align-items: start;
+    border-top: 2px solid rgba(65, 94, 90, 0.2);
+}
+
+/* Stili Testo */
+.footer p {
+    font-size: 0.85rem;
+    color: #415E5A; /* Il tuo colore verde scuro */
     margin: 4px 0;
     font-family: 'Roboto Mono', monospace; 
+    line-height: 1.4;
 }
 
+.footer strong {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Griglia Nomi e Mail */
 .contacts-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 10px 30px;
-    margin-top: 10px;
+    grid-template-columns: auto 1fr; /* Colonna nomi si adatta, mail prende il resto */
+    gap: 10px 30px; /* Spazio verticale e orizzontale */
+    margin-top: 15px;
+    margin-bottom: 30px;
 }
 
+/* Copyright piccolo */
+.copyright-statement {
+    font-size: 0.7rem !important;
+    opacity: 0.7;
+    margin-top: 20px;
+    max-width: 90%;
+}
+
+/* Linea Divisoria */
 .footer-divider {
     background: #415E5A;
     opacity: 0.35;
     width: 2px;
     height: 100%;
+    min-height: 200px;
 }
 
-.footer-right img {
-    width: 140px;
-    margin-top: 20px;
+/* Colonna Destra */
+.footer-right {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Spazio tra i blocchi di testo */
+}
+
+/* Loghi */
+.logos-container {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Ho aumentato un po' anche lo spazio tra i loghi per farli respirare */
+    margin-top: 20px; /* Un po' più di margine sopra */
+    flex-wrap: wrap;
+}
+
+.footer-logo {
+    height: 65px; /* <<< QUI HO AUMENTATO LA DIMENSIONE (era 40px) */
+    width: auto;  /* Mantiene le proporzioni */
     display: block;
+    mix-blend-mode: multiply;
 }
 
-
+/* Responsive Tablet/Mobile */
 @media (max-width: 900px) {
-    .team-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .footer {
+        grid-template-columns: 1fr; /* Tutto in una colonna */
+        gap: 40px;
+        padding: 40px 20px;
     }
-}
-
-@media (max-width: 600px) {
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
+    
+    .footer-divider {
+        display: none;
     }
+    
+    .contacts-grid {
+        grid-template-columns: 1fr; /* Nomi sopra, mail sotto o affiancati */
+        gap: 5px;
+    }
+    
+    /* Per mobile, magari vuoi nomi e mail vicini */
+    .names p { display: block; font-weight: bold; margin-top: 10px; }
+    .emails p { display: block; margin-bottom: 10px; }
 }

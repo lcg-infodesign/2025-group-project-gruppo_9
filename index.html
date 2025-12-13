@@ -3,104 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Global Food Waste</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="index/style.css">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Food Waste - The Whole Story</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="index/style.css">
 </head>
-
 <body>
-  <!-- Sfondo -->
-  <div class="background-image"></div>
 
-  <!-- Titolo principale -->
-  <header class="main-header">
-    <h1>
-      <span class="the">THE</span>
-      <span class="whole"><span class="w-hole">W</span>HOLE</span>
-      <span class="story">STORY</span>
-    </h1>
+  <button id="skipBtn">
+    <span class="arrow-icon">&#10132;</span> Skip
+  </button>
+  
+  <div id="interactionHint"></div>
+
+  <header id="heroSection">
+    
+    <div class="hero-titles-container">
+      <h1>
+        <span class="line-food">FOOD</span>
+        <span class="line-waste">WASTE</span>
+      </h1>
+      <span class="main-subtitle">THE WHOLE STORY</span>
+    </div>
+
+    <div class="illustration-wrapper">
+      <img src="assets/img/basket.svg" alt="Bin" class="bin-animated">
+      
+      <img src="assets/img/sacco.png" alt="Bag Left" class="sacco sacco-left">
+      <img src="assets/img/sacco.png" alt="Bag Right" class="sacco sacco-right">
+    </div>
+
   </header>
 
-  <!-- Freccia scroll -->
-<div class="scroll-arrow">&#8595;</div>
+  <section id="introSection">
+    <div class="typewriter-container">
+      <span id="typewriterText"></span><span class="cursor"></span>
+    </div>
+  </section>
 
-<!-- Sezione storytelling -->
-<section class="story-section" id="storySection">
-  <p id="storyText"></p>
-  <a id="exploreBtn" href="main/main.html">Explore the gap</a>
-</section>
+  <section id="timelineSection">
+    <div class="timeline-wrapper">
+      <div class="graphics-column" id="graphicsCol">
+        <div class="vertical-line" id="mainLine"></div>
+      </div>
+      <div class="text-column" id="textCol"></div>
+    </div>
+  </section>
 
-</section>
+  <section id="outroSection">
+    <div class="outro-container">
+      <div class="outro-text">
+        <p>This website was created to explore not just the food we throw away at home, but all the food lost along the way.</p>
+        <p>To understand the problem, we need the whole picture, including the hidden causes and missing information.<br>
+        Only by seeing the full story can we start to fix it.</p>
+      </div>
+      <a href="main/main.html" class="explore-data-btn">Explore the data</a> 
+    </div>
+  </section>
 
-  <!-- Sacchi animati sul lato sinistro -->
-  <img src="assets/img/sacco.png" alt="Trash Bag" class="sacco sacco1">
-  <img src="assets/img/sacco.png" alt="Trash Bag" class="sacco sacco2">
-
-  <script>
-const arrow = document.querySelector('.scroll-arrow');
-const storySection = document.getElementById('storySection');
-const storyText = document.getElementById('storyText');
-
-const text = "<strong>Do we really know what “food waste” means?</strong>\n\n" +
-"A large part of our food never reaches our plates.\n" +
-"It gets lost beforehand. It disappears along the supply chain.\n" +
-"Often we don’t know <strong>where</strong>, <strong>how</strong>, <strong>why</strong>.\n\n" +
-"Waste affects food, but it also affects information.\n" +
-"This website was created to explore what exists and what is missing.\n" +
-"And to understand the problem, we need both.";
-
-
-function typeWriter(element, text, i = 0, speed = 60) {
-  if (i < text.length) {
-    element.innerHTML = text.substring(0, i + 1);
-    setTimeout(() => typeWriter(element, text, i + 1, speed), speed);
-  } else {
-    document.getElementById("exploreBtn").classList.add("show");
-  }
-}
-
-// --- FUNZIONE UNICA DA ATTIVARE (click + scroll + tastiera)
-function triggerStory() {
-  // Evita che la funzione si riattivi più volte
-  if (triggerStory.started) return;
-  triggerStory.started = true;
-
-  storySection.scrollIntoView({ behavior: 'smooth' });
-
-  // Aspetta che la sezione sia visibile prima di scrivere
-  setTimeout(() => typeWriter(storyText, text), 800);
-}
-
-// CLICK sulla freccia
-arrow.addEventListener('click', triggerStory);
-
-// SCROLL manuale (trackpad, mouse wheel, touch)
-window.addEventListener('wheel', () => {
-  triggerStory();
-}, { passive: true, capture: true });
-
-// SCROLL *qualsiasi* (fallback per Android/iOS)
-document.addEventListener('touchmove', () => {
-  triggerStory();
-}, { passive: true });
-
-// Scroll generale (per sicurezza)
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 10) triggerStory();
-});
-
-// TASTI: freccia ↓, PageDown, Space
-window.addEventListener('keydown', (e) => {
-  const keys = ["ArrowDown", "PageDown", " ", "Spacebar"];
-  if (keys.includes(e.key)) triggerStory();
-});
-</script>
-
-
+  <script src="index/script.js"></script>
 </body>
 </html>
-
-

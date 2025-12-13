@@ -10,18 +10,19 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+ <!-- HEADER -->
     <header id="headerBar">
     <div class="header-left">
         <a href="../main/main.html" class="nav-btn">Home</a>
+        <a href="../index.html" class="nav-btn btn-secondary">Intro</a>
     </div>
 
     <div class="header-center">
-    <a href="../index.html" id="siteLogo">
-        <span class="main-title">FOOD WASTE:</span>
-        <span class="subtitle">THE WHOLE STORY</span>
-    </a>
-</div>
+        <a href="../index.html" id="siteLogo">
+            <span class="main-title">FOOD WASTE:</span>
+            <span class="subtitle">THE WHOLE STORY</span>
+        </a>
+    </div>
 
     <nav class="header-right">
         <a href="../dati/dati.html" class="nav-link">Data</a>
@@ -51,38 +52,56 @@
     <div class="team-grid">
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
+            <div class="member-photo">
+                <img src="../assets/img/team/Caterina.png" alt="Caterina Gallo" class="img-default">
+                <img src="../assets/img/team/Caterina.png" alt="Caterina Gallo Hover" class="img-hover">
+            </div>
             <h3>Caterina Gallo</h3>
             <p>Roles and skills...</p>
         </div>
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
+            <div class="member-photo">
+                <img src="../assets/img/team/Giulia.png" alt="Giulia Furlani" class="img-default">
+                <img src="../assets/img/team/Giulia.png" alt="Giulia Furlani Hover" class="img-hover">
+            </div>
             <h3>Giulia Furlani</h3>
             <p>Roles and skills...</p>
         </div>
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
+            <div class="member-photo">
+                <img src="../assets/img/team/Irene.png" alt="Irene Massignani" class="img-default">
+                <img src="../assets/img/team/Irene.png" alt="Irene Massignani Hover" class="img-hover">
+            </div>
             <h3>Irene Massignani</h3>
             <p>Roles and skills...</p>
         </div>
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
+            <div class="member-photo">
+                <img src="../assets/img/team/Rebecca.png" alt="Rebecca Sole Bassani" class="img-default">
+                <img src="../assets/img/team/Rebecca_hover.jpg" alt="Rebecca Sole Bassani Hover" class="img-hover">
+            </div>
             <h3>Rebecca Sole Bassani</h3>
             <p>Roles and skills...</p>
         </div>
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
+            <div class="member-photo">
+                <img src="../assets/img/team/Stefano.png" alt="Stefano Lorini" class="img-default">
+                <img src="../assets/img/team/Stefano.png" alt="Stefano Lorini Hover" class="img-hover">
+            </div>
             <h3>Stefano Lorini</h3>
             <p>Roles and skills...</p>
         </div>
 
         <div class="team-member">
-            <img src="../assets/img/mosche.png" alt="Member">
-            <h3>Lorenzo Barazzetta</h3>
+            <div class="member-photo">
+                <img src="../assets/img/team/Tommaso.png" alt="Tommaso Barazzetta" class="img-default">
+                <img src="../assets/img/team/Tommaso.png" alt="Tommaso Barazzetta Hover" class="img-hover">
+            </div>
+            <h3>Tommaso Barazzetta</h3>
             <p>Roles and skills...</p>
         </div>
 
@@ -93,8 +112,8 @@
 <!-- FOOTER -->
 <footer class="footer">
 
-    <div class="footer-contacts">
-        <p><strong>Contatti:</strong></p>
+    <div class="footer-left">
+        <p><strong>Project by</strong></p>
 
         <div class="contacts-grid">
             <div class="names">
@@ -108,22 +127,41 @@
 
             <div class="emails">
                 <p>caterina.gallo@example.mail.it</p>
-                <p>irene.massignani@example.mail.it</p>
-                <p>giulia.furlani@example.mail.it</p>
+                <p>irenemassignani05@gmail.com</p>
+                <p>giulialicia.furlani@mail.polimi.it</p>
                 <p>bassanirebecca@gmail.com</p>
                 <p>stefano.lorini@example.mail.it</p>
-                <p>tommaso.barazzetta@example.mail.it</p>
+                <p>tommaso.barazzetta@mail.polimi.it</p>
             </div>
         </div>
+
+        <p class="copyright-statement">
+            © 2026 Politecnico di Milano. This work is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+        </p>
     </div>
 
     <div class="footer-divider"></div>
 
     <div class="footer-right">
-        <p><strong>Laboratorio di Computer Grafica per l’Information Design</strong></p>
-        <p>A.A. 2025/2026</p>
-        <p>Docenti: Mauri Michele e Conficconi Davide</p>
-        <img src="../assets/img/logopolimi.png" alt="Polimi Logo">
+        <div class="course-info">
+            <p><strong>Computer Graphics Studio for Information Design</strong></p>
+            <p>Bachelor's Degree in Communication Design</p>
+            <p>A.Y. 2025/2026</p>
+        </div>
+
+        <div class="faculty-info">
+            <p><strong>Faculty</strong></p>
+            <p>Michele Mauri, Davide Conficconi</p>
+            
+            <p style="margin-top: 10px;"><strong>Teaching Assistants</strong></p>
+            <p>Alessandra Facchin, Alessandro Nazzari</p>
+        </div>
+
+        <div class="logos-container">
+            <img src="../assets/img/density_logo.svg" alt="DensityDesign" class="footer-logo">
+            <img src="../assets/img/nects_logo.svg" alt="NECTS" class="footer-logo">
+            <img src="../assets/img/logopolimi.svg" alt="Polimi Logo" class="footer-logo">
+        </div>
     </div>
 
 </footer>
