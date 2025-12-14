@@ -1013,7 +1013,7 @@ const textX = legendX + padding;
 const textY = legendY + padding;
 
 text(
-  "The diameter of each circles\nrepresent the percentage\nof waste for that commodity.",
+  "The diameter of each circle\nrepresent the percentage\nof waste for that commodity.",
   textX,
   textY
 );
