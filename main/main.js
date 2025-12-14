@@ -44,7 +44,7 @@ const CONFIG = {
         },
         legend: {
             width: 180, // Leggermente più larga
-            height: 140, // Più alta per ospitare l'immagine
+            height: 260, // Più alta per ospitare l'immagine
             marginRight: 50, // Più vicina al centro
             padding: 15
         }
@@ -997,9 +997,41 @@ function drawSizeLegend() {
     fill(CONFIG.colors.legend.background);
     noStroke();
     rect(legendX, legendY, legendWidth, legendHeight, 8);
+
+
+    // --- legenda DIDASCALIA ---
+fill(CONFIG.colors.background);
+noStroke();
+textFont(CONFIG.typography.fontFamily);
+textAlign(LEFT, TOP);
+
+// 1) Testo principale 
+textSize(CONFIG.typography.legendSize);
+textLeading(14); // interlinea
+
+const textX = legendX + padding;
+const textY = legendY + padding;
+
+text(
+  "The diameter of each circles\nrepresent the percentage\nof waste for that commodity.",
+  textX,
+  textY
+);
+
+// 2) Testo secondario più piccolo
+textSize(CONFIG.typography.legendSize - 2);
+textLeading(13);
+
+const secondY = textY + 48; // distanza sotto al primo blocco
+text(
+  "Move along the timeline to observe\nfood waste over the years",
+  textX,
+  secondY
+);
+
     
     // Pallini sovrapposti per min e max
-    const circleY = legendY + 35;
+    const circleY = legendY + 130;
     const smallCircleX = legendX + 20;
     const bigCircleX = legendX + legendWidth - 30;
     
@@ -1052,10 +1084,10 @@ function drawSizeLegend() {
     // Linea separatrice
     stroke(CONFIG.colors.background + '99');
     strokeWeight(1);
-    line(legendX + padding, legendY + 80, legendX + legendWidth - padding, legendY + 80);
+    line(legendX + padding, legendY + 180, legendX + legendWidth - padding, legendY + 180);
     
     // Immagine outline e testo "dato non presente"
-    const outlineImageY = legendY + 110;
+    const outlineImageY = legendY + 215;
     
     if (legendImage && legendImage.width > 0) {
         const outlineImg = legendImage;
