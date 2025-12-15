@@ -52,6 +52,8 @@ let yearRange = { min: 0, max: 0 };
 let isHoveringCell = false;
 let hoveredCellIndex = -1;
 
+// ===== IMMAGINI RIEMPIMENTO DINAMICO =====
+const fillImages = {};
 
 // Immagini
 const ASSETS_BASE = "../assets/img/";
@@ -89,6 +91,33 @@ function normalizeFilename(name) {
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9*-]/g, "");
 }
+//immagini riempimenti
+
+function getFillImage(supplyStage, cause) {
+  if (!supplyStage || !cause) return fillImages.default;
+
+  const key = 
+    normalizeFilename(supplyStage) + "_" +
+    normalizeFilename(cause);
+
+  return fillImages[key] || fillImages.default;
+}
+
+function drawImageFillLevel(img, x, bottomY, w, h, fillH) {
+  if (!img || fillH <= 0) return;
+
+  const srcH = img.height * (fillH / h);
+  const srcY = img.height - srcH;
+
+  const destY = bottomY - fillH;
+
+  image(
+    img,
+    x, destY, w, fillH,
+    0, srcY, img.width, srcH
+  );
+}
+
 
 function loadImageSafe(path, cb) {
   loadImage(path, img => cb && cb(img), () => cb && cb(null));
@@ -137,7 +166,39 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_empty = img);
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
+
+
+
+  loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
+
+  const stages = [
+    "production",
+    "post_harvest",
+    "storage",
+    "transport",
+    "retail",
+    "consumption"
+  ];
+
+  const causes = [
+    "mechanical_damage",
+    "spoilage",
+    "overproduction",
+    "poor_storage",
+    "handling"
+  ];
+
+  for (let s of stages) {
+    for (let c of causes) {
+      const key = `${s}_${c}`;
+      loadImageSafe(
+        ASSETS_BASE + "fills/" + key + ".png",
+        img => fillImages[key] = img || null
+      );
+    }
+  }
 }
+
 
 
 // ===== SETUP =====
@@ -949,11 +1010,37 @@ function drawComplexCell(commodityName, x, y, w, h) {
   if (fillY < innerTopY) fillY = innerTopY;
 
   // Riempiemento
-  push();
-  noStroke();
-  fill(...LEVEL2_COLOR);
-  rect(innerX+4, fillY-8, innerW-10, fillH+8);
-  pop();
+  // === IMAGE FILL LEVEL ===
+const fullRow = getFullDataRow(
+  selectedCountry,
+  selectedYear,
+  commodityName
+);
+
+const fillImg = getFillImage(
+  fullRow.supplyChainPhase,
+  fullRow.mainCauseOfWaste
+);
+
+// Clipping area
+push();
+drawingContext.save();
+drawingContext.beginPath();
+drawingContext.rect(innerX+4, innerBottomY - innerH, innerW-10, innerH);
+drawingContext.clip();
+
+// Disegno PNG riempimento
+drawImageFillLevel(
+  fillImg,
+  innerX+4,
+  innerBottomY - 8,
+  innerW-10,
+  innerH,
+  fillH
+);
+
+drawingContext.restore();
+pop();
 
   // Parte superiore curva (bianca) - MANTENUTA COME ORIGINALE
   const hoverResult = checkGridHover(commodities, GRID_START_Y);
