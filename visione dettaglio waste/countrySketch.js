@@ -77,7 +77,7 @@ let GRID_START_Y = 180;      // Dove inizia la griglia
 const LEVEL2_COLOR = ['#EDC69A'];
 
 // AGGIUNTO: Costante per altezza minima riempimento
-const MIN_FILL_HEIGHT = 20; // Altezza minima in pixel
+const MIN_FILL_HEIGHT = 10; // Altezza minima in pixel
 const MIN_FILL_PERCENTAGE = 3; // Percentuale minima visibile
 
 
@@ -936,7 +936,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
   const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+5;
 
   // MODIFICA 2: Altezza minima garantita
-  const fillH = Math.max(MIN_FILL_HEIGHT, Math.round(innerH * (pct / 100)));
+  //const fillH = Math.max(MIN_FILL_HEIGHT, Math.round(innerH * (pct / 100)));
+  const fillH = pct === 0 ? 0 : map(pct, 0, 100, MIN_FILL_HEIGHT, innerH);
   let fillY = innerBottomY - fillH - 18;
 
   const innerTopY = innerBottomY - innerH;
