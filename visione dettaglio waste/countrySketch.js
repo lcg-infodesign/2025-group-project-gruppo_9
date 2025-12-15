@@ -172,27 +172,48 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
 
   const stages = [
-    "production",
-    "post_harvest",
-    "storage",
-    "transport",
+    "collector",
+    
+    "distributor",
+    "export",
+    "farm",
+    "foodservices",
+    "grading",
+    "harvest",
+    "households",
+    "market",
+    "packing",
+    "postharvest",
+    "preharvest",
+    "processing",
     "retail",
-    "consumption"
+    "storage",
+    "trader",
+    "transport",
+    "wholesupplychain",
+    "wholesale"
   ];
 
   const causes = [
-    "mechanical_damage",
-    "spoilage",
-    "overproduction",
-    "poor_storage",
-    "handling"
+    "conservation",
+    "disease",
+    "drying",
+    "environmentalfactors",
+    "harvestandmanagement",
+    "insects",
+    "machinerydamage",
+    "market",
+    "processing",
+    "storage",
+    "transport",
+    "waste"
   ];
 
   for (let s of stages) {
     for (let c of causes) {
       const key = `${s}_${c}`;
       loadImageSafe(
-        ASSETS_BASE + "fills/" + key + ".png",
+        ASSETS_BASE + "glifi/" + key + ".png",
         img => fillImages[key] = img || null
       );
     }
