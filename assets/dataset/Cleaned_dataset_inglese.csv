@@ -376,15 +376,15 @@ Belarus,Dairy,1996,0.06,Whole supply chain,,1
 Belarus,Eggs,1996,0.09,Whole supply chain,,1
 Belarus,Dairy,1997,0.06,Whole supply chain,,1
 Belarus,Eggs,1997,0.12,Whole supply chain,,1
-Belarus,Dairy,1998,0.00,Whole supply chain,,1
-Belarus,Dairy,2000,0.00,Whole supply chain,,1
-Belarus,Dairy,2001,0.00,Whole supply chain,,1
-Belarus,Dairy,2002,0.00,Whole supply chain,,1
-Belarus,Dairy,2003,0.00,Whole supply chain,,1
-Belarus,Dairy,2004,0.00,Whole supply chain,,1
-Belarus,Dairy,2005,0.00,Whole supply chain,,1
-Belarus,Dairy,2006,0.00,Whole supply chain,,1
-Belarus,Dairy,2007,0.00,Whole supply chain,,1
+Belarus,Dairy,1998,0.10,Whole supply chain,,1
+Belarus,Dairy,2000,0.10,Whole supply chain,,1
+Belarus,Dairy,2001,0.10,Whole supply chain,,1
+Belarus,Dairy,2002,0.10,Whole supply chain,,1
+Belarus,Dairy,2003,0.10,Whole supply chain,,1
+Belarus,Dairy,2004,0.10,Whole supply chain,,1
+Belarus,Dairy,2005,0.10,Whole supply chain,,1
+Belarus,Dairy,2006,0.10,Whole supply chain,,1
+Belarus,Dairy,2007,0.10,Whole supply chain,,1
 Belgium,Cereals,2000,1.00,Whole supply chain,,2
 Belgium,Cereals,2001,1.00,Whole supply chain,,2
 Belgium,Tubers,2006,11.00,Whole supply chain,,1
@@ -576,13 +576,13 @@ Cameroon,Cereals,2018,2.63,Harvest,,8
 Cameroon,Cereals,2019,2.63,Harvest,,8
 Cameroon,Cereals,2021,2.63,Harvest,,8
 Cameroon,Fruits,2017,29.45,Retail,,11
-Canada,Cereals,2008,0.00,Whole supply chain,,1
-Canada,Cereals,2009,0.00,Whole supply chain,,1
-Canada,Cereals,2010,0.00,Whole supply chain,,1
-Canada,Cereals,2011,0.00,Whole supply chain,,1
-Canada,Cereals,2012,0.00,Whole supply chain,,1
-Canada,Cereals,2013,0.00,Whole supply chain,,1
-Canada,Cereals,2022,0.00,Processing,,1
+Canada,Cereals,2008,0.10,Whole supply chain,,1
+Canada,Cereals,2009,0.10,Whole supply chain,,1
+Canada,Cereals,2010,0.10,Whole supply chain,,1
+Canada,Cereals,2011,0.10,Whole supply chain,,1
+Canada,Cereals,2012,0.10,Whole supply chain,,1
+Canada,Cereals,2013,0.10,Whole supply chain,,1
+Canada,Cereals,2022,0.10,Processing,,1
 Canada,Cereals,1997,0.60,Whole supply chain,,5
 Canada,Cereals,2000,0.60,Whole supply chain,,5
 Canada,Cereals,1994,0.75,Whole supply chain,,4
@@ -777,7 +777,7 @@ China,Cereals,1987,1.71,Farm,Drying,7
 China,Meat,2013,2.25,Wholesale,"Insects, parasites and animals",4
 China,Cereals,1997,14.00,,Harvest and management,1
 China,Vegetables,2001,8.73,Storage,Transport,60
-China,Cereals,2009,0.00,Retail,,1
+China,Cereals,2009,0.10,Retail,,1
 China,Cereals,1994,1.00,Whole supply chain,,1
 China,Cereals,1995,1.00,Whole supply chain,,1
 China,Cereals,2022,1.00,Processing,,1
@@ -845,9 +845,9 @@ Côte d'Ivoire,Cereals,2002,2.85,Harvest,,13
 Côte d'Ivoire,Cereals,1982,7.00,Post-harvest,,1
 Côte d'Ivoire,Cereals,2005,7.23,Farm,,13
 Croatia,Cereals,2022,3.00,Processing,,1
-Cuba,Legumes,2009,0.00,Whole supply chain,,1
-Cuba,Legumes,2010,0.00,Whole supply chain,,1
-Cuba,Legumes,2011,0.00,Whole supply chain,,1
+Cuba,Legumes,2009,0.10,Whole supply chain,,1
+Cuba,Legumes,2010,0.10,Whole supply chain,,1
+Cuba,Legumes,2011,0.10,Whole supply chain,,1
 Cuba,Fruits,2008,1.00,Whole supply chain,,1
 Cuba,Fruits,2009,1.00,Whole supply chain,,1
 Cuba,Fruits,2010,1.00,Whole supply chain,,1
@@ -1120,7 +1120,7 @@ Eritrea,Cereals,2017,3.00,Harvest,,15
 Eritrea,Cereals,2018,3.00,Harvest,,15
 Eritrea,Cereals,2019,3.00,Harvest,,15
 Eritrea,Cereals,2021,3.00,Harvest,,15
-Estonia,Cereals,2012,0.00,Whole supply chain,,2
+Estonia,Cereals,2012,0.10,Whole supply chain,,2
 Estonia,Cereals,2014,0.25,Whole supply chain,,4
 Estonia,Cereals,2015,0.25,Whole supply chain,,4
 Estonia,Cereals,2005,0.50,Whole supply chain,,2
@@ -1231,8 +1231,8 @@ Finland,Legumes,2017,13.00,Farm,Environmental factors,3
 Finland,Cereals,2017,3.00,Farm,Environmental factors,2
 Finland,Tubers,2017,10.50,Farm,Diseases and molds,2
 Finland,Vegetables,2017,11.00,Farm,Diseases and molds,1
-Finland,Dairy,2011,0.00,Harvest,,1
-Finland,Dairy,2012,0.00,Harvest,,1
+Finland,Dairy,2011,0.10,Harvest,,1
+Finland,Dairy,2012,0.10,Harvest,,1
 Finland,Dairy,2013,1.50,Processing,,2
 Finland,Meat,2013,13.00,Processing,,1
 Finland,Fruits,2010,13.00,Households,,1
@@ -1258,9 +1258,9 @@ Finland,Cereals,2013,6.50,Whole supply chain,,4
 Finland,Dairy,2010,6.75,Households,,4
 Finland,Eggs,2010,7.00,Households,,1
 Finland,Meat,2010,8.00,Food Services,,2
-France,Dairy,1993,0.00,Whole supply chain,,1
-France,Dairy,1994,0.00,Whole supply chain,,1
-France,Eggs,1997,0.00,Whole supply chain,,1
+France,Dairy,1993,0.10,Whole supply chain,,1
+France,Dairy,1994,0.10,Whole supply chain,,1
+France,Eggs,1997,0.10,Whole supply chain,,1
 France,Dairy,1991,0.50,Whole supply chain,,2
 France,Dairy,1992,0.50,Whole supply chain,,2
 France,Cereals,1991,0.75,Whole supply chain,,4
@@ -1363,7 +1363,7 @@ Gambia,Cereals,2017,2.44,Harvest,,18
 Gambia,Cereals,2018,2.44,Harvest,,18
 Gambia,Cereals,2019,2.44,Harvest,,18
 Gambia,Cereals,2021,2.44,Harvest,,18
-Georgia,Tubers,2010,0.00,Whole supply chain,,1
+Georgia,Tubers,2010,0.10,Whole supply chain,,1
 Georgia,Tubers,2008,1.00,Whole supply chain,,1
 Georgia,Tubers,2009,1.00,Whole supply chain,,1
 Georgia,Tubers,2017,1.00,Whole supply chain,,1
@@ -1429,7 +1429,7 @@ Georgia,Cereals,2005,5.00,Whole supply chain,,2
 Georgia,Cereals,2008,5.00,Whole supply chain,,2
 Georgia,Cereals,2006,5.50,Whole supply chain,,2
 Georgia,Tubers,2006,7.00,Whole supply chain,,1
-Germany,Eggs,2001,0.00,Whole supply chain,,1
+Germany,Eggs,2001,0.10,Whole supply chain,,1
 Germany,Cereal products,1992,1.00,Whole supply chain,,1
 Germany,Cereal products,1994,1.00,Whole supply chain,,1
 Germany,Cereal products,1995,1.00,Whole supply chain,,1
@@ -1610,10 +1610,10 @@ Ghana,Fruits,2008,8.65,Whole supply chain,,17
 Ghana,Fruits,2010,9.74,Wholesale,,19
 Greece,Cereals,2022,1.00,Processing,,1
 Guatemala,Cereals,2013,31.00,Storage,Environmental factors,2
-Guatemala,Meat,1991,0.00,Whole supply chain,,1
-Guatemala,Cereal products,1991,0.00,Whole supply chain,,1
-Guatemala,Cereals,1993,0.00,Whole supply chain,,1
-Guatemala,Cereals,1994,0.00,Whole supply chain,,1
+Guatemala,Meat,1991,0.10,Whole supply chain,,1
+Guatemala,Cereal products,1991,0.10,Whole supply chain,,1
+Guatemala,Cereals,1993,0.10,Whole supply chain,,1
+Guatemala,Cereals,1994,0.10,Whole supply chain,,1
 Guatemala,Sugar,2005,1.00,Whole supply chain,,1
 Guatemala,Sugar,2006,1.00,Whole supply chain,,1
 Guatemala,Sugar,2007,1.00,Whole supply chain,,1
@@ -1735,20 +1735,20 @@ Honduras,Legumes,1977,35.00,Storage,Storage,1
 Honduras,Cereals,1977,35.00,Storage,,1
 Honduras,Cereals,2016,6.00,Farm,,3
 Honduras,Legumes,2016,6.00,Farm,,3
-Hungary,Cereal products,1991,0.00,Whole supply chain,,1
-Hungary,Eggs,1991,0.00,Whole supply chain,,1
-Hungary,Eggs,1992,0.00,Whole supply chain,,1
-Hungary,Eggs,1993,0.00,Whole supply chain,,1
-Hungary,Eggs,1995,0.00,Whole supply chain,,1
-Hungary,Eggs,1996,0.00,Whole supply chain,,1
-Hungary,Eggs,1998,0.00,Whole supply chain,,1
-Hungary,Eggs,2001,0.00,Whole supply chain,,1
-Hungary,Eggs,2002,0.00,Whole supply chain,,1
-Hungary,Eggs,2003,0.00,Whole supply chain,,1
-Hungary,Oil seeds,2004,0.00,Whole supply chain,,3
-Hungary,Legumes,2005,0.00,Whole supply chain,,1
-Hungary,Oil seeds,2005,0.00,Whole supply chain,,3
-Hungary,Oil seeds,2012,0.00,Whole supply chain,,2
+Hungary,Cereal products,1991,0.10,Whole supply chain,,1
+Hungary,Eggs,1991,0.10,Whole supply chain,,1
+Hungary,Eggs,1992,0.10,Whole supply chain,,1
+Hungary,Eggs,1993,0.10,Whole supply chain,,1
+Hungary,Eggs,1995,0.10,Whole supply chain,,1
+Hungary,Eggs,1996,0.10,Whole supply chain,,1
+Hungary,Eggs,1998,0.10,Whole supply chain,,1
+Hungary,Eggs,2001,0.10,Whole supply chain,,1
+Hungary,Eggs,2002,0.10,Whole supply chain,,1
+Hungary,Eggs,2003,0.10,Whole supply chain,,1
+Hungary,Oil seeds,2004,0.10,Whole supply chain,,3
+Hungary,Legumes,2005,0.10,Whole supply chain,,1
+Hungary,Oil seeds,2005,0.10,Whole supply chain,,3
+Hungary,Oil seeds,2012,0.10,Whole supply chain,,2
 Hungary,Legumes,2000,0.33,Whole supply chain,,3
 Hungary,Oil seeds,2001,0.33,Whole supply chain,,3
 Hungary,Oil seeds,2009,0.33,Whole supply chain,,3
@@ -1864,7 +1864,7 @@ India,Fruits,2014,1.64,Whole supply chain,Machinery damage,96
 India,Vegetables,2014,1.76,Whole supply chain,Machinery damage,42
 India,Mushrooms,2014,2.25,Whole supply chain,Machinery damage,8
 India,Vegetables,2012,29.50,Storage,Waste,4
-India,Dairy,2006,0.00,Transport,,5
+India,Dairy,2006,0.10,Transport,,5
 India,Cereals,2001,0.29,Storage,,7
 India,Oil seeds,2006,0.41,Harvest,,59
 India,Cereals,2004,0.50,Farm,,6
@@ -1998,7 +1998,7 @@ Indonesia,Tubers,1993,9.00,Whole supply chain,,3
 Indonesia,Tubers,1997,9.33,Whole supply chain,,3
 Indonesia,Tubers,1998,9.33,Whole supply chain,,3
 Iran,Vegetables,2001,21.00,Post-harvest,Harvest and management,6
-Iran,Honey,2016,0.00,Whole supply chain,,1
+Iran,Honey,2016,0.10,Whole supply chain,,1
 Iran,Cereals,2009,0.33,Farm,,3
 Iran,Cereals,2010,0.33,Farm,,3
 Iran,Cereals,2011,0.33,Farm,,3
@@ -2055,16 +2055,16 @@ Israel,Sugar,1993,6.00,Whole supply chain,,1
 Israel,Sugar,2001,6.00,Whole supply chain,,1
 Israel,Sugar,1992,7.00,Whole supply chain,,1
 Israel,Sugar,1991,8.00,Whole supply chain,,1
-Italy,Fruits,1991,0.00,Whole supply chain,,1
-Italy,Eggs,1991,0.00,Whole supply chain,,1
-Italy,Fruits,1992,0.00,Whole supply chain,,1
-Italy,Eggs,1992,0.00,Whole supply chain,,1
-Italy,Fruits,1993,0.00,Whole supply chain,,1
-Italy,Fruits,1994,0.00,Whole supply chain,,1
-Italy,Eggs,1994,0.00,Whole supply chain,,1
-Italy,Eggs,1995,0.00,Whole supply chain,,1
-Italy,Eggs,1996,0.00,Whole supply chain,,1
-Italy,Eggs,1997,0.00,Whole supply chain,,1
+Italy,Fruits,1991,0.10,Whole supply chain,,1
+Italy,Eggs,1991,0.10,Whole supply chain,,1
+Italy,Fruits,1992,0.10,Whole supply chain,,1
+Italy,Eggs,1992,0.10,Whole supply chain,,1
+Italy,Fruits,1993,0.10,Whole supply chain,,1
+Italy,Fruits,1994,0.10,Whole supply chain,,1
+Italy,Eggs,1994,0.10,Whole supply chain,,1
+Italy,Eggs,1995,0.10,Whole supply chain,,1
+Italy,Eggs,1996,0.10,Whole supply chain,,1
+Italy,Eggs,1997,0.10,Whole supply chain,,1
 Italy,Fruits,1996,1.00,Whole supply chain,,1
 Italy,Vegetables,1995,2.00,Whole supply chain,,1
 Italy,Wine,2020,22.00,Whole supply chain,,1
@@ -2079,7 +2079,7 @@ Jamaica,Legumes,2016,19.25,Whole supply chain,,4
 Jamaica,Tubers,2015,30.00,Whole supply chain,,1
 Jamaica,Tubers,2016,30.00,Whole supply chain,,1
 Jamaica,Tubers,2017,30.00,Whole supply chain,,1
-Japan,Sugar,1996,0.00,Whole supply chain,,1
+Japan,Sugar,1996,0.10,Whole supply chain,,1
 Japan,Cereals,1994,0.75,Whole supply chain,,4
 Japan,Cereals,1995,0.75,Whole supply chain,,4
 Japan,Cereals,1991,1.00,Whole supply chain,,4
@@ -2237,19 +2237,19 @@ Jordan,Cereals,2008,5.00,Whole supply chain,,1
 Jordan,Cereals,2011,5.00,Whole supply chain,,1
 Jordan,Tubers,2009,5.00,Whole supply chain,,1
 Jordan,Tubers,2010,6.00,Whole supply chain,,1
-Kazakhstan,Dairy,1992,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1993,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1994,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1995,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1996,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1997,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1998,0.00,Whole supply chain,,1
-Kazakhstan,Meat,1999,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,1999,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,2000,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,2001,0.00,Whole supply chain,,1
-Kazakhstan,Dairy,2007,0.00,Whole supply chain,,1
-Kazakhstan,Cereals,2017,0.00,Whole supply chain,,2
+Kazakhstan,Dairy,1992,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1993,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1994,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1995,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1996,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1997,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1998,0.10,Whole supply chain,,1
+Kazakhstan,Meat,1999,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,1999,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,2000,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,2001,0.10,Whole supply chain,,1
+Kazakhstan,Dairy,2007,0.10,Whole supply chain,,1
+Kazakhstan,Cereals,2017,0.10,Whole supply chain,,2
 Kazakhstan,Cereals,2016,0.50,Whole supply chain,,2
 Kazakhstan,Meat,2000,1.00,Whole supply chain,,1
 Kazakhstan,Meat,2001,1.00,Whole supply chain,,1
@@ -2409,7 +2409,7 @@ Kenya,Cereals,2003,5.21,Farm,,28
 Kenya,Cereals,2018,6.22,Storage,,51
 Kenya,Cereals,2012,6.33,Farm,,72
 Kenya,Cereals,2013,9.83,Harvest,,29
-Kyrgyzstan,Cereals,2000,0.00,Whole supply chain,,1
+Kyrgyzstan,Cereals,2000,0.10,Whole supply chain,,1
 Kyrgyzstan,Tubers,2004,1.00,Whole supply chain,,1
 Kyrgyzstan,Tubers,2005,1.00,Whole supply chain,,1
 Kyrgyzstan,Tubers,2007,4.00,Whole supply chain,,1
@@ -2424,11 +2424,11 @@ Laos,Legumes,2008,12.00,Whole supply chain,,1
 Laos,Legumes,2015,12.00,Post-harvest,,1
 Laos,Vegetables,2008,12.00,Whole supply chain,,2
 Laos,Vegetables,2015,16.00,Post-harvest,,1
-Latvia,Dairy,1992,0.00,Whole supply chain,,1
-Latvia,Dairy,1993,0.00,Whole supply chain,,1
-Latvia,Dairy,1994,0.00,Whole supply chain,,1
-Latvia,Cereals,2014,0.00,Whole supply chain,,4
-Latvia,Cereals,2015,0.00,Whole supply chain,,4
+Latvia,Dairy,1992,0.10,Whole supply chain,,1
+Latvia,Dairy,1993,0.10,Whole supply chain,,1
+Latvia,Dairy,1994,0.10,Whole supply chain,,1
+Latvia,Cereals,2014,0.10,Whole supply chain,,4
+Latvia,Cereals,2015,0.10,Whole supply chain,,4
 Latvia,Cereals,2016,0.50,Whole supply chain,,4
 Latvia,Cereals,2017,0.50,Whole supply chain,,2
 Latvia,Tubers,2014,1.00,Whole supply chain,,1
@@ -2485,21 +2485,21 @@ Liberia,Cereals,2024,5.17,Harvest,,6
 Libya,Tubers,1985,14.33,Households,,3
 Libya,Fruits,1985,16.00,Whole supply chain,,7
 Libya,Vegetables,1985,25.00,Whole supply chain,,4
-Lithuania,Eggs,1994,0.00,Whole supply chain,,1
-Lithuania,Eggs,1995,0.00,Whole supply chain,,1
-Lithuania,Eggs,1996,0.00,Whole supply chain,,1
-Lithuania,Eggs,1997,0.00,Whole supply chain,,1
-Lithuania,Eggs,1998,0.00,Whole supply chain,,1
-Lithuania,Eggs,1999,0.00,Whole supply chain,,1
-Lithuania,Eggs,2000,0.00,Whole supply chain,,1
-Lithuania,Eggs,2001,0.00,Whole supply chain,,1
-Lithuania,Eggs,2002,0.00,Whole supply chain,,1
-Lithuania,Eggs,2003,0.00,Whole supply chain,,1
-Lithuania,Eggs,2004,0.00,Whole supply chain,,1
-Lithuania,Eggs,2005,0.00,Whole supply chain,,1
-Lithuania,Eggs,2006,0.00,Whole supply chain,,1
-Lithuania,Eggs,2007,0.00,Whole supply chain,,1
-Lithuania,Cereals,2022,0.00,Processing,,1
+Lithuania,Eggs,1994,0.10,Whole supply chain,,1
+Lithuania,Eggs,1995,0.10,Whole supply chain,,1
+Lithuania,Eggs,1996,0.10,Whole supply chain,,1
+Lithuania,Eggs,1997,0.10,Whole supply chain,,1
+Lithuania,Eggs,1998,0.10,Whole supply chain,,1
+Lithuania,Eggs,1999,0.10,Whole supply chain,,1
+Lithuania,Eggs,2000,0.10,Whole supply chain,,1
+Lithuania,Eggs,2001,0.10,Whole supply chain,,1
+Lithuania,Eggs,2002,0.10,Whole supply chain,,1
+Lithuania,Eggs,2003,0.10,Whole supply chain,,1
+Lithuania,Eggs,2004,0.10,Whole supply chain,,1
+Lithuania,Eggs,2005,0.10,Whole supply chain,,1
+Lithuania,Eggs,2006,0.10,Whole supply chain,,1
+Lithuania,Eggs,2007,0.10,Whole supply chain,,1
+Lithuania,Cereals,2022,0.10,Processing,,1
 Lithuania,Cereals,2015,1.00,Whole supply chain,,5
 Lithuania,Cereals,2017,1.00,Whole supply chain,,2
 Lithuania,Cereals,2008,1.50,Whole supply chain,,2
@@ -2675,17 +2675,17 @@ Mauritania,Cereals,2017,2.67,Harvest,,15
 Mauritania,Cereals,2018,2.67,Harvest,,15
 Mauritania,Cereals,2019,2.67,Harvest,,15
 Mauritania,Cereals,2021,2.67,Harvest,,15
-Mauritius,Cereals,1993,0.00,Whole supply chain,,2
-Mauritius,Cereals,1999,0.00,Whole supply chain,,2
-Mauritius,Cereals,2002,0.00,Whole supply chain,,2
-Mauritius,Cereals,2003,0.00,Whole supply chain,,1
-Mauritius,Cereals,2004,0.00,Whole supply chain,,1
-Mauritius,Cereals,2005,0.00,Whole supply chain,,1
-Mauritius,Cereals,2006,0.00,Whole supply chain,,1
-Mauritius,Cereals,2007,0.00,Whole supply chain,,1
-Mauritius,Cereal products,2007,0.00,Whole supply chain,,1
-Mauritius,Cereals,2008,0.00,Whole supply chain,,1
-Mauritius,Cereal products,2009,0.00,Whole supply chain,,1
+Mauritius,Cereals,1993,0.10,Whole supply chain,,2
+Mauritius,Cereals,1999,0.10,Whole supply chain,,2
+Mauritius,Cereals,2002,0.10,Whole supply chain,,2
+Mauritius,Cereals,2003,0.10,Whole supply chain,,1
+Mauritius,Cereals,2004,0.10,Whole supply chain,,1
+Mauritius,Cereals,2005,0.10,Whole supply chain,,1
+Mauritius,Cereals,2006,0.10,Whole supply chain,,1
+Mauritius,Cereals,2007,0.10,Whole supply chain,,1
+Mauritius,Cereal products,2007,0.10,Whole supply chain,,1
+Mauritius,Cereals,2008,0.10,Whole supply chain,,1
+Mauritius,Cereal products,2009,0.10,Whole supply chain,,1
 Mauritius,Cereals,1991,0.50,Whole supply chain,,2
 Mauritius,Cereals,1992,0.50,Whole supply chain,,2
 Mauritius,Cereals,1994,0.50,Whole supply chain,,2
@@ -2772,7 +2772,7 @@ Mexico,Spices,2013,44.50,Whole supply chain,,2
 Mexico,Vegetables,2015,45.00,Whole supply chain,,1
 Mexico,Cereals,2013,47.00,Whole supply chain,,1
 Mexico,Legumes,2016,5.40,Processing,,5
-Moldova,Tubers,1999,0.00,Whole supply chain,,1
+Moldova,Tubers,1999,0.10,Whole supply chain,,1
 Moldova,Oil seeds,1992,1.00,Whole supply chain,,1
 Moldova,Oil seeds,1993,1.00,Whole supply chain,,1
 Moldova,Oil seeds,1995,1.00,Whole supply chain,,1
@@ -2897,27 +2897,27 @@ Nepal,Cereals,1997,8.00,Whole supply chain,,4
 Nepal,Cereals,1998,8.00,Whole supply chain,,4
 Nepal,Cereals,1999,8.00,Whole supply chain,,4
 Nepal,Cereals,1991,8.67,Whole supply chain,,3
-Netherlands,Eggs,1993,0.00,Whole supply chain,,1
-Netherlands,Eggs,1994,0.00,Whole supply chain,,1
-Netherlands,Eggs,1995,0.00,Whole supply chain,,1
-Netherlands,Eggs,1996,0.00,Whole supply chain,,1
-Netherlands,Eggs,1997,0.00,Whole supply chain,,1
-Netherlands,Eggs,1998,0.00,Whole supply chain,,1
-Netherlands,Eggs,1999,0.00,Whole supply chain,,1
-Netherlands,Eggs,2000,0.00,Whole supply chain,,1
-Netherlands,Eggs,2001,0.00,Whole supply chain,,1
-Netherlands,Eggs,2002,0.00,Whole supply chain,,1
-Netherlands,Eggs,2003,0.00,Whole supply chain,,1
-Netherlands,Fruits,2004,0.00,Whole supply chain,,1
-Netherlands,Eggs,2004,0.00,Whole supply chain,,1
-Netherlands,Eggs,2005,0.00,Whole supply chain,,1
-Netherlands,Eggs,2006,0.00,Whole supply chain,,1
-Netherlands,Eggs,2007,0.00,Whole supply chain,,1
-Netherlands,Eggs,2008,0.00,Whole supply chain,,1
-Netherlands,Eggs,2009,0.00,Whole supply chain,,1
-Netherlands,Eggs,2010,0.00,Whole supply chain,,1
-Netherlands,Eggs,2011,0.00,Whole supply chain,,1
-Netherlands,Cereals,2022,0.00,Processing,,1
+Netherlands,Eggs,1993,0.10,Whole supply chain,,1
+Netherlands,Eggs,1994,0.10,Whole supply chain,,1
+Netherlands,Eggs,1995,0.10,Whole supply chain,,1
+Netherlands,Eggs,1996,0.10,Whole supply chain,,1
+Netherlands,Eggs,1997,0.10,Whole supply chain,,1
+Netherlands,Eggs,1998,0.10,Whole supply chain,,1
+Netherlands,Eggs,1999,0.10,Whole supply chain,,1
+Netherlands,Eggs,2000,0.10,Whole supply chain,,1
+Netherlands,Eggs,2001,0.10,Whole supply chain,,1
+Netherlands,Eggs,2002,0.10,Whole supply chain,,1
+Netherlands,Eggs,2003,0.10,Whole supply chain,,1
+Netherlands,Fruits,2004,0.10,Whole supply chain,,1
+Netherlands,Eggs,2004,0.10,Whole supply chain,,1
+Netherlands,Eggs,2005,0.10,Whole supply chain,,1
+Netherlands,Eggs,2006,0.10,Whole supply chain,,1
+Netherlands,Eggs,2007,0.10,Whole supply chain,,1
+Netherlands,Eggs,2008,0.10,Whole supply chain,,1
+Netherlands,Eggs,2009,0.10,Whole supply chain,,1
+Netherlands,Eggs,2010,0.10,Whole supply chain,,1
+Netherlands,Eggs,2011,0.10,Whole supply chain,,1
+Netherlands,Cereals,2022,0.10,Processing,,1
 Netherlands,Cereals,1996,0.50,Whole supply chain,,4
 Netherlands,Cereals,1992,0.67,Whole supply chain,,3
 Netherlands,Cereals,1994,0.67,Whole supply chain,,3
@@ -2976,8 +2976,8 @@ New Zealand,Cereals,1996,4.00,Whole supply chain,,2
 New Zealand,Vegetables,2021,5.00,Harvest,,3
 Nicaragua,Cereals,2013,15.00,,Storage,2
 Nicaragua,Legumes,2013,15.00,,Storage,1
-Nicaragua,Sugar,2001,0.00,Whole supply chain,,1
-Nicaragua,Sugar,2003,0.00,Whole supply chain,,1
+Nicaragua,Sugar,2001,0.10,Whole supply chain,,1
+Nicaragua,Sugar,2003,0.10,Whole supply chain,,1
 Nicaragua,Sugar,2002,1.00,Whole supply chain,,1
 Nicaragua,Sugar,2004,1.00,Whole supply chain,,1
 Nicaragua,Sugar,2005,1.00,Whole supply chain,,1
@@ -3174,22 +3174,22 @@ Palestine,Spices,2018,14.00,Retail,,2
 Palestine,Fruits,2018,15.33,Collector,,3
 Palestine,Vegetables,2018,6.33,Wholesale,,3
 Panama,Cereals,2012,10.75,Post-harvest,Harvest and management,4
-Panama,Cereal products,1991,0.00,Whole supply chain,,1
-Panama,Cereal products,1998,0.00,Whole supply chain,,1
-Panama,Cereal products,1999,0.00,Whole supply chain,,1
-Panama,Cereal products,2000,0.00,Whole supply chain,,1
-Panama,Cereal products,2001,0.00,Whole supply chain,,1
-Panama,Cereal products,2002,0.00,Whole supply chain,,1
-Panama,Cereal products,2003,0.00,Whole supply chain,,1
-Panama,Cereal products,2004,0.00,Whole supply chain,,1
-Panama,Cereal products,2005,0.00,Whole supply chain,,1
-Panama,Cereal products,2006,0.00,Whole supply chain,,1
-Panama,Cereal products,2007,0.00,Whole supply chain,,1
-Panama,Cereal products,2008,0.00,Whole supply chain,,1
-Panama,Cereal products,2009,0.00,Whole supply chain,,1
-Panama,Cereal products,2010,0.00,Whole supply chain,,1
-Panama,Cereal products,2011,0.00,Whole supply chain,,1
-Panama,Cereal products,2012,0.00,Whole supply chain,,1
+Panama,Cereal products,1991,0.10,Whole supply chain,,1
+Panama,Cereal products,1998,0.10,Whole supply chain,,1
+Panama,Cereal products,1999,0.10,Whole supply chain,,1
+Panama,Cereal products,2000,0.10,Whole supply chain,,1
+Panama,Cereal products,2001,0.10,Whole supply chain,,1
+Panama,Cereal products,2002,0.10,Whole supply chain,,1
+Panama,Cereal products,2003,0.10,Whole supply chain,,1
+Panama,Cereal products,2004,0.10,Whole supply chain,,1
+Panama,Cereal products,2005,0.10,Whole supply chain,,1
+Panama,Cereal products,2006,0.10,Whole supply chain,,1
+Panama,Cereal products,2007,0.10,Whole supply chain,,1
+Panama,Cereal products,2008,0.10,Whole supply chain,,1
+Panama,Cereal products,2009,0.10,Whole supply chain,,1
+Panama,Cereal products,2010,0.10,Whole supply chain,,1
+Panama,Cereal products,2011,0.10,Whole supply chain,,1
+Panama,Cereal products,2012,0.10,Whole supply chain,,1
 Panama,Dairy,2014,1.00,Whole supply chain,,1
 Panama,Dairy,2015,1.00,Whole supply chain,,1
 Panama,Dairy,2016,1.00,Whole supply chain,,1
@@ -3394,9 +3394,9 @@ Paraguay,Fruits,2013,11.50,Storage,Diseases and molds,2
 Paraguay,Oil seeds,1977,15.00,Storage,,1
 Paraguay,Cereals,1977,25.00,Storage,,1
 Peru,Tubers,1991,25.14,Storage,Storage,7
-Peru,Sugar,1991,0.00,Whole supply chain,,1
-Peru,Sugar,1994,0.00,Whole supply chain,,1
-Peru,Spices,1996,0.00,Whole supply chain,,1
+Peru,Sugar,1991,0.10,Whole supply chain,,1
+Peru,Sugar,1994,0.10,Whole supply chain,,1
+Peru,Spices,1996,0.10,Whole supply chain,,1
 Peru,Cereal products,1999,1.00,Whole supply chain,,1
 Peru,Cereal products,2000,1.00,Whole supply chain,,2
 Peru,Cereal products,2001,1.00,Whole supply chain,,2
@@ -3610,34 +3610,34 @@ Philippines,Fruits,2003,23.00,Retail,,3
 Philippines,Cereals,2013,3.70,Whole supply chain,,10
 Philippines,Vegetables,2018,7.63,Wholesale,,8
 Philippines,Fruits,2018,8.36,Retail,,39
-Poland,Eggs,1991,0.00,Whole supply chain,,1
-Poland,Eggs,1992,0.00,Whole supply chain,,1
-Poland,Eggs,1993,0.00,Whole supply chain,,1
-Poland,Eggs,1994,0.00,Whole supply chain,,1
-Poland,Eggs,1995,0.00,Whole supply chain,,1
-Poland,Eggs,1996,0.00,Whole supply chain,,1
-Poland,Eggs,1997,0.00,Whole supply chain,,1
-Poland,Eggs,1998,0.00,Whole supply chain,,1
-Poland,Eggs,1999,0.00,Whole supply chain,,1
-Poland,Eggs,2000,0.00,Whole supply chain,,1
-Poland,Eggs,2001,0.00,Whole supply chain,,1
-Poland,Eggs,2002,0.00,Whole supply chain,,1
-Poland,Eggs,2003,0.00,Whole supply chain,,1
-Poland,Eggs,2004,0.00,Whole supply chain,,1
-Poland,Eggs,2005,0.00,Whole supply chain,,1
-Poland,Eggs,2006,0.00,Whole supply chain,,1
-Poland,Eggs,2007,0.00,Whole supply chain,,1
-Poland,Eggs,2008,0.00,Whole supply chain,,1
-Poland,Eggs,2009,0.00,Whole supply chain,,1
-Poland,Eggs,2010,0.00,Whole supply chain,,1
-Poland,Eggs,2011,0.00,Whole supply chain,,1
-Poland,Eggs,2012,0.00,Whole supply chain,,1
-Poland,Eggs,2013,0.00,Whole supply chain,,1
-Poland,Sugar,2014,0.00,Whole supply chain,,1
-Poland,Sugar,2015,0.00,Whole supply chain,,1
-Poland,Sugar,2016,0.00,Whole supply chain,,1
-Poland,Sugar,2017,0.00,Whole supply chain,,1
-Poland,Cereals,2022,0.00,Processing,,3
+Poland,Eggs,1991,0.10,Whole supply chain,,1
+Poland,Eggs,1992,0.10,Whole supply chain,,1
+Poland,Eggs,1993,0.10,Whole supply chain,,1
+Poland,Eggs,1994,0.10,Whole supply chain,,1
+Poland,Eggs,1995,0.10,Whole supply chain,,1
+Poland,Eggs,1996,0.10,Whole supply chain,,1
+Poland,Eggs,1997,0.10,Whole supply chain,,1
+Poland,Eggs,1998,0.10,Whole supply chain,,1
+Poland,Eggs,1999,0.10,Whole supply chain,,1
+Poland,Eggs,2000,0.10,Whole supply chain,,1
+Poland,Eggs,2001,0.10,Whole supply chain,,1
+Poland,Eggs,2002,0.10,Whole supply chain,,1
+Poland,Eggs,2003,0.10,Whole supply chain,,1
+Poland,Eggs,2004,0.10,Whole supply chain,,1
+Poland,Eggs,2005,0.10,Whole supply chain,,1
+Poland,Eggs,2006,0.10,Whole supply chain,,1
+Poland,Eggs,2007,0.10,Whole supply chain,,1
+Poland,Eggs,2008,0.10,Whole supply chain,,1
+Poland,Eggs,2009,0.10,Whole supply chain,,1
+Poland,Eggs,2010,0.10,Whole supply chain,,1
+Poland,Eggs,2011,0.10,Whole supply chain,,1
+Poland,Eggs,2012,0.10,Whole supply chain,,1
+Poland,Eggs,2013,0.10,Whole supply chain,,1
+Poland,Sugar,2014,0.10,Whole supply chain,,1
+Poland,Sugar,2015,0.10,Whole supply chain,,1
+Poland,Sugar,2016,0.10,Whole supply chain,,1
+Poland,Sugar,2017,0.10,Whole supply chain,,1
+Poland,Cereals,2022,0.10,Processing,,3
 Poland,Legumes,2014,1.00,Whole supply chain,,1
 Poland,Fruits,1991,10.00,Whole supply chain,,1
 Poland,Fruits,1992,10.00,Whole supply chain,,1
@@ -3691,12 +3691,12 @@ Portugal,Cereals,2001,4.00,Whole supply chain,,1
 Portugal,Cereals,2003,4.00,Whole supply chain,,1
 Portugal,Cereals,2004,4.00,Whole supply chain,,1
 Portugal,Cereals,2005,5.00,Whole supply chain,,1
-Romania,Vegetables,1997,0.00,Whole supply chain,,2
-Romania,Cereals,2007,0.00,Whole supply chain,,1
-Romania,Legumes,2014,0.00,Whole supply chain,,1
-Romania,Legumes,2015,0.00,Whole supply chain,,1
-Romania,Sugar,2015,0.00,Whole supply chain,,1
-Romania,Oil seeds,2017,0.00,Whole supply chain,,3
+Romania,Vegetables,1997,0.10,Whole supply chain,,2
+Romania,Cereals,2007,0.10,Whole supply chain,,1
+Romania,Legumes,2014,0.10,Whole supply chain,,1
+Romania,Legumes,2015,0.10,Whole supply chain,,1
+Romania,Sugar,2015,0.10,Whole supply chain,,1
+Romania,Oil seeds,2017,0.10,Whole supply chain,,3
 Romania,Vegetables,1996,0.67,Whole supply chain,,3
 Romania,Cereals,1996,1.00,Whole supply chain,,2
 Romania,Cereals,1997,1.00,Whole supply chain,,2
@@ -3716,50 +3716,50 @@ Romania,Tubers,2015,7.00,Whole supply chain,,1
 Romania,Tubers,2016,8.00,Whole supply chain,,1
 Romania,Tubers,2014,9.00,Whole supply chain,,1
 Romania,Tubers,2017,9.00,Whole supply chain,,1
-Russia,Dairy,1992,0.00,Whole supply chain,,1
-Russia,Eggs,1992,0.00,Whole supply chain,,1
-Russia,Dairy,1993,0.00,Whole supply chain,,1
-Russia,Eggs,1993,0.00,Whole supply chain,,1
-Russia,Dairy,1994,0.00,Whole supply chain,,1
-Russia,Eggs,1994,0.00,Whole supply chain,,1
-Russia,Dairy,1995,0.00,Whole supply chain,,1
-Russia,Eggs,1995,0.00,Whole supply chain,,1
-Russia,Dairy,1996,0.00,Whole supply chain,,1
-Russia,Eggs,1996,0.00,Whole supply chain,,1
-Russia,Dairy,1997,0.00,Whole supply chain,,1
-Russia,Eggs,1997,0.00,Whole supply chain,,1
-Russia,Dairy,1998,0.00,Whole supply chain,,1
-Russia,Eggs,1998,0.00,Whole supply chain,,1
-Russia,Dairy,1999,0.00,Whole supply chain,,1
-Russia,Eggs,1999,0.00,Whole supply chain,,1
-Russia,Dairy,2000,0.00,Whole supply chain,,1
-Russia,Eggs,2000,0.00,Whole supply chain,,1
-Russia,Dairy,2001,0.00,Whole supply chain,,1
-Russia,Eggs,2001,0.00,Whole supply chain,,1
-Russia,Dairy,2002,0.00,Whole supply chain,,1
-Russia,Eggs,2002,0.00,Whole supply chain,,1
-Russia,Dairy,2003,0.00,Whole supply chain,,1
-Russia,Eggs,2003,0.00,Whole supply chain,,1
-Russia,Dairy,2004,0.00,Whole supply chain,,1
-Russia,Eggs,2004,0.00,Whole supply chain,,1
-Russia,Dairy,2005,0.00,Whole supply chain,,1
-Russia,Eggs,2005,0.00,Whole supply chain,,1
-Russia,Dairy,2006,0.00,Whole supply chain,,1
-Russia,Eggs,2006,0.00,Whole supply chain,,1
-Russia,Dairy,2007,0.00,Whole supply chain,,1
-Russia,Eggs,2007,0.00,Whole supply chain,,1
-Russia,Dairy,2008,0.00,Whole supply chain,,1
-Russia,Eggs,2008,0.00,Whole supply chain,,1
-Russia,Dairy,2009,0.00,Whole supply chain,,1
-Russia,Eggs,2009,0.00,Whole supply chain,,1
-Russia,Dairy,2010,0.00,Whole supply chain,,1
-Russia,Eggs,2010,0.00,Whole supply chain,,1
-Russia,Dairy,2011,0.00,Whole supply chain,,1
-Russia,Eggs,2011,0.00,Whole supply chain,,1
-Russia,Dairy,2012,0.00,Whole supply chain,,1
-Russia,Eggs,2012,0.00,Whole supply chain,,1
-Russia,Dairy,2013,0.00,Whole supply chain,,1
-Russia,Eggs,2013,0.00,Whole supply chain,,1
+Russia,Dairy,1992,0.10,Whole supply chain,,1
+Russia,Eggs,1992,0.10,Whole supply chain,,1
+Russia,Dairy,1993,0.10,Whole supply chain,,1
+Russia,Eggs,1993,0.10,Whole supply chain,,1
+Russia,Dairy,1994,0.10,Whole supply chain,,1
+Russia,Eggs,1994,0.10,Whole supply chain,,1
+Russia,Dairy,1995,0.10,Whole supply chain,,1
+Russia,Eggs,1995,0.10,Whole supply chain,,1
+Russia,Dairy,1996,0.10,Whole supply chain,,1
+Russia,Eggs,1996,0.10,Whole supply chain,,1
+Russia,Dairy,1997,0.10,Whole supply chain,,1
+Russia,Eggs,1997,0.10,Whole supply chain,,1
+Russia,Dairy,1998,0.10,Whole supply chain,,1
+Russia,Eggs,1998,0.10,Whole supply chain,,1
+Russia,Dairy,1999,0.10,Whole supply chain,,1
+Russia,Eggs,1999,0.10,Whole supply chain,,1
+Russia,Dairy,2000,0.10,Whole supply chain,,1
+Russia,Eggs,2000,0.10,Whole supply chain,,1
+Russia,Dairy,2001,0.10,Whole supply chain,,1
+Russia,Eggs,2001,0.10,Whole supply chain,,1
+Russia,Dairy,2002,0.10,Whole supply chain,,1
+Russia,Eggs,2002,0.10,Whole supply chain,,1
+Russia,Dairy,2003,0.10,Whole supply chain,,1
+Russia,Eggs,2003,0.10,Whole supply chain,,1
+Russia,Dairy,2004,0.10,Whole supply chain,,1
+Russia,Eggs,2004,0.10,Whole supply chain,,1
+Russia,Dairy,2005,0.10,Whole supply chain,,1
+Russia,Eggs,2005,0.10,Whole supply chain,,1
+Russia,Dairy,2006,0.10,Whole supply chain,,1
+Russia,Eggs,2006,0.10,Whole supply chain,,1
+Russia,Dairy,2007,0.10,Whole supply chain,,1
+Russia,Eggs,2007,0.10,Whole supply chain,,1
+Russia,Dairy,2008,0.10,Whole supply chain,,1
+Russia,Eggs,2008,0.10,Whole supply chain,,1
+Russia,Dairy,2009,0.10,Whole supply chain,,1
+Russia,Eggs,2009,0.10,Whole supply chain,,1
+Russia,Dairy,2010,0.10,Whole supply chain,,1
+Russia,Eggs,2010,0.10,Whole supply chain,,1
+Russia,Dairy,2011,0.10,Whole supply chain,,1
+Russia,Eggs,2011,0.10,Whole supply chain,,1
+Russia,Dairy,2012,0.10,Whole supply chain,,1
+Russia,Eggs,2012,0.10,Whole supply chain,,1
+Russia,Dairy,2013,0.10,Whole supply chain,,1
+Russia,Eggs,2013,0.10,Whole supply chain,,1
 Russia,Tubers,1999,3.00,Whole supply chain,,1
 Russia,Tubers,2000,3.00,Whole supply chain,,1
 Russia,Tubers,2001,3.00,Whole supply chain,,1
@@ -3791,7 +3791,7 @@ Rwanda,Vegetables,2010,8.00,Retail,Conservation,3
 Rwanda,Fruits,2009,17.12,Wholesale,Machinery damage,26
 Rwanda,Cereals,2013,6.15,Storage,Machinery damage,20
 Rwanda,Vegetables,2009,8.33,Retail,Machinery damage,9
-Rwanda,Nuts,2016,0.00,Whole supply chain,,1
+Rwanda,Nuts,2016,0.10,Whole supply chain,,1
 Rwanda,Vegetables,2015,10.33,Retail,,3
 Rwanda,Fruits,2010,10.67,Wholesale,,6
 Rwanda,Cereals,2020,11.00,Harvest,,5
@@ -3866,15 +3866,15 @@ Senegal,Cereals,2008,6.39,Harvest,,23
 Senegal,Cereals,2016,6.45,Harvest,,22
 Serbia,Oil seeds,2008,5.00,Pre-harvest,Environmental factors,1
 Serbia,Oil seeds,2009,5.00,Pre-harvest,Environmental factors,1
-Serbia,Dairy,2014,0.00,Whole supply chain,,3
-Serbia,Eggs,2014,0.00,Whole supply chain,,1
-Serbia,Dairy,2015,0.00,Whole supply chain,,3
-Serbia,Eggs,2015,0.00,Whole supply chain,,1
-Serbia,Dairy,2016,0.00,Whole supply chain,,3
-Serbia,Eggs,2016,0.00,Whole supply chain,,1
-Serbia,Dairy,2017,0.00,Whole supply chain,,3
-Serbia,Eggs,2017,0.00,Whole supply chain,,1
-Serbia,Cereals,2022,0.00,Processing,,1
+Serbia,Dairy,2014,0.10,Whole supply chain,,3
+Serbia,Eggs,2014,0.10,Whole supply chain,,1
+Serbia,Dairy,2015,0.10,Whole supply chain,,3
+Serbia,Eggs,2015,0.10,Whole supply chain,,1
+Serbia,Dairy,2016,0.10,Whole supply chain,,3
+Serbia,Eggs,2016,0.10,Whole supply chain,,1
+Serbia,Dairy,2017,0.10,Whole supply chain,,3
+Serbia,Eggs,2017,0.10,Whole supply chain,,1
+Serbia,Cereals,2022,0.10,Processing,,1
 Serbia,Cereals,2014,2.00,Whole supply chain,,1
 Serbia,Cereals,2015,2.00,Whole supply chain,,1
 Serbia,Cereals,2016,2.00,Whole supply chain,,1
@@ -3937,7 +3937,7 @@ Somalia,Cereals,2012,5.00,Harvest,,11
 Somalia,Cereals,2016,5.62,Farm,,13
 Somalia,Cereals,2005,8.15,Farm,,13
 Somalia,Cereals,2013,9.09,Harvest,,11
-South Africa,Cereals,2022,0.00,Processing,,1
+South Africa,Cereals,2022,0.10,Processing,,1
 South Africa,Cereals,2007,1.25,Storage,,8
 South Africa,Cereals,2000,1.55,Storage,,11
 South Africa,Cereals,2003,1.55,Storage,,11
@@ -4006,13 +4006,13 @@ South Sudan,Cereals,2018,3.00,Storage,,1
 South Sudan,Cereals,2019,3.00,Storage,,1
 South Sudan,Cereals,2021,3.00,Storage,,1
 South Sudan,Cereals,2006,39.00,,,2
-Spain,Cereals,1991,0.00,Whole supply chain,,4
-Spain,Cereals,1992,0.00,Whole supply chain,,4
-Spain,Cereals,1996,0.00,Whole supply chain,,4
-Spain,Cereals,1997,0.00,Whole supply chain,,4
-Spain,Cereals,1998,0.00,Whole supply chain,,4
-Spain,Cereals,1999,0.00,Whole supply chain,,4
-Spain,Cereals,2000,0.00,Whole supply chain,,2
+Spain,Cereals,1991,0.10,Whole supply chain,,4
+Spain,Cereals,1992,0.10,Whole supply chain,,4
+Spain,Cereals,1996,0.10,Whole supply chain,,4
+Spain,Cereals,1997,0.10,Whole supply chain,,4
+Spain,Cereals,1998,0.10,Whole supply chain,,4
+Spain,Cereals,1999,0.10,Whole supply chain,,4
+Spain,Cereals,2000,0.10,Whole supply chain,,2
 Spain,Cereals,1993,0.25,Whole supply chain,,4
 Spain,Cereals,1994,0.25,Whole supply chain,,4
 Spain,Cereals,1995,0.25,Whole supply chain,,4
@@ -4115,9 +4115,9 @@ Sweden,Tubers,2017,16.20,Farm,Waste,5
 Sweden,Eggs,2011,3.00,Harvest,Waste,1
 Sweden,Eggs,2012,3.00,Harvest,Waste,1
 Sweden,Eggs,2013,3.00,Harvest,Waste,1
-Sweden,Dairy,2011,0.00,,,3
-Sweden,Dairy,2012,0.00,Harvest,Waste,1
-Sweden,Dairy,2013,0.00,Harvest,Waste,1
+Sweden,Dairy,2011,0.10,,,3
+Sweden,Dairy,2012,0.10,Harvest,Waste,1
+Sweden,Dairy,2013,0.10,Harvest,Waste,1
 Sweden,Dairy,1991,1.00,Whole supply chain,,1
 Sweden,Cereals,2011,10.33,Whole supply chain,,3
 Sweden,Cereals,2012,10.33,Whole supply chain,,3
@@ -4150,7 +4150,7 @@ Sweden,Cereals,1999,3.00,Whole supply chain,,1
 Sweden,Cereals,1991,4.50,Whole supply chain,,4
 Sweden,Cereals,1992,5.00,Whole supply chain,,2
 Sweden,Tubers,1991,9.00,Whole supply chain,,1
-Switzerland,Tubers,2015,0.00,Wholesale,,3
+Switzerland,Tubers,2015,0.10,Wholesale,,3
 Switzerland,Cereals,2002,0.83,Whole supply chain,,6
 Switzerland,Cereals,2003,1.00,Whole supply chain,,6
 Switzerland,Cereals,2004,1.00,Whole supply chain,,6
@@ -4287,8 +4287,8 @@ Turkey,Fruits,2013,10.60,Farm,,5
 Turkey,Tubers,1991,13.00,Whole supply chain,,1
 Turkey,Meat,2014,2.00,Processing,,5
 U.S.A,Meat,2010,4.00,Harvest,"Insects, parasites and animals",1
-U.S.A,Sugar,1991,0.00,Whole supply chain,,1
-U.S.A,Cereals,2022,0.00,Processing,,1
+U.S.A,Sugar,1991,0.10,Whole supply chain,,1
+U.S.A,Cereals,2022,0.10,Processing,,1
 U.S.A,Cereals,2021,1.00,Storage,,1
 U.S.A,Eggs,1978,1.00,Whole supply chain,,1
 U.S.A,Eggs,1981,1.00,Whole supply chain,,1
@@ -4740,32 +4740,32 @@ Uganda,Cereals,2015,7.19,Farm,,42
 Uganda,Cereals,2014,7.52,Farm,,31
 Uganda,Cereals,2013,7.60,Farm,,30
 Uganda,Cereals,2011,7.89,Farm,,28
-Ukraine,Dairy,1993,0.00,Whole supply chain,,1
-Ukraine,Sugar,1993,0.00,Whole supply chain,,1
-Ukraine,Dairy,1994,0.00,Whole supply chain,,1
-Ukraine,Sugar,1994,0.00,Whole supply chain,,1
-Ukraine,Dairy,1995,0.00,Whole supply chain,,1
-Ukraine,Sugar,1995,0.00,Whole supply chain,,1
-Ukraine,Dairy,1996,0.00,Whole supply chain,,1
-Ukraine,Sugar,1996,0.00,Whole supply chain,,1
-Ukraine,Dairy,1997,0.00,Whole supply chain,,1
-Ukraine,Sugar,1997,0.00,Whole supply chain,,1
-Ukraine,Dairy,1998,0.00,Whole supply chain,,1
-Ukraine,Dairy,1999,0.00,Whole supply chain,,1
-Ukraine,Meat,2000,0.00,Whole supply chain,,1
-Ukraine,Dairy,2000,0.00,Whole supply chain,,1
-Ukraine,Dairy,2001,0.00,Whole supply chain,,1
-Ukraine,Dairy,2002,0.00,Whole supply chain,,1
-Ukraine,Dairy,2003,0.00,Whole supply chain,,1
-Ukraine,Dairy,2004,0.00,Whole supply chain,,1
-Ukraine,Dairy,2005,0.00,Whole supply chain,,1
-Ukraine,Dairy,2006,0.00,Whole supply chain,,1
-Ukraine,Dairy,2007,0.00,Whole supply chain,,1
-Ukraine,Dairy,2008,0.00,Whole supply chain,,1
-Ukraine,Dairy,2009,0.00,Whole supply chain,,1
-Ukraine,Dairy,2010,0.00,Whole supply chain,,1
-Ukraine,Dairy,2011,0.00,Whole supply chain,,1
-Ukraine,Dairy,2012,0.00,Whole supply chain,,1
+Ukraine,Dairy,1993,0.10,Whole supply chain,,1
+Ukraine,Sugar,1993,0.10,Whole supply chain,,1
+Ukraine,Dairy,1994,0.10,Whole supply chain,,1
+Ukraine,Sugar,1994,0.10,Whole supply chain,,1
+Ukraine,Dairy,1995,0.10,Whole supply chain,,1
+Ukraine,Sugar,1995,0.10,Whole supply chain,,1
+Ukraine,Dairy,1996,0.10,Whole supply chain,,1
+Ukraine,Sugar,1996,0.10,Whole supply chain,,1
+Ukraine,Dairy,1997,0.10,Whole supply chain,,1
+Ukraine,Sugar,1997,0.10,Whole supply chain,,1
+Ukraine,Dairy,1998,0.10,Whole supply chain,,1
+Ukraine,Dairy,1999,0.10,Whole supply chain,,1
+Ukraine,Meat,2000,0.10,Whole supply chain,,1
+Ukraine,Dairy,2000,0.10,Whole supply chain,,1
+Ukraine,Dairy,2001,0.10,Whole supply chain,,1
+Ukraine,Dairy,2002,0.10,Whole supply chain,,1
+Ukraine,Dairy,2003,0.10,Whole supply chain,,1
+Ukraine,Dairy,2004,0.10,Whole supply chain,,1
+Ukraine,Dairy,2005,0.10,Whole supply chain,,1
+Ukraine,Dairy,2006,0.10,Whole supply chain,,1
+Ukraine,Dairy,2007,0.10,Whole supply chain,,1
+Ukraine,Dairy,2008,0.10,Whole supply chain,,1
+Ukraine,Dairy,2009,0.10,Whole supply chain,,1
+Ukraine,Dairy,2010,0.10,Whole supply chain,,1
+Ukraine,Dairy,2011,0.10,Whole supply chain,,1
+Ukraine,Dairy,2012,0.10,Whole supply chain,,1
 Ukraine,Meat,1999,1.00,Whole supply chain,,1
 Ukraine,Tubers,1996,1.00,Whole supply chain,,1
 Ukraine,Tubers,1997,1.00,Whole supply chain,,1
@@ -4803,14 +4803,14 @@ Ukraine,Dairy,2013,7.20,Farm,,5
 Ukraine,Dairy,2014,9.00,Processing,,2
 United Kingdom,Vegetables,2011,4.11,Farm,Market,18
 United Kingdom,Tubers,2011,7.60,Packing,Market,5
-United Kingdom,Cereals,2002,0.00,Whole supply chain,,2
-United Kingdom,Cereals,2004,0.00,Whole supply chain,,2
-United Kingdom,Eggs,2004,0.00,Whole supply chain,,1
-United Kingdom,Cereals,2008,0.00,Whole supply chain,,2
-United Kingdom,Cereals,2014,0.00,Whole supply chain,,3
-United Kingdom,Cereals,2015,0.00,Whole supply chain,,3
-United Kingdom,Cereals,2016,0.00,Whole supply chain,,3
-United Kingdom,Cereals,2017,0.00,Whole supply chain,,3
+United Kingdom,Cereals,2002,0.10,Whole supply chain,,2
+United Kingdom,Cereals,2004,0.10,Whole supply chain,,2
+United Kingdom,Eggs,2004,0.10,Whole supply chain,,1
+United Kingdom,Cereals,2008,0.10,Whole supply chain,,2
+United Kingdom,Cereals,2014,0.10,Whole supply chain,,3
+United Kingdom,Cereals,2015,0.10,Whole supply chain,,3
+United Kingdom,Cereals,2016,0.10,Whole supply chain,,3
+United Kingdom,Cereals,2017,0.10,Whole supply chain,,3
 United Kingdom,Cereals,1995,0.50,Whole supply chain,,2
 United Kingdom,Cereals,1996,0.50,Whole supply chain,,2
 United Kingdom,Cereals,1997,0.50,Whole supply chain,,2
@@ -4866,10 +4866,10 @@ United Kingdom,Tubers,2018,7.40,Processing,,5
 United Kingdom,Fruits,1992,8.00,Whole supply chain,,1
 United Kingdom,Tubers,2014,9.00,Packing,,4
 Uruguay,Vegetables,1995,21.00,Whole supply chain,,1
-Uzbekistan,Dairy,2014,0.00,Whole supply chain,,1
-Uzbekistan,Dairy,2015,0.00,Whole supply chain,,1
-Uzbekistan,Dairy,2016,0.00,Whole supply chain,,1
-Uzbekistan,Dairy,2017,0.00,Whole supply chain,,1
+Uzbekistan,Dairy,2014,0.10,Whole supply chain,,1
+Uzbekistan,Dairy,2015,0.10,Whole supply chain,,1
+Uzbekistan,Dairy,2016,0.10,Whole supply chain,,1
+Uzbekistan,Dairy,2017,0.10,Whole supply chain,,1
 Uzbekistan,Fruits,2014,1.00,Whole supply chain,,1
 Uzbekistan,Fruits,2015,1.00,Whole supply chain,,1
 Uzbekistan,Fruits,2016,1.00,Whole supply chain,,1
@@ -4878,29 +4878,29 @@ Uzbekistan,Tubers,2014,1.00,Whole supply chain,,1
 Uzbekistan,Tubers,2015,1.00,Whole supply chain,,1
 Uzbekistan,Tubers,2016,1.00,Whole supply chain,,1
 Uzbekistan,Tubers,2017,1.00,Whole supply chain,,1
-Venezuela,Sugar,1991,0.00,Whole supply chain,,1
-Venezuela,Sugar,1992,0.00,Whole supply chain,,1
-Venezuela,Sugar,1993,0.00,Whole supply chain,,1
-Venezuela,Sugar,1994,0.00,Whole supply chain,,1
-Venezuela,Sugar,1995,0.00,Whole supply chain,,1
-Venezuela,Sugar,1996,0.00,Whole supply chain,,1
-Venezuela,Sugar,1997,0.00,Whole supply chain,,1
-Venezuela,Sugar,1998,0.00,Whole supply chain,,1
-Venezuela,Dairy,1999,0.00,Whole supply chain,,1
-Venezuela,Sugar,1999,0.00,Whole supply chain,,1
-Venezuela,Sugar,2000,0.00,Whole supply chain,,1
-Venezuela,Spices,2001,0.00,Whole supply chain,,1
-Venezuela,Sugar,2001,0.00,Whole supply chain,,1
-Venezuela,Spices,2002,0.00,Whole supply chain,,1
-Venezuela,Sugar,2002,0.00,Whole supply chain,,1
-Venezuela,Spices,2003,0.00,Whole supply chain,,1
-Venezuela,Sugar,2003,0.00,Whole supply chain,,1
-Venezuela,Spices,2004,0.00,Whole supply chain,,1
-Venezuela,Sugar,2004,0.00,Whole supply chain,,1
-Venezuela,Sugar,2005,0.00,Whole supply chain,,1
-Venezuela,Sugar,2006,0.00,Whole supply chain,,1
-Venezuela,Sugar,2007,0.00,Whole supply chain,,1
-Venezuela,Oil seeds,2011,0.00,Whole supply chain,,1
+Venezuela,Sugar,1991,0.10,Whole supply chain,,1
+Venezuela,Sugar,1992,0.10,Whole supply chain,,1
+Venezuela,Sugar,1993,0.10,Whole supply chain,,1
+Venezuela,Sugar,1994,0.10,Whole supply chain,,1
+Venezuela,Sugar,1995,0.10,Whole supply chain,,1
+Venezuela,Sugar,1996,0.10,Whole supply chain,,1
+Venezuela,Sugar,1997,0.10,Whole supply chain,,1
+Venezuela,Sugar,1998,0.10,Whole supply chain,,1
+Venezuela,Dairy,1999,0.10,Whole supply chain,,1
+Venezuela,Sugar,1999,0.10,Whole supply chain,,1
+Venezuela,Sugar,2000,0.10,Whole supply chain,,1
+Venezuela,Spices,2001,0.10,Whole supply chain,,1
+Venezuela,Sugar,2001,0.10,Whole supply chain,,1
+Venezuela,Spices,2002,0.10,Whole supply chain,,1
+Venezuela,Sugar,2002,0.10,Whole supply chain,,1
+Venezuela,Spices,2003,0.10,Whole supply chain,,1
+Venezuela,Sugar,2003,0.10,Whole supply chain,,1
+Venezuela,Spices,2004,0.10,Whole supply chain,,1
+Venezuela,Sugar,2004,0.10,Whole supply chain,,1
+Venezuela,Sugar,2005,0.10,Whole supply chain,,1
+Venezuela,Sugar,2006,0.10,Whole supply chain,,1
+Venezuela,Sugar,2007,0.10,Whole supply chain,,1
+Venezuela,Oil seeds,2011,0.10,Whole supply chain,,1
 Venezuela,Dairy,1992,0.50,Whole supply chain,,2
 Venezuela,Dairy,1995,0.50,Whole supply chain,,2
 Venezuela,Dairy,1996,0.50,Whole supply chain,,2
