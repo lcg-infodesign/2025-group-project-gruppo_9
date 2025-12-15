@@ -142,7 +142,7 @@ function preload() {
 
 // ===== SETUP =====
 function setup() {
-  cnv = createCanvas(windowWidth, windowHeight+1000);
+  cnv = createCanvas(windowWidth, windowHeight);
   cnv.parent("canvasContainer");
 
   clear();
@@ -419,7 +419,12 @@ function draw() {
   // 6. Disegna Tooltip 
   if (tooltipData && isHoveringCell) {
     drawTooltip();
+    
   }
+  push();
+  fill('#415E5A');
+  rect((windowWidth)/10,windowHeight/38, 300,100,12);
+  pop();
 }
 
 // AGGIUNTO: Funzione per disegnare overlay hover
