@@ -32,7 +32,7 @@ const CONFIG = {
         sliderHeight: 100,
         margin: {
             horizontal: 300,
-            vertical: 60
+            vertical: 110
         },
         minCellHeight: 70,
         maxCellHeight: 100,
@@ -324,7 +324,7 @@ function drawSlider() {
     noStroke();
     rect(slider.x, slider.y, slider.width, 20, 5);
     
-    // Disegna i punti del grafico sulla track
+    // Punti del grafico sulla track
     drawSliderDataPoints();
     
     // Slider thumb
@@ -334,21 +334,39 @@ function drawSlider() {
     ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
     noStroke();
     
-    // Year value
-    fill(CONFIG.colors.slider.text);
-    textStyle(BOLD);
+    // --- Year Box in Center ---
+    const boxW = 120;
+    const boxH = 50;
+    const boxX = slider.x + slider.width / 2 - boxW / 2;
+    const boxY = slider.y +80; // sopra lo slider
+    
+    // Rettangolo con bordo
+    stroke('#415E5A');
+    strokeWeight(2);
+    noFill();
+    rect(boxX, boxY, boxW, boxH, 10);
+    
+    // Scritta sopra il numero
+    noStroke();
+    fill('#415E5A');
+    textSize(14);
+    textAlign(CENTER, TOP);
     textFont(CONFIG.typography.fontFamily);
+    text("Selected Year", boxX + boxW / 2, boxY -20);
+    
+    // Numero anno centrato
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
-    text(currentYear, slider.x + slider.width / 2, slider.y + 40);
+    text(currentYear, boxX + boxW / 2, boxY + boxH / 2);
     
-    // Year range labels
-    textStyle(NORMAL);
-    textSize(14);
-    textFont(CONFIG.typography.fontFamily);
-    text(yearRange.min, slider.x, slider.y + 40);
-    text(yearRange.max, slider.x + slider.width, slider.y + 40);
+    // Etichette min e max
+    textSize(12);
+    textAlign(LEFT);
+    text(yearRange.min, slider.x, slider.y + 45);
+    textAlign(RIGHT);
+    text(yearRange.max, slider.x + slider.width, slider.y + 45);
 }
+
 
 // Disegna i punti dati sulla slider track
 function drawSliderDataPoints() {
