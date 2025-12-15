@@ -32,8 +32,6 @@ let commodities = [];
 // Variabili per il Tooltip
 let tooltipData = null; // Contiene l'oggetto con i dati completi per il tooltip
 
-
-
 // Stato
 let selectedCountry = "";
 let selectedYear = null;
@@ -93,7 +91,7 @@ function normalizeFilename(name) {
 }
 //immagini riempimenti
 
-function getFillImage(supplyStage, cause) {
+/*function getFillImage(supplyStage, cause) {
   if (!supplyStage || !cause) return fillImages.default;
 
   const key = 
@@ -101,7 +99,22 @@ function getFillImage(supplyStage, cause) {
     normalizeFilename(cause);
 
   return fillImages[key] || fillImages.default;
+}*/
+function getFillImage(supplyStage, cause) {
+  // Se manca supplyStage o cause → fallback generale
+  if (!supplyStage || !cause) return fillImages.default;
+
+  const key = normalizeFilename(supplyStage) + "_" + normalizeFilename(cause);
+
+  // Se esiste la combinazione specifica
+  if (fillImages[key]) return fillImages[key];
+
+  const stageDefaultKey = normalizeFilename(supplyStage) + "_default";
+  if (fillImages[stageDefaultKey]) return fillImages[stageDefaultKey];
+
+  return fillImages.default;
 }
+
 
 function drawImageFillLevel(img, x, bottomY, w, h, fillH) {
   if (!img || fillH <= 0) return;
@@ -117,7 +130,6 @@ function drawImageFillLevel(img, x, bottomY, w, h, fillH) {
     0, srcY, img.width, srcH
   );
 }
-
 
 function loadImageSafe(path, cb) {
   loadImage(path, img => cb && cb(img), () => cb && cb(null));
@@ -173,7 +185,6 @@ function preload() {
 
   const stages = [
     "collector",
-    
     "distributor",
     "export",
     "farm",
@@ -183,8 +194,8 @@ function preload() {
     "households",
     "market",
     "packing",
-    "postharvest",
-    "preharvest",
+    "post-harvest",
+    "pre-harvest",
     "processing",
     "retail",
     "storage",
@@ -196,11 +207,11 @@ function preload() {
 
   const causes = [
     "conservation",
-    "disease",
+    "diseasesandmolds",
     "drying",
     "environmentalfactors",
     "harvestandmanagement",
-    "insects",
+    "insects_parasitesandanimals",
     "machinerydamage",
     "market",
     "processing",
@@ -503,10 +514,7 @@ function draw() {
     drawTooltip();
     
   }
-  push();
-  fill('#415E5A');
-  rect((windowWidth)/10,windowHeight/38, 300,100,12);
-  pop();
+ 
 }
 
 // AGGIUNTO: Funzione per disegnare overlay hover
@@ -554,22 +562,37 @@ function drawTimeline() {
     ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
     noStroke();
     
-    // --- Text Labels ---
-    fill(CONFIG.colors.slider.text);
-    textAlign(CENTER, CENTER);
+    // --- Year Box in Center ---
+    const boxW = 120;
+    const boxH = 50;
+    const boxX = slider.x + slider.width / 2 - boxW / 2;
+    const boxY = slider.y +80 ;
+    stroke('#415E5A'); // bordo verde
+    strokeWeight(2);
+    noFill();
+    rect(boxX, boxY, boxW, boxH, 10);
+
+
+    fill('#415E5A');
+    noStroke();
+    textSize(14);
+    textAlign(CENTER, TOP);
+    textFont(CONFIG.typography.fontFamily);
+    text("Selected Year", boxX + boxW / 2, boxY- 20);
+
+    // Numero anno selezionato centrato
     textSize(CONFIG.typography.sliderValueSize);
-    textFont(CONFIG.typography.fontFamily);
+    textAlign(CENTER, CENTER);
+    text(selectedYear, boxX + boxW / 2, boxY + boxH / 2);
     
-    // Anno corrente sotto il pallino
-    text(selectedYear, slider.x + slider.width / 2, slider.y + 45);
-    textFont(CONFIG.typography.fontFamily);
-    // Range min/max
+  
     textSize(12);
     textAlign(LEFT);
     text(yearRange.min, slider.x, slider.y + 45);
     textAlign(RIGHT);
     text(yearRange.max, slider.x + slider.width, slider.y + 45);
 }
+
 
 function drawSliderDataPoints() {
     const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
@@ -938,7 +961,7 @@ function drawTooltip() {
 }
 
 // ===== DRAW COMPLEX CELL (Mantenuta dal codice A) =====
-function drawComplexCell(commodityName, x, y, w, h) {
+/*function drawComplexCell(commodityName, x, y, w, h) {
   push();
   noFill();
   stroke(0, 12);
@@ -1004,7 +1027,118 @@ function drawComplexCell(commodityName, x, y, w, h) {
 
     pop(); // Chiude il push iniziale della cella
     return; // Termina la funzione
+  }*/
+
+  function drawComplexCell(commodityName, x, y, w, h) {
+  push();
+  noFill();
+  stroke(0, 12);
+  strokeWeight(0);
+  rect(x, y, w, h, 8);
+
+  const pb = 30;
+  const availW = w - pb * 4;
+  const availH = h - pb * 4;
+
+  let baseW = availW;
+  let baseH = availH;
+
+  if (img_empty && img_empty.width) {
+    const scale = Math.min(availW / img_empty.width, availH / img_empty.height) * 0.8;
+    baseW = Math.round(img_empty.width * scale);
+    baseH = Math.round(img_empty.height * scale);
   }
+
+  const baseX = x + (w - baseW) / 2;
+  const baseY = y + (h - baseH) / 2;
+
+  const rowData = data.find(d =>
+    d.country === selectedCountry &&
+    d.year === selectedYear &&
+    d.commodity === commodityName
+  );
+
+  // === NO DATA ===
+  if (!rowData) {
+    if (img_over && img_over.width) {
+      image(img_over, baseX, baseY, baseW, baseH);
+    }
+
+    const norm = normalizeFilename(commodityName);
+    const iconImg = commodityOutline[norm] || null; 
+    if (iconImg && iconImg.width) {
+      const maxIconW = Math.round(w * 0.36);
+      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height)*0.8;
+      const iw = Math.round(iconImg.width * iconScale);
+      const ih = Math.round(iconImg.height * iconScale);
+      imageMode(CENTER);
+      image(iconImg, x + w/2, baseY+ih * 1.3, iw, ih);
+    }
+
+    pop();
+    return;
+  }
+
+  // === FILL LEVEL ===
+  let pct = isNaN(rowData.loss) ? 0 : Math.max(0, Math.min(100, rowData.loss));
+
+  // Altezza minima garantita
+  if (pct > 0 && pct < MIN_FILL_PERCENTAGE) pct = MIN_FILL_PERCENTAGE;
+
+  const nominalW = INTERNAL_NOMINAL_W+50;
+  const nominalH = INTERNAL_NOMINAL_H+50;
+  const scaleInner = Math.min(1, baseW / (nominalW + 12), baseH / (nominalH + 12));
+  const innerW = Math.round(nominalW * scaleInner);
+  const innerH = Math.round(nominalH * scaleInner)+5;
+  const innerX = baseX + Math.round((baseW - innerW) / 2);
+  const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+5;
+
+  const fillH = pct === 0 ? MIN_FILL_HEIGHT : map(pct, 0, 100, MIN_FILL_HEIGHT, innerH);
+  let fillY = innerBottomY - fillH - 18;
+  const innerTopY = innerBottomY - innerH;
+  if (fillY < innerTopY) fillY = innerTopY;
+
+  // === IMAGE FILL LEVEL ===
+  const fullRow = getFullDataRow(selectedCountry, selectedYear, commodityName);
+  const fillImg = getFillImage(fullRow.supplyChainPhase, fullRow.mainCauseOfWaste);
+
+  if (fillImg) {
+    push();
+    drawingContext.save();
+    drawingContext.beginPath();
+    drawingContext.rect(innerX+4, innerBottomY - innerH, innerW-10, innerH);
+    drawingContext.clip();
+
+    drawImageFillLevel(
+      fillImg,
+      innerX+4,
+      innerBottomY - 8,
+      innerW-10,
+      innerH,
+      fillH
+    );
+
+    drawingContext.restore();
+    pop();
+  }
+
+  // Continua con il resto della cella (curva, overlay, icona) come prima
+  if (img_over && img_over.width) image(img_over, baseX, baseY, baseW, baseH);
+
+  const norm = normalizeFilename(commodityName);
+  const iconImg = commodityImgs[norm] || null;
+  if (iconImg && iconImg.width) {
+    const maxIconW = Math.round(w * 0.36);
+    const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height) * 0.8;
+    const iw = Math.round(iconImg.width * iconScale);
+    const ih = Math.round(iconImg.height * iconScale);
+    imageMode(CENTER);
+    image(iconImg, x + w/2, baseY + ih*1.3, iw, ih);
+  }
+
+  pop();
+}
+
 
   // === FILL LEVEL ===
   let pct = isNaN(rowData.loss) ? 0 : Math.max(0, Math.min(100, rowData.loss));
@@ -1099,7 +1233,7 @@ pop();
   }
 
   pop();
-}
+
 
 function drawHoveredCell() {
   // Calcola la posizione della cella hoverata (simile a drawFlexGrid)
