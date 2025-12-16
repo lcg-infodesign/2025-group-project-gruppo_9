@@ -193,7 +193,7 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
 
-  loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
+  /*loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
 
   const stages = [
     "collector",
@@ -215,7 +215,7 @@ function preload() {
     "transport",
     "wholesupplychain",
     "wholesale"
-  ];
+  ];*/
 
   const causes = [
     "conservation",
@@ -232,7 +232,7 @@ function preload() {
     "waste"
   ];
 
-  for (let s of stages) {
+  /*for (let s of stages) {
     for (let c of causes) {
       const key = `${s}_${c}`;
       loadImageSafe(
@@ -240,7 +240,7 @@ function preload() {
         img => fillImages[key] = img || null
       );
     }
-  }
+  }*/
 }
 
 // ===== SETUP =====
