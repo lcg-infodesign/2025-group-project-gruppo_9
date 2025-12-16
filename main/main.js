@@ -67,8 +67,8 @@ let dataset = [], commodities = [], countries = [];
 let cellWidth, cellHeight;
 let hoveredCol = -1, hoveredRow = -1;
 let clickedCol = -1, clickedRow = -1;
-let currentYear = 2014;
-let yearRange = { min: 2000, max: 2023 };
+let currentYear = 2020;
+let yearRange = { min: 1972, max: 2024 };
 let sortedCountries = [];
 let slider = {
     x: 0, y: 0, width: 0, height: 30,
@@ -225,6 +225,9 @@ function setup() {
     console.log(`Canvas height: ${totalHeight}, Countries: ${sortedCountries.length}, Matrix Y: ${matrixY}`);
 
     document.addEventListener('keydown', handleKeyPress);
+
+    currentYear=2020;
+    updateYear();
 }
 
 function calculateTotalHeight() {
