@@ -214,31 +214,30 @@ li {
 }
 
 /* Colonna Immagini Generica */
-.image-content {
-    flex: 1; /* Le immagini prendono il restante spazio (40%) */
-    
-    /* IMPILAMENTO VERTICALE */
-    display: flex;
-    flex-direction: column; /* Mette le immagini una sotto l'altra */
-    align-items: center;    /* Le centra nella loro colonna */
-    justify-content: center;
-    gap: 40px;              /* Spazio fisico tra immagine 1 e immagine 2 */
+.content-block .image-content {
+    flex: 1;
+    position: relative; /* fondamentale per il posizionamento assoluto delle immagini */
+    height: 400px; /* altezza fissa del contenitore */
 }
 
-/* Reset Immagini Blocco 1 */
-.content-block .image-content img {
-    position: static !important; /* Disabilita sovrapposizioni assolute */
-    display: block;
-    max-width: 100%; /* Non escono dal contenitore */
-    height: auto;
-    margin: 0;
-    transform: none;
+/* Immagini scrollabili (banana e sacco) */
+.scroll-img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.05s linear;
 }
 
-/* Dimensioni specifiche per estetica (opzionale, modificabile) */
-.content-block .image-content img:nth-child(1) { max-width: 350px; } /* Banana */
-.content-block .image-content img:nth-child(2) { max-width: 250px; } /* Sacco */
+/* Dimensioni e posizioni iniziali */
+.scroll-img.banana {
+    top:-500px;
+    max-width:350px;
+}
 
+.scroll-img.sacco {
+    top:150px;
+    max-width: 250px;
+}
 
 /* --- BLOCCO 2: SFONDO VERDE (Mela + Cestino) --- */
 .green-section {
@@ -270,7 +269,6 @@ li {
 
 .green-section .image-content {
     flex: 1;
-    /* IMPILAMENTO VERTICALE */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -290,12 +288,11 @@ li {
 .green-section .image-content img:nth-child(1) { max-width: 150px; } /* Mela */
 .green-section .image-content img:nth-child(2) { max-width: 300px; } /* Cestino */
 
-
 /* =========================================
    6. ANIMAZIONI (Opzionale)
-   ========================================= */
-/* Se vuoi mantenere il "tremolio" tic-tac, mantieni queste classi.
-   Se non le vuoi, puoi rimuovere questo blocco. */
+   ========================================= 
+ Se vuoi mantenere il "tremolio" tic-tac, mantieni queste classi.
+   Se non le vuoi, puoi rimuovere questo blocco.
 .tic-tac-image1, .tic-tac-image2, .tic-tac-image3 {
     animation-name: tic-tac;
     animation-timing-function: steps(1, end);
@@ -308,6 +305,54 @@ li {
 @keyframes tic-tac {
     0%, 100% { transform: rotate(-3deg); }
     50% { transform: rotate(3deg); }
+}*/
+
+/* =========================================
+   SCENA ANIMATA: MELA CHE ENTRA NEL BIDONE
+   ========================================= */
+
+.trash-scene {
+    position: relative;
+    height: 420px;
+}
+
+/* reset flex */
+.trash-scene {
+    display: block;
+}
+
+.apple {
+    position: absolute;
+    top: -300px; /* ben visibile all’inizio */
+    left: 50%;
+    transform: translateX(-50%);
+
+    --fall: 0;
+
+    transform:
+        translateX(-50%)
+        translateY(calc(var(--fall) * 260px))
+        rotate(calc(var(--fall) * 40deg))
+        scale(calc(1 - var(--fall) * 0.3));
+
+    
+    z-index: 2;
+}
+
+
+.apple img {
+    width: 150px;
+    height: auto;
+    display: block;
+}
+
+.bin {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    z-index: 1;
 }
 
 /* =========================================
