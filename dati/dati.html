@@ -40,7 +40,7 @@
     <main>
         <section class="content-block">
             <div class="text-content">
-                <p>The dataset used on this website comes from the FAO - Technical Platform on the Measurement and Reduction of Food Loss and Waste, the leading international resource on food loss along the supply chain.</p>
+                <p>The dataset used on this website comes from the <strong>Fao</strong> - Technical Platform on the Measurement and Reduction of Food Loss and Waste, the leading international resource on food loss along the supply chain.</p>
                 <p class="underline">Data origin</p>
                 <p>FAO compiles data from over 700 scientific publications, institutional reports, global databases (World Bank, IFPRI, FAOSTAT…) and national studies.The latest version includes more than 29,000 data points, continuously updated as part of a “living” database.</p>
                 <p class="underline">How the data are collected</p>
@@ -51,9 +51,9 @@
                 </ul>
                 <p>Each record includes the methodology used to produce it.</p>
                 <p class="underline">What the data include</p>
-                <p>For each observation, information is available on:</p>
+                <p>The original dataset contains:</p>
                 <ul>
-                    <li><strong>Country</strong>, food type (CPC 2.1), year, loss percentage, supply chain stage, cause of loss (when available), methodology and sample size.</li>
+                    <li>m49 code, country, region, cpc code, commodity, year, loss percentage, loss quantity (The data is present in 1/7 of the rows and for the most part a unit of measurement is not indicated), activity, supply chain stage, treatment, cause of loss, sample size, method data collection, reference, url and notes.</li>
                     <li><strong>Losses</strong> may be expressed in percentage, weight or economic value. FAO harmonizes units when possible and uses the data to calculate global indicators such as the Food Loss Index (SDG 12.3.1.a).</li>
                 </ul>
                 <p class="underline">A rich but incomplete dataset</p>
@@ -63,10 +63,12 @@
                 <p class="underline">How we processed the dataset</p>    
                 <p>To make the dataset clear and consistent for visual exploration, we:</p>
                 <ul>
+                    <li>chose to use the data in the country, commodity, year, loss percentage, food supply stage and cause of loss columns</li>
                     <li>standardized country names;</li>
-                    <li>grouped food items into 19 broader categories;</li>
+                    <li>grouped food items into 16 broader categories;</li>
                     <li>grouped causes of loss into 14 categories;</li>
-                    <li>reduced the dataset from nearly 30,000 rows to about 5,000 by averaging loss values for the same country and commodity each year.</li>
+                    <li>we calculated the average percentage of waste for the same commodity in the same country in the same year;</li>
+                    <li>for each commodity we identified the supply chain stage where the greatest waste occurred and where possible we indicated the main cause of loss;</li>
                 </ul>
                 <p>The final dataset is cleaner, more readable and optimized for interactive visualization.</p>
 
@@ -98,7 +100,10 @@
                 <p class="underline"> How to use the site</p>
                 <ul class="bullet-points">
                     <li>Start from the central matrix: each cell represents the intersection of a country and a commodity in a given year.</li>
-                    <li>Symbols show the percentage of loss; empty cells reveal missing information.</li>
+                    <li>In the matrix, the various countries are ordered so that those containing the greatest amount of data are displayed first.</li>
+                    <li>The size of the symbols shows the percentage of loss; empty cells reveal missing information.</li>
+                    <li>The loss percentages were calculated by referring to the total quantity of the commodity produced in a given country in a given year.</li>
+                    <li>Caution! Since we don't have the quantity (in kg) to which the percentage refers, we can't compare waste percentages between countries because, although the percentages may be the same, they could refer to two significantly different quantities.</li>
                     <li>By clicking a cell, you access a detailed view of that country, showing losses by food category.</li>
                     <li>Explore different years to observe changes or anomalies.</li>
                 </ul>
