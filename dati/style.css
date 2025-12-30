@@ -145,6 +145,7 @@ li {
 .nav-btn.btn-secondary {
     border-color: transparent;
     background: rgba(32, 51, 43, 0.05);
+    color: var(--dark);
 }
 .nav-btn.btn-secondary:hover {
     border-color: var(--dark);
