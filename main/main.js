@@ -342,25 +342,19 @@ function drawSlider() {
     const boxH = 50;
     const boxX = slider.x + slider.width / 2 - boxW / 2;
     const boxY = slider.y +80; // sopra lo slider
-    
-    // Rettangolo con bordo
-    stroke('#415E5A');
-    strokeWeight(2);
-    noFill();
-    rect(boxX, boxY, boxW, boxH, 10);
-    
+     
     // Scritta sopra il numero
     noStroke();
     fill('#415E5A');
     textSize(14);
     textAlign(CENTER, TOP);
     textFont(CONFIG.typography.fontFamily);
-    text("Selected Year", boxX + boxW / 2, boxY -20);
+    text("Selected Year:", boxX-30 + boxW / 2, boxY -20);
     
     // Numero anno centrato
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
-    text(currentYear, boxX + boxW / 2, boxY + boxH / 2);
+    text(currentYear, boxX+50 + boxW / 2, boxY -14);
     
     // Etichette min e max
     textSize(12);
