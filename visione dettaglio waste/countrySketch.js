@@ -695,10 +695,10 @@ function checkGridHover(items, startY) {
         y: currentY,
         w: cellWidth,
         h: cellHeight,
-        hoverX: hoverX, // Aggiunto per debug
-        hoverY: hoverY, // Aggiunto per debug
-        hoverW: hoverWidth, // Aggiunto per debug
-        hoverH: hoverHeight, // Aggiunto per debug
+        hoverX: hoverX, 
+        hoverY: hoverY, 
+        hoverW: hoverWidth, 
+        hoverH: hoverHeight, 
         index: i,
         hasData: true
       };

@@ -14,6 +14,7 @@ const CONFIG = {
         slider: {
             track: '#415E5A',
             thumb: '#F5F3EE',
+            circle: '#EDC69A',
             text: '#16201f',
             wave: '#415E5A' // Colore per il grafico a onda
         },
@@ -53,7 +54,7 @@ const CONFIG = {
         titleSize: 48,
         columnSize: 11,
         rowSize: 14,
-        tooltipSize: 12,
+        tooltipSize: 15,
         sliderValueSize: 20,
         maxCountryChars: 18,
         fontFamily: 'Roboto',
@@ -318,9 +319,7 @@ function getYearFromX(x) {
 
 function drawSlider() {
     // Disegna prima il grafico sotto la track (se siamo in hover)
-    if (isHoveringSlider && hoveredYear) {
-        drawSliderWaveGraph();
-    }
+    drawSliderWaveGraph();
     
     // Slider track
     fill(CONFIG.colors.slider.track);
@@ -368,24 +367,18 @@ function drawSlider() {
 
 
 // Disegna i punti dati sulla slider track
+
 function drawSliderDataPoints() {
-    const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
-    const trackHeight = 20;
-    
-    for (let year of years) {
-        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
-        const dataRatio = yearDataCounts[year];
-        
-        // Altezza del punto in base alla quantità di dati
-        const pointHeight = 3 + (dataRatio * 7); // Da 3px a 10px
-        
-        // Colore basato sulla quantità di dati
-        const colorValue = map(dataRatio, 0, 1, 150, 255);
-        fill(colorValue, colorValue * 0.8, colorValue * 0.6);
-        
-        // Disegna un punto per ogni anno con dati
-        ellipse(x, slider.y + trackHeight/2, pointHeight);
-    }
+  const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+
+  for (let year of years) {
+    const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+    const pointHeight = 6.5;
+    const colorValue = CONFIG.colors.slider.circle;
+    fill(colorValue);
+
+    ellipse(x, slider.y + 10, pointHeight);
+  }
 }
 
 // Disegna il grafico a onda quando in hover (simile a YouTube)
@@ -936,68 +929,112 @@ function drawTooltip() {
     const commodity = commodities[hoveredCol];
     const exists = checkCombinationCached(country, commodity, currentYear);
     
-    let tooltipText = `${country} - ${commodity}`;
-    
+    let wastePercentage = null;
     if (exists) {
-        const wastePercentage = getWastePercentage(country, commodity, currentYear);
-        if (wastePercentage !== null) {
-            tooltipText += `\n${wastePercentage.toFixed(1)}% waste`;
-        }
+        wastePercentage = getWastePercentage(country, commodity, currentYear);
+    }
+    
+    // Configurazione
+    const TOOLTIP_CONFIG = {
+        bgColor: '#415E5A',
+        textColor: '#F5F3EE',
+        fontFamily: 'Roboto',
+        radius: 6,
+        pad: 12,
+        offset: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowBlur: 6
+    };
+    
+    push();
+    textSize(14);
+    textFont(TOOLTIP_CONFIG.fontFamily);
+    
+    // Calcola le stringhe
+    const line1 = commodity;
+    const line2 = exists && wastePercentage !== null ? 
+        `Loss: ${wastePercentage.toFixed(1)}%` : 
+        "No data";
+    
+    // Calcola larghezze
+    textStyle(BOLD);
+    const width1 = textWidth(line1);
+    
+    if (exists && wastePercentage !== null) {
+        // Per la seconda riga, calcoliamo le parti separate
+        const lossText = "Loss: ";
+        const percentText = `${wastePercentage.toFixed(1)}%`;
+        
+        textStyle(NORMAL);
+        const lossWidth = textWidth(lossText);
+        textStyle(BOLD);
+        const percentWidth = textWidth(percentText);
+        
+        const width2 = lossWidth + percentWidth;
+        var maxWidth = Math.max(width1, width2);
+        var hasMixedText = true;
+        var mixedParts = { lossText, percentText, lossWidth };
     } else {
-        tooltipText += '\nNo data available';
+        textStyle(NORMAL);
+        const width2 = textWidth(line2);
+        maxWidth = Math.max(width1, width2);
+        var hasMixedText = false;
     }
     
-    const lines = tooltipText.split('\n');
-    const lineHeight = 16;
-    const padding = 8;
+    // Dimensioni tooltip
+    const padding = TOOLTIP_CONFIG.pad;
+    const lineHeight = 18;
+    const lineSpacing = 4;
+    const tooltipW = maxWidth + padding * 2 + 4; // +4 per margine
+    const tooltipH = (lineHeight * 2) + lineSpacing + padding * 2;
     
-    // Calcola la larghezza massima del tooltip
-    let maxWidth = 0;
-    push();
-    textSize(CONFIG.typography.tooltipSize);
-    textFont(CONFIG.typography.fontFamily);
-    for (let line of lines) {
-        const lineWidth = textWidth(line);
-        if (lineWidth > maxWidth) maxWidth = lineWidth;
-    }
-    pop();
+    // Posizionamento
+    let tooltipX = mouseX + TOOLTIP_CONFIG.offset;
+    let tooltipY = mouseY + TOOLTIP_CONFIG.offset;
     
-    const w = maxWidth + padding * 2;
-    const h = lines.length * lineHeight + padding;
+    if (tooltipX + tooltipW > width - 5) tooltipX = mouseX - tooltipW - TOOLTIP_CONFIG.offset;
+    if (tooltipY + tooltipH > height - 5) tooltipY = mouseY - tooltipH - TOOLTIP_CONFIG.offset;
     
-    // Posiziona il tooltip per non farlo uscire dallo schermo
-    let tooltipX = mouseX + 15;
-    let tooltipY = mouseY + 15;
+    tooltipX = constrain(tooltipX, padding, width - tooltipW - padding);
+    tooltipY = constrain(tooltipY, padding, height - tooltipH - padding);
     
-    // Se il tooltip esce a destra, spostalo a sinistra del mouse
-    if (tooltipX + w > width - 10) {
-        tooltipX = mouseX - w - 15;
-    }
+    // Sfondo
+    drawingContext.shadowOffsetX = 1;
+    drawingContext.shadowOffsetY = 1;
+    drawingContext.shadowBlur = TOOLTIP_CONFIG.shadowBlur;
+    drawingContext.shadowColor = TOOLTIP_CONFIG.shadowColor;
     
-    // Se il tooltip esce in basso, spostalo sopra il mouse
-    if (tooltipY + h > height - 10) {
-        tooltipY = mouseY - h - 15;
-    }
-    
-    push();
-    textSize(CONFIG.typography.tooltipSize);
-    textFont(CONFIG.typography.fontFamily);
-    
-    // Sfondo del tooltip
-    fill(CONFIG.colors.tooltip.background);
-    stroke(CONFIG.colors.tooltip.border);
-    strokeWeight(1);
-    rect(tooltipX, tooltipY, w, h, 5);
-    
-    // Testo del tooltip
+    fill(TOOLTIP_CONFIG.bgColor);
     noStroke();
-    fill(CONFIG.colors.text.tooltip);
+    rect(tooltipX, tooltipY, tooltipW, tooltipH, TOOLTIP_CONFIG.radius);
+    
+    // Testo
+    drawingContext.shadowBlur = 0;
+    fill(TOOLTIP_CONFIG.textColor);
     textAlign(LEFT, TOP);
     
-    for (let i = 0; i < lines.length; i++) {
-        const yPos = tooltipY + padding + i * lineHeight;
-        text(lines[i], tooltipX + padding, yPos);
+    const textX = tooltipX + padding;
+    const titleY = tooltipY + padding;
+    const contentY = titleY + lineHeight + lineSpacing;
+    
+    // Titolo in grassetto
+    textStyle(BOLD);
+    text(line1, textX, titleY);
+    
+    // Contenuto
+    if (hasMixedText) {
+        // "Loss: " normale
+        textStyle(NORMAL);
+        text(mixedParts.lossText, textX, contentY);
+        
+        // Percentuale grassetto
+        textStyle(BOLD);
+        text(mixedParts.percentText, textX + mixedParts.lossWidth, contentY);
+    } else {
+        textStyle(NORMAL);
+        text(line2, textX, contentY);
     }
+    
     pop();
 }
 
