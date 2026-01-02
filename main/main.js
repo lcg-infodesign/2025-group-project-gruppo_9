@@ -249,7 +249,7 @@ function setupUI() {
     // Setup slider
     slider.width = width * 0.8;
     slider.x = (width - slider.width) / 2;
-    slider.y =  60;
+    slider.y =  130;
     updateSliderThumb();
     matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
 }
@@ -328,7 +328,7 @@ function drawSlider() {
     rect(slider.x, slider.y, slider.width, 20, 5);
     
     // Punti del grafico sulla track
-    drawSliderDataPoints();
+    drawSliderDataPoints(slider.y);
     
     // Slider thumb
     stroke(CONFIG.colors.slider.track);
@@ -338,27 +338,22 @@ function drawSlider() {
     noStroke();
     
     // --- Year Box in Center ---
-    const boxW = 120;
-    const boxH = 50;
-    const boxX = slider.x + slider.width / 2 - boxW / 2;
-    const boxY = slider.y +80; // sopra lo slider
-     
-    // Calcola il centro del box
-    const centerX = boxX + boxW / 2;
+    const boxX = width / 2;
+    const boxY = 20; // sopra lo slider
 
     // Scritta "Selected Year:" centrata sopra il box
     noStroke();
     fill('#415E5A');
     textSize(14);
-    textAlign(CENTER, CENTER);
+    textAlign(CENTER, TOP);
     textFont(CONFIG.typography.fontFamily);
-    text("Selected Year:", centerX, boxY - 20);
+    text("Selected Year:", boxX, boxY);
     
     // Numero anno centrato nel box
     textStyle(BOLD);
     textSize(CONFIG.typography.sliderValueSize);
-    textAlign(CENTER, CENTER);
-    text(currentYear, centerX, boxY + boxH / 5);
+    textAlign(CENTER, TOP);
+    text(currentYear, boxX, boxY + 30);
     textStyle(NORMAL);
     
     // Etichette min e max
@@ -371,8 +366,7 @@ function drawSlider() {
 
 
 // Disegna i punti dati sulla slider track
-
-function drawSliderDataPoints() {
+function drawSliderDataPoints(y) {
   const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
 
   for (let year of years) {
@@ -381,7 +375,7 @@ function drawSliderDataPoints() {
     const colorValue = CONFIG.colors.slider.circle;
     fill(colorValue);
 
-    ellipse(x, slider.y + 10, pointHeight);
+    ellipse(x, y + 10, pointHeight);
   }
 }
 
@@ -781,7 +775,7 @@ function drawRowHoverBackground() {
     push();
     
     // Rettangolo con punte arrotondate
-    fill(CONFIG.colors.row.hover ); // 80 = 50% trasparenza
+    fill(CONFIG.colors.row.hover + 'cc'); // 80 = 50% trasparenza
     noStroke();
     
     // Calcola le coordinate
@@ -978,9 +972,6 @@ function drawTooltip() {
     
     // Configurazione
     const TOOLTIP_CONFIG = {
-        bgColor: '#415E5A',
-        textColor: '#F5F3EE',
-        fontFamily: 'Roboto',
         radius: 6,
         pad: 12,
         offset: 10,
@@ -990,7 +981,7 @@ function drawTooltip() {
     
     push();
     textSize(14);
-    textFont(TOOLTIP_CONFIG.fontFamily);
+    textFont(CONFIG.typography.fontFamily);
     
     // Calcola le stringhe
     const line1 = commodity;
@@ -1040,19 +1031,21 @@ function drawTooltip() {
     tooltipX = constrain(tooltipX, padding, width - tooltipW - padding);
     tooltipY = constrain(tooltipY, padding, height - tooltipH - padding);
     
+    push();
     // Sfondo
     drawingContext.shadowOffsetX = 1;
     drawingContext.shadowOffsetY = 1;
     drawingContext.shadowBlur = TOOLTIP_CONFIG.shadowBlur;
     drawingContext.shadowColor = TOOLTIP_CONFIG.shadowColor;
     
-    fill(TOOLTIP_CONFIG.bgColor);
+    fill(CONFIG.colors.tooltip.background);
     noStroke();
     rect(tooltipX, tooltipY, tooltipW, tooltipH, TOOLTIP_CONFIG.radius);
-    
+    pop();
+
     // Testo
     drawingContext.shadowBlur = 0;
-    fill(TOOLTIP_CONFIG.textColor);
+    fill(CONFIG.colors.text.tooltip);
     textAlign(LEFT, TOP);
     
     const textX = tooltipX + padding;
