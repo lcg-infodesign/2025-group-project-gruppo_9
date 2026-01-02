@@ -352,9 +352,15 @@ function drawSlider() {
     text("Selected Year:", boxX-30 + boxW / 2, boxY -20);
     
     // Numero anno centrato
+    textStyle(BOLD);
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
+<<<<<<< Updated upstream
     text(currentYear, boxX+50 + boxW / 2, boxY -14);
+=======
+    text(currentYear, boxX + boxW / 2, boxY + boxH / 2-10);
+    textStyle(NORMAL);
+>>>>>>> Stashed changes
     
     // Etichette min e max
     textSize(12);
@@ -1015,34 +1021,34 @@ function drawSizeLegend() {
 
 
     // --- legenda DIDASCALIA ---
-fill(CONFIG.colors.background);
-noStroke();
-textFont(CONFIG.typography.fontFamily);
-textAlign(LEFT, TOP);
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
 
-// 1) Testo principale 
-textSize(CONFIG.typography.legendSize);
-textLeading(14); // interlinea
+    // 1) Testo principale 
+    textSize(CONFIG.typography.legendSize);
+    textLeading(14); // interlinea
 
-const textX = legendX + padding;
-const textY = legendY + padding;
+    const textX = legendX + padding;
+    const textY = legendY + padding;
 
-text(
-  "The diameter of each circle\nrepresent the percentage\nof waste for that commodity.",
-  textX,
-  textY
-);
+    text(
+        "The diameter of each circle\nrepresent the percentage\nof waste for that commodity.",
+        textX,
+        textY
+    );
 
-// 2) Testo secondario più piccolo
-textSize(CONFIG.typography.legendSize - 2);
-textLeading(13);
+    // 2) Testo secondario più piccolo
+    textSize(CONFIG.typography.legendSize - 2);
+    textLeading(13);
 
-const secondY = textY + 48; // distanza sotto al primo blocco
-text(
-  "Move along the timeline to observe\nfood waste over the years",
-  textX,
-  secondY
-);
+    const secondY = textY + 48; // distanza sotto al primo blocco
+    text(
+        "Move along the timeline to observe\nfood waste over the years",
+        textX,
+        secondY
+    );
 
     
     // Pallini sovrapposti per min e max
