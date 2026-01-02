@@ -29,7 +29,7 @@ const CONFIG = {
         }
     },
     layout: {
-        headerHeight: 0,
+        headerHeight: 35,
         sliderHeight: 100,
         margin: {
             horizontal: 300,
@@ -249,7 +249,7 @@ function setupUI() {
     // Setup slider
     slider.width = width * 0.8;
     slider.x = (width - slider.width) / 2;
-    slider.y = CONFIG.layout.headerHeight + 60;
+    slider.y =  60;
     updateSliderThumb();
     matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
 }
@@ -301,6 +301,7 @@ function draw() {
     drawMatrix(currentYear);
     
     // Poi le label (così sono sopra il rettangolo di hover)
+    drawColumnLabels();
     drawRowLabels();
     
     // Disegna la legenda delle dimensioni
@@ -342,19 +343,22 @@ function drawSlider() {
     const boxX = slider.x + slider.width / 2 - boxW / 2;
     const boxY = slider.y +80; // sopra lo slider
      
-    // Scritta sopra il numero 
+    // Calcola il centro del box
+    const centerX = boxX + boxW / 2;
+
+    // Scritta "Selected Year:" centrata sopra il box
     noStroke();
     fill('#415E5A');
     textSize(14);
-    textAlign(CENTER, TOP);
+    textAlign(CENTER, CENTER);
     textFont(CONFIG.typography.fontFamily);
-    text("Selected Year:", boxX-30 + boxW / 2, boxY -20);
+    text("Selected Year:", centerX, boxY - 20);
     
-    // Numero anno centrato
+    // Numero anno centrato nel box
     textStyle(BOLD);
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
-    text(currentYear, boxX + boxW / 2, boxY + boxH / 2-10);
+    text(currentYear, centerX, boxY + boxH / 5);
     textStyle(NORMAL);
     
     // Etichette min e max
@@ -657,6 +661,44 @@ function updateHoveredCell() {
     // Aggiungi basketSpace anche qui
     hoveredCol = floor((mouseX - CONFIG.layout.margin.horizontal - basketSpace) / cellWidth);
     hoveredRow = floor((mouseY - matrixY) / cellHeight);
+}
+
+function drawColumnLabels() {
+    const basketSpace = 60; // Spazio per il cestino
+    const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
+    drawLabels(commodities, CONFIG.typography.columnSize, (i) => ({
+        x: CONFIG.layout.margin.horizontal + basketSpace + i * cellWidth,
+        y: matrixY - 15,
+        rotation: -PI / 4
+    }));
+}
+
+function drawLabels(items, fontSize, positionCallback, rotated = true) {
+    push();
+    textAlign(LEFT, CENTER);
+    textSize(fontSize);
+    textFont(CONFIG.typography.fontFamily);
+    fill(CONFIG.colors.text.primary);
+
+    for (let i = 0; i < items.length; i++) {
+        const pos = positionCallback(i);
+        let labelText = items[i];
+        
+        if (pos.truncate && labelText.length > pos.truncate) {
+            labelText = labelText.slice(0, pos.truncate) + '…';
+        }
+
+        if (rotated) {
+            push();
+            translate(pos.x, pos.y);
+            rotate(pos.rotation);
+            text(labelText, 0, 0);
+            pop();
+        } else {
+            text(labelText, pos.x, pos.y);
+        }
+    }
+    pop();
 }
 
 function drawRowLabels() {
@@ -986,7 +1028,7 @@ function drawTooltip() {
     const lineHeight = 18;
     const lineSpacing = 4;
     const tooltipW = maxWidth + padding * 2 + 4; // +4 per margine
-    const tooltipH = (lineHeight * 2) + lineSpacing + padding * 2;
+    const tooltipH = (lineHeight * 2)  + padding * 2;
     
     // Posizionamento
     let tooltipX = mouseX + TOOLTIP_CONFIG.offset;
