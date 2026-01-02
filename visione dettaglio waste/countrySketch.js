@@ -649,6 +649,10 @@ function checkGridHover(items, startY) {
   const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
   const centeringOffset = floor((width - gridTotalWidth) / 2);
 
+  const hoverReduction = 0.5;
+  const hoverWidth = cellWidth * hoverReduction;
+  const hoverHeight = cellHeight * hoverReduction;
+
   let currentX = centeringOffset;
   let currentY = startY;
 
@@ -675,11 +679,15 @@ function checkGridHover(items, startY) {
       currentY += cellHeight - 80 + CELL_SPACING;
     }
 
+    // Calcola l'area di hover ridotta centrata
+    const hoverX = currentX + (cellWidth - hoverWidth) / 2;
+    const hoverY = currentY + (cellHeight - hoverHeight) / 2;
+
     if (
-      mouseX >= currentX &&
-      mouseX <= currentX + cellWidth &&
-      mouseY >= currentY &&
-      mouseY <= currentY + cellHeight
+      mouseX >= hoverX &&
+      mouseX <= hoverX + hoverWidth &&
+      mouseY >= hoverY &&
+      mouseY <= hoverY + hoverHeight
     ) {
       return {
         commodity: commodity,
@@ -687,6 +695,10 @@ function checkGridHover(items, startY) {
         y: currentY,
         w: cellWidth,
         h: cellHeight,
+        hoverX: hoverX, // Aggiunto per debug
+        hoverY: hoverY, // Aggiunto per debug
+        hoverW: hoverWidth, // Aggiunto per debug
+        hoverH: hoverHeight, // Aggiunto per debug
         index: i,
         hasData: true
       };
