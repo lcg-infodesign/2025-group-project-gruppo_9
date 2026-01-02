@@ -18,7 +18,7 @@ const CONFIG = {
   layout: {
     legend: {
       width: 180, // Leggermente più larga
-      height: 500, // Più alta per ospitare l'immagine
+      height: 1000, // Più alta per ospitare l'immagine
       marginRight: 50, // Più vicina al centro
       padding: 15
     },
@@ -105,9 +105,32 @@ let GRID_START_Y = 180;
 // Colore riempimento commodity
 const LEVEL2_COLOR = ['#EDC69A'];
 
-// AGGIUNTO: Costante per altezza minima riempimento
+// Costante per altezza minima riempimento
 const MIN_FILL_HEIGHT = 10;
 const MIN_FILL_PERCENTAGE = 3;
+
+// Costante per food supply stages
+  const foodSupplyStage = [
+    "wholesupplychain",
+    "pre-harvest",
+    "harvest",
+    "post-harvest",
+    "farm",
+    "grading",
+    "packing",
+    "storage",
+    "transport",
+    "collector",
+    "trader",
+    "market",
+    "processing",
+    "wholesale",
+    "distributor",
+    "retail",
+    "export",
+    "foodservices",
+    "households"
+  ];
 
 // ===== Utility =====
 function normalizeFilename(name) {
@@ -191,44 +214,7 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
 
-  /*loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
-
-  const stages = [
-    "collector",
-    "distributor",
-    "export",
-    "farm",
-    "foodservices",
-    "grading",
-    "harvest",
-    "households",
-    "market",
-    "packing",
-    "post-harvest",
-    "pre-harvest",
-    "processing",
-    "retail",
-    "storage",
-    "trader",
-    "transport",
-    "wholesupplychain",
-    "wholesale"
-  ];*/
-
-  const causes = [
-    "conservation",
-    "diseasesandmolds",
-    "drying",
-    "environmentalfactors",
-    "harvestandmanagement",
-    "insects_parasitesandanimals",
-    "machinerydamage",
-    "market",
-    "processing",
-    "storage",
-    "transport",
-    "waste"
-  ];
+  //loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
 
   /*for (let s of stages) {
     for (let c of causes) {
@@ -1057,7 +1043,7 @@ function drawHoveredCell() {
 }
 
 function drawSizeLegend() {
-    const legendX = width - CONFIG.layout.margin.horizontal + 50;
+    const legendX = width - CONFIG.layout.legend.marginRight - CONFIG.layout.legend.width;
     const legendY = GRID_START_Y + 20;
     const legendWidth = CONFIG.layout.legend.width;
     const legendHeight = CONFIG.layout.legend.height;
@@ -1065,41 +1051,109 @@ function drawSizeLegend() {
     
     push();
     
-    // Sfondo della legenda
+    // Sfondo della legenda con il colore del CONFIG
     fill(CONFIG.colors.legend.background);
-    noStroke();
-    rect(legendX, legendY, legendWidth, legendHeight, 8);
-
-
-    // --- legenda DIDASCALIA ---
-    fill(CONFIG.colors.background);
+    stroke(CONFIG.colors.legend.border);
+    strokeWeight(2);
+    rect(legendX, legendY, legendWidth, legendHeight, 12);
+    
+    // Titolo della legenda (bianco per contrasto con sfondo scuro)
+    fill('#F5F3EE'); // Colore chiaro per contrasto
     noStroke();
     textFont(CONFIG.typography.fontFamily);
     textAlign(LEFT, TOP);
-
-    // 1) Testo principale 
     textSize(CONFIG.typography.legendSize);
-    textLeading(14); // interlinea
+    textStyle(BOLD);
+    
+    const titleX = legendX + 15 ;
+    let currentY = legendY + padding;
+    
+    text("FOOD SUPPLY\nSTAGES", titleX, currentY);
+    
+    currentY += 45;
+    
+    // Sottotitolo
+    textSize(CONFIG.typography.legendSize - 4);
+    textStyle(NORMAL);
+    fill('#F5F3EE');
+    textAlign(LEFT, TOP);
+    text("from production\nto consumption", titleX, currentY);
+    
+    currentY += 50;
 
-    const textX = legendX + padding;
-    const textY = legendY + padding;
-
-    text(
-        "Food supply stage",
-        textX,
-        textY
-    );
-
-    //fill("red");
-    strokeWeight(5);
-    stroke(CONFIG.colors.slider.thumb);
-    line(legendX + legendWidth -20 , textY + 30, legendX + legendWidth -20 , legendY + legendHeight - 20);
-
-    for(let i=0; i<19; i++){
-      let divario = 20 * i;
-      fill(CONFIG.colors.slider.thumb);
-      circle(legendX + legendWidth -20, textY + 30 + (divario), 10);
+    // Linea verticale centrale con colore chiaro
+    const lineX = legendX + 20;
+    const lineTopY = currentY;
+    const lineBottomY = legendY + legendHeight - padding - 30;
+    
+    stroke(CONFIG.colors.legend.circle); // Colore chiaro dei pallini
+    strokeWeight(2);
+    strokeCap(ROUND);
+    line(lineX, lineTopY, lineX, lineBottomY);
+    
+    // Calcola la spaziatura tra i punti
+    const totalItems = foodSupplyStage.length;
+    const availableHeight = lineBottomY - lineTopY;
+    const spacing = availableHeight / (totalItems - 1);
+    
+    // Punti e labels
+    for(let i = 0; i < totalItems; i++) {
+        const stage = foodSupplyStage[i];
+        const pointY = lineTopY + (i * spacing);
+        
+        // Punto con il colore dal CONFIG
+        push();
+        noStroke();
+        fill(CONFIG.colors.legend.circle); // Colore chiaro dei pallini
+        circle(lineX, pointY, 16);
+        
+        // Punto interno più piccolo per effetto "anello"
+        fill(CONFIG.colors.legend.background); // Stesso colore dello sfondo
+        circle(lineX, pointY, 8);
+        pop();
+        
+        // Testo della label (bianco per leggibilità)
+        push();
+        fill('#F5F3EE'); // Colore chiaro per contrasto
+        noStroke();
+        textSize(CONFIG.typography.legendSize - 3);
+        textFont(CONFIG.typography.fontFamily);
+        textStyle(NORMAL);
+        textAlign(LEFT, CENTER);
+        
+        // Formatta il testo
+        const formattedStage = stage
+            .replace(/-/g, ' ')
+            .replace(/\b\w/g, l => l.toUpperCase())
+            .replace(/WHOLESUPPLYCHAIN/i, 'Whole supply chain')
+            .replace(/FOODSERVICES/i, 'Food services');
+        
+        // Tronca se troppo lungo
+        const maxChars = 20;
+        const displayText = formattedStage.length > maxChars ? 
+            formattedStage.substring(0, maxChars - 3) + "..." : 
+            formattedStage;
+        
+        text(displayText, lineX + 15, pointY);
+        pop();
     }
+    
+    // Indicatori di direzione con stile elegante
+    push();
+    fill('#F5F3EE');
+    noStroke();
+    textSize(CONFIG.typography.legendSize - 3);
+    textAlign(LEFT, CENTER);
+    textStyle(BOLD);
+    
+    // Numero totale degli stages
+    push();
+    fill('#F5F3EE');
+    noStroke();
+    textSize(CONFIG.typography.legendSize - 3);
+    textAlign(CENTER, CENTER);
+    textStyle(NORMAL);
+    pop();
 
     pop();
 }
