@@ -8,13 +8,31 @@ const CONFIG = {
       text: '#16201f',
       wave: '#415E5A'
     },
-    overlay: '#415E5A'
+    overlay: '#415E5A',
+    legend: {
+      background: '#415E5A', // Colore di sfondo della legenda
+      border: '#415E5A',
+      circle: '#F5F3EE' // Colore dei pallini (stesso sfondo del sito)
+    }
+  },
+  layout: {
+    legend: {
+      width: 180, // Leggermente più larga
+      height: 500, // Più alta per ospitare l'immagine
+      marginRight: 50, // Più vicina al centro
+      padding: 15
+    },
+    margin: {
+      horizontal: 300,
+      vertical: 110
+    }
   },
   typography: {
     fontFamily: 'Roboto',
     titleFont: 'Roboto',
     sliderValueSize: 20,
     tooltipSize: 12,
+    legendSize: 18
   }
 };
 
@@ -62,26 +80,6 @@ let hoveredCellIndex = -1;
 
 // ===== IMMAGINI RIEMPIMENTO DINAMICO =====
 const fillImages = {};
-
-// Colori del rettangolo di riempimento
-const rect_colors = {
-  wholesupplychain: "#ff8a24ff",
-  farm: "#c4ff3aff",
-  foodservices: "#AABBcc",
-  wholesale: "#ff24b2ff",
-  trader: "#577e08ff",
-  transport: "#002d80ff",
-  storage: "#891414ff",
-  retail: "#533000ff",
-  processing: "#fff200ff",
-  preharvest: "#00fbffff",
-  postharvest: "#00ff26ff",
-  packing: "#9701dcff",
-  market: "#333333ff",
-  households: "#321341ff",
-  harvest: "#23102cff",
-  grading: "#f69bc7ff"
-}
 
 // Immagini
 const ASSETS_BASE = "../assets/img/";
@@ -505,6 +503,9 @@ function draw() {
     }
   }
 
+  // 6. Disegna legenda
+  drawSizeLegend();
+
   // 6. Disegna Tooltip 
   if (tooltipData && isHoveringCell) {
     drawTooltip();
@@ -534,9 +535,7 @@ function drawHeaderInfo() {
 }
 
 function drawTimeline() {
-  if (isHoveringSlider && hoveredYear) {
-    drawSliderWaveGraph();
-  }
+  drawSliderWaveGraph();
 
   fill(CONFIG.colors.slider.track);
   noStroke();
@@ -554,10 +553,6 @@ function drawTimeline() {
   const boxH = 50;
   const boxX = slider.x + slider.width / 2 - boxW / 2;
   const boxY = slider.y + 80;
-  stroke('#415E5A');
-  strokeWeight(2);
-  noFill();
-  rect(boxX, boxY, boxW, boxH, 10);
 
   fill('#415E5A');
   noStroke();
@@ -567,8 +562,10 @@ function drawTimeline() {
   text("Selected Year", boxX + boxW / 2, boxY - 20);
 
   textSize(CONFIG.typography.sliderValueSize);
+  textStyle(BOLD);
   textAlign(CENTER, CENTER);
-  text(selectedYear, boxX + boxW / 2, boxY + boxH / 2);
+  text(selectedYear, boxX + boxW / 2, boxY + boxH / 2 - 10);
+  textStyle(NORMAL);
 
   textSize(12);
   textAlign(LEFT);
@@ -582,11 +579,9 @@ function drawSliderDataPoints() {
 
   for (let year of years) {
     const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
-    const dataRatio = yearDataCounts[year];
-
-    const pointHeight = 3 + (dataRatio * 7);
-    const colorValue = map(dataRatio, 0, 1, 150, 255);
-    fill(colorValue, colorValue * 0.8, colorValue * 0.6);
+    const pointHeight = 6.5;
+    const colorValue = LEVEL2_COLOR;
+    fill(colorValue);
 
     ellipse(x, slider.y + 10, pointHeight);
   }
@@ -844,30 +839,10 @@ function drawTooltip() {
     const lossText = `Loss: ${nf(lossPercentage, 0, 1)}%`;
     text(lossText, ttX + pad, textY);
     textY += 24;
-    
-    // === Supply Chain Phase con quadratino colorato ===
-    const stageKey = supplyChainPhase.toLowerCase().replace(/[^a-z]/g, '');
-    const stageColor = rect_colors[stageKey] || '#EDC69A';
      
-    // Testo con margine per il quadratino
+    // Testo 
     let supplyText = `Supply chain phase: ${supplyChainPhase}`;
     text(supplyText, ttX + 20, textY);
-    push();
-    noStroke();
-    fill(stageColor);
-    rect(textWidth(supplyText)+ttX+28, textY+1, 12, 12, 2);
-    pop();
-    textY += 24;
-    
-    // === MODIFICA: Main Cause con quadratino (opzionale, se vuoi un colore per le cause) ===
-    // Per ora uso lo stesso colore della fase o un colore di default
-    push();
-    noStroke();
-    fill(stageColor); // Usa lo stesso colore della fase, oppure puoi definire una mappa di colori per le cause
-    pop();
-    
-    let cause = mainCauseOfWaste || "Data not available";
-    text(`Main cause: ${cause}`, ttX +  20, textY);
   } else {
     textSize(16);
     fill('#EDC69A');
@@ -979,22 +954,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   push();
   noStroke();
   
-  // Ottieni il colore in base alla food_supply_stage
-  let rectColor;
-  if (fullRow.supplyChainPhase) {
-    const stageKey = fullRow.supplyChainPhase.toLowerCase().replace(/[^a-z]/g, '');
-    rectColor = rect_colors[stageKey] || LEVEL2_COLOR;
-  } else {
-    rectColor = LEVEL2_COLOR;
-  }
-  
-  // Se rectColor è un array (LEVEL2_COLOR), usa i valori separati
-  if (Array.isArray(rectColor)) {
-    fill(rectColor[0]);
-  } else {
-    fill(rectColor);
-  }
-  
+  fill(LEVEL2_COLOR);
   rect(innerX + 4, fillY - 8, innerW - 10, fillH + 8);
   pop();
 
@@ -1082,6 +1042,54 @@ function drawHoveredCell() {
 
     currentX += cellWidth + CELL_SPACING;
   }
+}
+
+function drawSizeLegend() {
+    const legendX = width - CONFIG.layout.margin.horizontal + 50;
+    const legendY = GRID_START_Y + 20;
+    const legendWidth = CONFIG.layout.legend.width;
+    const legendHeight = CONFIG.layout.legend.height;
+    const padding = CONFIG.layout.legend.padding;
+    
+    push();
+    
+    // Sfondo della legenda
+    fill(CONFIG.colors.legend.background);
+    noStroke();
+    rect(legendX, legendY, legendWidth, legendHeight, 8);
+
+
+    // --- legenda DIDASCALIA ---
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+
+    // 1) Testo principale 
+    textSize(CONFIG.typography.legendSize);
+    textLeading(14); // interlinea
+
+    const textX = legendX + padding;
+    const textY = legendY + padding;
+
+    text(
+        "Food supply stage",
+        textX,
+        textY
+    );
+
+    //fill("red");
+    strokeWeight(5);
+    stroke(CONFIG.colors.slider.thumb);
+    line(legendX + legendWidth -20 , textY + 30, legendX + legendWidth -20 , legendY + legendHeight - 20);
+
+    for(let i=0; i<19; i++){
+      let divario = 20 * i;
+      fill(CONFIG.colors.slider.thumb);
+      circle(legendX + legendWidth -20, textY + 30 + (divario), 10);
+    }
+
+    pop();
 }
 
 // ===== RESIZE =====
