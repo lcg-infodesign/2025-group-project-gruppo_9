@@ -343,7 +343,7 @@ function drawSlider() {
     const boxX = slider.x + slider.width / 2 - boxW / 2;
     const boxY = slider.y +80; // sopra lo slider
      
-    // Scritta sopra il numero
+    // Scritta sopra il numero 
     noStroke();
     fill('#415E5A');
     textSize(14);
@@ -355,12 +355,8 @@ function drawSlider() {
     textStyle(BOLD);
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, CENTER);
-<<<<<<< Updated upstream
-    text(currentYear, boxX+50 + boxW / 2, boxY -14);
-=======
     text(currentYear, boxX + boxW / 2, boxY + boxH / 2-10);
     textStyle(NORMAL);
->>>>>>> Stashed changes
     
     // Etichette min e max
     textSize(12);
