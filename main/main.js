@@ -45,7 +45,7 @@ const CONFIG = {
         },
         legend: {
             width: 180, // Leggermente più larga
-            height: 260, // Più alta per ospitare l'immagine
+            height: 300, // Più alta per ospitare l'immagine
             marginRight: 50, // Più vicina al centro
             padding: 15
         }
@@ -305,7 +305,7 @@ function draw() {
     drawRowLabels();
     
     // Disegna la legenda delle dimensioni
-    drawSizeLegend();
+    drawLegends();
     
     if (isValidCell(hoveredRow, hoveredCol)) {
         drawTooltip();
@@ -384,6 +384,20 @@ function drawSliderWaveGraph() {
     const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
     const graphHeight = 30;
     const graphY = slider.y - graphHeight;
+
+    // Disegna linea che indica la parte più alta del grafico
+    push();
+    stroke(CONFIG.colors.slider.wave);
+    strokeWeight(1);
+    line(slider.x, graphY, slider.x + slider.width, graphY);
+    
+    // Etichetta "max data availability" a sinistra della linea
+    noStroke();
+    fill(CONFIG.colors.slider.wave);
+    textSize(10);
+    textAlign(LEFT, BOTTOM);
+    text("Max data\navailability", slider.x - 53, graphY + 12);
+    pop();
     
     push();
     noFill();
@@ -403,19 +417,13 @@ function drawSliderWaveGraph() {
         const y = graphY + graphHeight - (dataRatio * graphHeight);
 
         vertex(x, y);
-    }
-    endShape(CLOSE);
-    
-    // Punti sul grafico
-    for (let year of years) {
-        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
-        const dataRatio = yearDataCounts[year];
-        const y = graphY + graphHeight - (dataRatio * graphHeight);
-        
+        push();
         fill(CONFIG.colors.slider.wave);
         noStroke();
         ellipse(x, y, 6);
+        pop();
     }
+    endShape(CLOSE);
     
     pop();
 }
@@ -1073,9 +1081,76 @@ function drawTooltip() {
     pop();
 }
 
+function drawLegends(){
+    // Puoi aggiungere altre legende qui se necessario
+    drawInfoLegend();
+    drawSizeLegend();
+    drawSliderLegend();
+}
+
+function drawSliderLegend() {
+    const legendX = slider.x
+    const legendY = 15;
+    push();
+    fill(CONFIG.colors.legend.background);
+    noStroke();
+    
+    rect(legendX, legendY, 200, 70, 8);
+    pop();
+
+    // Testo della legenda
+    push();
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+    textSize(CONFIG.typography.legendSize +1);
+    textLeading(14); // interlinea
+    const textX = legendX + 15;
+    const textY = legendY + 15;
+    text(
+        "The graph above the timeline\nshows the amount of available\ndata, about food waste, by year.",
+        textX,
+        textY
+    );
+    pop();
+}
+
+function drawInfoLegend() {
+    const legendX = width - CONFIG.layout.margin.horizontal + 50;
+    const legendY = matrixY-20;
+    const legendWidth = CONFIG.layout.legend.width;
+    const legendHeight = 100;
+    const padding = CONFIG.layout.legend.padding;
+
+    push();
+    
+    // Sfondo della legenda
+    fill(CONFIG.colors.legend.background);
+    noStroke();
+    rect(legendX, legendY, legendWidth, legendHeight, 8);
+
+    // Testo della legenda
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+    textSize(CONFIG.typography.legendSize);
+    textLeading(14);
+    const textX = legendX + padding;
+    const textY = legendY + padding;
+    text(
+        "This graph displays food waste\nby commodity and country.\n\nThe states are sorted by data\navailability (highest to lowest).",
+        textX,
+        textY
+    );
+    pop();
+
+}
+
 function drawSizeLegend() {
     const legendX = width - CONFIG.layout.margin.horizontal + 50;
-    const legendY = matrixY + 20;
+    const legendY = matrixY + 100;
     const legendWidth = CONFIG.layout.legend.width;
     const legendHeight = CONFIG.layout.legend.height;
     const padding = CONFIG.layout.legend.padding;
@@ -1102,29 +1177,19 @@ function drawSizeLegend() {
     const textY = legendY + padding;
 
     text(
-        "The diameter of each circle\nrepresent the percentage\nof waste for that commodity.",
+        "Size reference:",
         textX,
         textY
     );
 
-    // 2) Testo secondario più piccolo
-    textSize(CONFIG.typography.legendSize - 2);
-    textLeading(13);
-
-    const secondY = textY + 48; // distanza sotto al primo blocco
-    text(
-        "Move along the timeline to observe\nfood waste over the years",
-        textX,
-        secondY
-    );
-
     
     // Pallini sovrapposti per min e max
-    const circleY = legendY + 130;
+    const circleY = textY + 48;
     const smallCircleX = legendX + 20;
     const bigCircleX = legendX + legendWidth - 30;
     
     // Disegna i pallini senza contorno, con trasparenza e che si intersecano
+    push();
     fill(CONFIG.colors.legend.circle + 'CC');
     noStroke();
     
@@ -1169,14 +1234,43 @@ function drawSizeLegend() {
     
     // Testo per max
     text(`${wastePercentages.max.toFixed(1)}%`, bigCircleX - overlap/2, circleY);
+    pop();
+
+    // 2) Testo secondario più piccolo
+    push();
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+
+    textSize(CONFIG.typography.legendSize - 2);
+    textLeading(13);
+
+    let secondY = circleY + 48; // distanza sotto al primo blocco
+    text(
+        "* Percentage are not comparable as\nthey are calculated per commodity,\nnot globally.",
+        textX,
+        secondY
+    );
+
+    secondY += 50;
+    textSize(CONFIG.typography.legendSize);
+    text(
+            "Each commodity is represented\nby a glyph.\nThe size is determined by\nthe percentage of waste.",
+            textX,
+            secondY
+        );
+
+    pop();
     
     // Linea separatrice
-    stroke(CONFIG.colors.background + '99');
+    stroke(CONFIG.colors.background);
     strokeWeight(1);
-    line(legendX + padding, legendY + 180, legendX + legendWidth - padding, legendY + 180);
+    secondY += 70;
+    line(legendX + padding, secondY, legendX + legendWidth - padding, secondY);
     
     // Immagine outline e testo "dato non presente"
-    const outlineImageY = legendY + 215;
+    const outlineImageY = secondY + 35;
     
     if (legendImage && legendImage.width > 0) {
         const outlineImg = legendImage;
@@ -1190,7 +1284,7 @@ function drawSizeLegend() {
             const w = outlineImg.width * scale;
             const h = outlineImg.height * scale;
             
-            image(outlineImg, legendX + 50, outlineImageY, w, h);
+            image(outlineImg, legendX + 40, outlineImageY, w, h);
             pop();
             smooth();
         }
@@ -1202,7 +1296,7 @@ function drawSizeLegend() {
     textSize(CONFIG.typography.legendSize);
     textFont(CONFIG.typography.fontFamily);
     textAlign(LEFT, CENTER);
-    text("Data not found", legendX + 70, outlineImageY+3);
+    text("No available data", legendX + 60, outlineImageY+3);
     
     pop();
 }
