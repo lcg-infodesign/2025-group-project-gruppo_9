@@ -34,6 +34,8 @@ const introSec = document.getElementById('introSection');
 const typeTextEl = document.getElementById('typewriterText');
 const timelineSec = document.getElementById('timelineSection');
 const outroSec = document.getElementById('outroSection');
+const tutorialSec = document.getElementById('tutorialSection');
+const tutorialBtn = document.getElementById('tutorialBtn');
 const graphicsCol = document.getElementById('graphicsCol');
 const textCol = document.getElementById('textCol');
 const mainLine = document.getElementById('mainLine');
@@ -50,7 +52,6 @@ function unForceHideHint() { if (!outroReached) { body.classList.remove('force-h
 setTimeout(() => { showHint(); }, 2000);
 
 // --- GESTORE DEGLI INPUT (Mouse + Tastiera) ---
-
 function handleProgress() {
   if (isMoving) return;
 
@@ -80,7 +81,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // --- NAVIGAZIONE SEZIONI ---
-
 function goToIntro() {
   isMoving = true;
   introStarted = true;
@@ -107,7 +107,7 @@ function goToTimeline() {
   setTimeout(() => {
     timelineSec.classList.add('active');
     isMoving = false;
-    addNextStep(); // Primo punto
+    addNextStep();
   }, 1000);
 }
 
@@ -115,6 +115,7 @@ function goToOutro() {
   isMoving = true;
   outroReached = true;
   forceHideHint();
+
   outroSec.classList.add('section-visible');
   body.style.overflowY = 'auto';
   outroSec.scrollIntoView({ behavior: 'smooth' });
@@ -122,15 +123,20 @@ function goToOutro() {
   setTimeout(() => {
     outroSec.classList.add('visible');
     isMoving = false;
+
+    // MOSTRA SEMPRE IL BOTTONE TUTORIAL
+    if (tutorialBtn) {
+      tutorialBtn.style.display = 'inline-block';
+    }
   }, 1000);
 }
 
 // --- LOGICA SCRITTURA (TYPEWRITER) ---
-
 function startTypewriter() {
   skipBtn.classList.add('visible');
   let i = 0;
   typeTextEl.innerHTML = "";
+
   function type() {
     if (i < introTextRaw.length) {
       let char = introTextRaw.charAt(i);
@@ -151,7 +157,6 @@ function finishIntro() {
 }
 
 // --- LOGICA TIMELINE ---
-
 function addNextStep(instant = false) {
   if (timelineStep >= timelineData.length) return;
 
@@ -164,7 +169,6 @@ function addNextStep(instant = false) {
   dot.classList.add('dot');
   graphicsCol.appendChild(dot);
 
-  // Posizionamento basato sull'altezza del blocco nel DOM
   const topPos = block.offsetTop;
   dot.style.top = (topPos + 5) + 'px';
 
@@ -179,14 +183,12 @@ function addNextStep(instant = false) {
       block.classList.add('show');
       dot.classList.add('show');
       mainLine.style.height = (topPos + 5) + 'px';
-      // Ogni nuova frase viene centrata nello schermo
       block.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 50);
   }
 
   timelineStep++;
 
-  // Gestione visibilità Skip e Fine Timeline
   if (timelineStep < timelineData.length) {
     skipBtn.classList.add('visible');
   } else {
@@ -197,23 +199,19 @@ function addNextStep(instant = false) {
 }
 
 // --- TASTO SKIP ---
-
 skipBtn.addEventListener('click', (e) => {
   e.stopPropagation();
-  
+
   if (introStarted && !introFinished) {
-    // Skip della macchina da scrivere
     clearTimeout(typeTimer);
     typeTextEl.innerHTML = introTextRaw.replace(/\n/g, '<br>');
     finishIntro();
   } 
   else if (timelineActive && !timelineFinished) {
-    // Skip totale della timeline
     while (timelineStep < timelineData.length) {
       addNextStep(true);
     }
-    
-    // Sblocca lo scroll e punta all'ultimo elemento
+
     body.style.overflowY = 'auto';
     const lastBlock = textCol.lastElementChild;
     if (lastBlock) {
@@ -221,9 +219,27 @@ skipBtn.addEventListener('click', (e) => {
         lastBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 50);
     }
-    
+
     timelineFinished = true;
     skipBtn.classList.remove('visible');
     unForceHideHint();
   }
 });
+
+// --- BOTTONE TUTORIAL ---
+if (tutorialBtn && tutorialSec) {
+  tutorialBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    tutorialSec.style.display = 'flex';
+    tutorialSec.scrollIntoView({ behavior: 'smooth' });
+
+    setTimeout(() => {
+      tutorialSec.classList.add('visible');
+    }, 300);
+  });
+}
+
+
+
+

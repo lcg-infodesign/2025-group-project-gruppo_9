@@ -390,6 +390,52 @@ h1 {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
+/* TUTORIAL */
+#tutorialSection {
+  display: none;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#tutorialSection.visible {
+  display: flex;
+  opacity: 1;
+}
+
+
+.tutorial-container {
+  max-width: 800px;
+}
+
+.tutorial-container h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.tutorial-steps {
+  list-style: none;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+.tutorial-steps li {
+  margin-bottom: 20px;
+}
+
+.explore-data-btn.secondary {
+  background-color: transparent;
+  color: #f0f0f0;
+  border: 2px solid #f0f0f0;
+  margin-top: 30px;
+}
+
+
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
     h1 { font-size: 8rem; }
