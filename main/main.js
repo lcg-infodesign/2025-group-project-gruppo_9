@@ -417,13 +417,21 @@ function drawSliderWaveGraph() {
         const y = graphY + graphHeight - (dataRatio * graphHeight);
 
         vertex(x, y);
+    }
+    endShape(CLOSE);
+
+    for (let i = 0; i < years.length; i++) {
+        const year = years[i];
+        const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+        const dataRatio = yearDataCounts[year];
+        const y = graphY + graphHeight - (dataRatio * graphHeight);
+
         push();
         fill(CONFIG.colors.slider.wave);
         noStroke();
         ellipse(x, y, 6);
         pop();
     }
-    endShape(CLOSE);
     
     pop();
 }
