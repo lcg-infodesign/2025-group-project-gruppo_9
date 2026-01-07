@@ -135,7 +135,7 @@ https://docs.google.com/spreadsheets/d/1NZWyZyY00FchE5g2odcLVNRNYcSqfYXh57ye09JH
 
 ### Per la prototipazione e il brainstorming
 
-- **Excel e Google Fogli**, pper sistemare in parte e rendere utilizzabile il dataset
+- **Excel e Google Fogli**, per sistemare in parte e rendere utilizzabile il dataset
 - **Google Document**, per raccogliere idee di base del concept, opinioni, scambi, testi
 - **Miro**, per organizzare visivamente il lavoro, definire una moodboard e uno stile
 - **Figma**, per creare il mockup definitivo ed effettuare delle prove di visualizzazione 
