@@ -514,3 +514,51 @@ li {
     .names p { display: block; font-weight: bold; margin-top: 10px; }
     .emails p { display: block; margin-bottom: 10px; }
 }
+
+/* --- TEAM CARD: ROLE & SKILLS --- */
+
+.member-role {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin: 6px 0 14px;
+    color: var(--accent);
+}
+
+/* Skills container */
+.member-skills {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--bg);
+
+    /* allineamento più ordinato */
+    text-align: left;
+    max-width: 200px;
+}
+
+.team-member {
+    gap: 6px;
+}
+
+/* singola skill */
+.member-skills li {
+    margin-bottom: 6px;
+    padding-left: 10px;
+    position: relative;
+}
+
+/* micro-dot minimale a sinistra */
+.member-skills li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--bg);
+    opacity: 0.6;
+}
