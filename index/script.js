@@ -231,15 +231,63 @@ if (tutorialBtn && tutorialSec) {
   tutorialBtn.addEventListener('click', (e) => {
     e.stopPropagation();
 
-    tutorialSec.style.display = 'flex';
+    tutorialSec.classList.add('section-visible');
     tutorialSec.scrollIntoView({ behavior: 'smooth' });
 
     setTimeout(() => {
       tutorialSec.classList.add('visible');
+      showStep(0); // mostra subito il primo step
     }, 300);
   });
 }
 
+// --- TUTORIAL STEP-BY-STEP ---
+const tutorialSteps = document.querySelectorAll('.tutorial-steps li');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const finishTutorialBtn = document.getElementById('finishTutorialBtn');
+let currentStep = 0;
+
+function showStep(index) {
+  const header = document.querySelector('.tutorial-header');
+  const progressFill = document.querySelector('.tutorial-progress-fill');
+  const currentStepEl = document.getElementById('currentStep');
+  const totalStepsEl = document.getElementById('totalSteps');
+
+  // sicurezza: se la progress bar non esiste, non crasha
+  if (totalStepsEl && currentStepEl) {
+    totalStepsEl.textContent = tutorialSteps.length;
+    currentStepEl.textContent = index + 1;
+  }
+
+  if (index === 0 && header) {
+    header.classList.add('hidden');
+  }
+
+  tutorialSteps.forEach((step, i) => {
+    step.classList.toggle('active-step', i === index);
+  });
+
+  if (progressFill) {
+    const progressPercent = ((index + 1) / tutorialSteps.length) * 100;
+    progressFill.style.width = progressPercent + '%';
+  }
+
+  if (index === tutorialSteps.length - 1) {
+  finishTutorialBtn.style.display = 'inline-block';
+} else {
+  finishTutorialBtn.style.display = 'none';
+}
 
 
+// Avanza cliccando ovunque nel tutorial
+tutorialSec.addEventListener('click', (e) => {
+  // Se clicco il bottone finale → lascia fare il link
+  if (e.target.closest('#finishTutorialBtn')) return;
 
+  // Se sono all’ultimo step → NON avanzare
+  if (currentStep >= tutorialSteps.length - 1) return;
+
+  currentStep++;
+  showStep(currentStep);
+});
+}
