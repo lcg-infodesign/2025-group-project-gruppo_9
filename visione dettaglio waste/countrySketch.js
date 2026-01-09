@@ -91,7 +91,7 @@ let commodityOutline = {};
 
 // Parametri visivi griglia
 const INTERNAL_NOMINAL_W = 90;
-const INTERNAL_NOMINAL_H = 112;
+const INTERNAL_NOMINAL_H = 132;
 const TARGET_CELL_WIDTH = 300;
 const CELL_SPACING = 5;
 const SIDE_MARGIN = 100;
@@ -106,7 +106,7 @@ let GRID_START_Y = 180;
 const LEVEL2_COLOR = ['#EDC69A'];
 
 // Costante per altezza minima riempimento
-const MIN_FILL_HEIGHT = 10;
+const MIN_FILL_HEIGHT = 5;
 const MIN_FILL_PERCENTAGE = 3;
 
 // Costante per food supply stages
@@ -916,7 +916,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   // === FILL LEVEL ===
   let pct = isNaN(rowData.loss) ? 0 : Math.max(0, Math.min(100, rowData.loss));
 
-  // MODIFICA 1: Altezza minima garantita
+  //  Altezza minima garantita
   if (pct > 0 && pct < MIN_FILL_PERCENTAGE) {
     pct = MIN_FILL_PERCENTAGE;
   }
@@ -925,11 +925,11 @@ function drawComplexCell(commodityName, x, y, w, h) {
   const nominalH = INTERNAL_NOMINAL_H + 50;
   const scaleInner = Math.min(1, baseW / (nominalW + 12), baseH / (nominalH + 12));
   const innerW = Math.round(nominalW * scaleInner);
-  const innerH = Math.round(nominalH * scaleInner) + 5;
+  const innerH = Math.round(nominalH * scaleInner);
   const innerX = baseX + Math.round((baseW - innerW) / 2);
-  const innerBottomY = baseY + baseH - Math.round(innerH * 0.08) + 5;
+  const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+12;
 
-  // MODIFICA 2: Altezza con map()
+  // Altezza con map()
   const fillH = map(pct, 0, 100, MIN_FILL_HEIGHT, innerH);
   let fillY = innerBottomY - fillH - 18;
 
@@ -978,13 +978,13 @@ function drawComplexCell(commodityName, x, y, w, h) {
   }*/
 
   // Parte superiore curva (bianca)
-  const hoverResult = checkGridHover(commodities, GRID_START_Y);
+  /*const hoverResult = checkGridHover(commodities, GRID_START_Y);
   if (!(hoverResult && hoverResult.commodity === commodityName)) {
     push();
     fill(CONFIG.colors.slider.thumb);
     ellipse(innerX + 70, fillY - 37, 170, 80);
     pop();
-  }
+  }*/
 
   // === BASKET OVERLAY ===
   if (img_over && img_over.width)
