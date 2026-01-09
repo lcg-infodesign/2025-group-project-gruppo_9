@@ -25,6 +25,8 @@ let timelineActive = false;
 let timelineFinished = false; 
 let outroReached = false;   
 let isMoving = false; 
+let blinkingSegment = null;
+
 
 // --- SELEZIONE ELEMENTI DOM ---
 const body = document.body;
@@ -53,6 +55,7 @@ setTimeout(() => { showHint(); }, 2000);
 
 // --- GESTORE DEGLI INPUT (Mouse + Tastiera) ---
 function handleProgress() {
+  removeBlinkingSegment();
   if (isMoving) return;
 
   if (!introStarted) {
@@ -171,6 +174,12 @@ function addNextStep(instant = false) {
 
   const topPos = block.offsetTop;
   dot.style.top = (topPos + 5) + 'px';
+ 
+  // segmento lampeggiante sotto il punto
+if (timelineStep < timelineData.length - 1) {
+  createBlinkingSegment(topPos);
+}
+
 
   if (instant) {
     block.style.transition = 'none';
@@ -189,13 +198,33 @@ function addNextStep(instant = false) {
 
   timelineStep++;
 
-  if (timelineStep < timelineData.length) {
-    skipBtn.classList.add('visible');
-  } else {
-    timelineFinished = true;
-    skipBtn.classList.remove('visible');
-    unForceHideHint();
+if (timelineStep < timelineData.length) {
+  skipBtn.classList.add('visible');
+} else {
+  timelineFinished = true;
+  skipBtn.classList.remove('visible');
+  removeBlinkingSegment();
+  unForceHideHint();
+}
+}
+
+// --- linea lampeggiante ---
+function removeBlinkingSegment() {
+  if (blinkingSegment) {
+    blinkingSegment.remove();
+    blinkingSegment = null;
   }
+}
+
+function createBlinkingSegment(topPos) {
+  removeBlinkingSegment();
+
+  const segment = document.createElement('div');
+  segment.className = 'line-segment blinking';
+  segment.style.top = (topPos + 25) + 'px'; // subito sotto il punto
+
+  graphicsCol.appendChild(segment);
+  blinkingSegment = segment;
 }
 
 // --- TASTO SKIP ---
@@ -291,3 +320,27 @@ tutorialSec.addEventListener('click', (e) => {
   showStep(currentStep);
 });
 }
+
+document.addEventListener('keydown', (e) => {
+  // tutorial non visibile → non fare nulla
+  if (!tutorialSec || !tutorialSec.classList.contains('visible')) return;
+
+  // evita che la barra spaziatrice scrolli la pagina
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+  }
+
+  // AVANTI → spazio o freccia destra
+  if ((e.key === ' ' || e.key === 'ArrowRight') &&
+      currentStep < tutorialSteps.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+
+  // INDIETRO → freccia sinistra
+  if (e.key === 'ArrowLeft' && currentStep > 0) {
+    currentStep--;
+    showStep(currentStep);
+  }
+});
+

@@ -338,6 +338,31 @@ h1 {
   color: #fff; 
 }
 
+@keyframes lineBlink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.vertical-line.blinking {
+  animation: lineBlink 1s ease-in-out infinite;
+}
+
+.line-segment {
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  background-color: #fff;
+  transform: translateX(-50%);
+  opacity: 1;
+  z-index: 1;
+}
+
+.line-segment.blinking {
+  animation: lineBlink 1s ease-in-out infinite;
+}
+
 /* OUTRO */
 #outroSection {
   display: none; /* MODIFICATO */
