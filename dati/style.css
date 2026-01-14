@@ -38,8 +38,9 @@ p, ul, li {
 }
 
 p.underline {
-    text-decoration: underline;
-    font-weight: 750;
+    text-decoration:underline;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 ul {

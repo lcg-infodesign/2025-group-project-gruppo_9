@@ -25,6 +25,8 @@ let timelineActive = false;
 let timelineFinished = false; 
 let outroReached = false;   
 let isMoving = false; 
+let blinkingSegment = null;
+
 
 // --- SELEZIONE ELEMENTI DOM ---
 const body = document.body;
@@ -53,6 +55,7 @@ setTimeout(() => { showHint(); }, 2000);
 
 // --- GESTORE DEGLI INPUT (Mouse + Tastiera) ---
 function handleProgress() {
+  removeBlinkingSegment();
   if (isMoving) return;
 
   if (!introStarted) {
@@ -171,6 +174,12 @@ function addNextStep(instant = false) {
 
   const topPos = block.offsetTop;
   dot.style.top = (topPos + 5) + 'px';
+ 
+  // segmento lampeggiante sotto il punto
+if (timelineStep < timelineData.length - 1) {
+  createBlinkingSegment(topPos);
+}
+
 
   if (instant) {
     block.style.transition = 'none';
@@ -189,13 +198,33 @@ function addNextStep(instant = false) {
 
   timelineStep++;
 
-  if (timelineStep < timelineData.length) {
-    skipBtn.classList.add('visible');
-  } else {
-    timelineFinished = true;
-    skipBtn.classList.remove('visible');
-    unForceHideHint();
+if (timelineStep < timelineData.length) {
+  skipBtn.classList.add('visible');
+} else {
+  timelineFinished = true;
+  skipBtn.classList.remove('visible');
+  removeBlinkingSegment();
+  unForceHideHint();
+}
+}
+
+// --- linea lampeggiante ---
+function removeBlinkingSegment() {
+  if (blinkingSegment) {
+    blinkingSegment.remove();
+    blinkingSegment = null;
   }
+}
+
+function createBlinkingSegment(topPos) {
+  removeBlinkingSegment();
+
+  const segment = document.createElement('div');
+  segment.className = 'line-segment blinking';
+  segment.style.top = (topPos + 25) + 'px'; // subito sotto il punto
+
+  graphicsCol.appendChild(segment);
+  blinkingSegment = segment;
 }
 
 // --- TASTO SKIP ---
@@ -231,15 +260,87 @@ if (tutorialBtn && tutorialSec) {
   tutorialBtn.addEventListener('click', (e) => {
     e.stopPropagation();
 
-    tutorialSec.style.display = 'flex';
+    tutorialSec.classList.add('section-visible');
     tutorialSec.scrollIntoView({ behavior: 'smooth' });
 
     setTimeout(() => {
       tutorialSec.classList.add('visible');
+      showStep(0); // mostra subito il primo step
     }, 300);
   });
 }
 
+// --- TUTORIAL STEP-BY-STEP ---
+const tutorialSteps = document.querySelectorAll('.tutorial-steps li');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const finishTutorialBtn = document.getElementById('finishTutorialBtn');
+let currentStep = 0;
+
+function showStep(index) {
+  const header = document.querySelector('.tutorial-header');
+  const progressFill = document.querySelector('.tutorial-progress-fill');
+  const currentStepEl = document.getElementById('currentStep');
+  const totalStepsEl = document.getElementById('totalSteps');
+
+  // sicurezza: se la progress bar non esiste, non crasha
+  if (totalStepsEl && currentStepEl) {
+    totalStepsEl.textContent = tutorialSteps.length;
+    currentStepEl.textContent = index + 1;
+  }
+
+  if (index === 0 && header) {
+    header.classList.add('hidden');
+  }
+
+  tutorialSteps.forEach((step, i) => {
+    step.classList.toggle('active-step', i === index);
+  });
+
+  if (progressFill) {
+    const progressPercent = ((index + 1) / tutorialSteps.length) * 100;
+    progressFill.style.width = progressPercent + '%';
+  }
+
+  if (index === tutorialSteps.length - 1) {
+  finishTutorialBtn.style.display = 'inline-block';
+} else {
+  finishTutorialBtn.style.display = 'none';
+}
 
 
+// Avanza cliccando ovunque nel tutorial
+tutorialSec.addEventListener('click', (e) => {
+  // Se clicco il bottone finale → lascia fare il link
+  if (e.target.closest('#finishTutorialBtn')) return;
+
+  // Se sono all’ultimo step → NON avanzare
+  if (currentStep >= tutorialSteps.length - 1) return;
+
+  currentStep++;
+  showStep(currentStep);
+});
+}
+
+document.addEventListener('keydown', (e) => {
+  // tutorial non visibile → non fare nulla
+  if (!tutorialSec || !tutorialSec.classList.contains('visible')) return;
+
+  // evita che la barra spaziatrice scrolli la pagina
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+  }
+
+  // AVANTI → spazio o freccia destra
+  if ((e.key === ' ' || e.key === 'ArrowRight') &&
+      currentStep < tutorialSteps.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+
+  // INDIETRO → freccia sinistra
+  if (e.key === 'ArrowLeft' && currentStep > 0) {
+    currentStep--;
+    showStep(currentStep);
+  }
+});
 

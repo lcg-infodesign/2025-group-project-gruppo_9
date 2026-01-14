@@ -19,7 +19,6 @@
   <div id="interactionHint"></div>
 
   <header id="heroSection">
-    
     <div class="hero-titles-container">
       <h1>
         <span class="line-food">FOOD</span>
@@ -30,11 +29,9 @@
 
     <div class="illustration-wrapper">
       <img src="assets/img/basket.svg" alt="Bin" class="bin-animated">
-      
       <img src="assets/img/sacco.png" alt="Bag Left" class="sacco sacco-left">
       <img src="assets/img/sacco.png" alt="Bag Right" class="sacco sacco-right">
     </div>
-
   </header>
 
   <section id="introSection">
@@ -62,34 +59,76 @@
       <a href="main/main.html" class="explore-data-btn">Explore the data</a> 
     </div>
     
-    <button 
-  id="tutorialBtn" 
-  class="explore-data-btn secondary" 
-  style="display:none"
->
-  Do you know how the website works?
-</button>
+    <button id="tutorialBtn" class="explore-data-btn secondary" style="display:none">
+      Do you know how the website works?
+    </button>
   </section>
- 
+
+  <!-- TUTORIAL -->
   <section id="tutorialSection">
-  <div class="tutorial-container">
-    <h2>How this website works:</h2>
+    <div class="tutorial-container">
 
-    <ul class="tutorial-steps">
-      <li><strong>Use the timeline</strong> to move back and forward in years</li>
-      <li><strong>Look and analyze</strong> how different countries are affected</li>
-      <li><strong>Zoom in</strong> each country to explore the data</li>
-      <li><strong>Interact</strong> with charts and elements</li>
-    </ul>
+      <div class="tutorial-hint">Click anywhere to continue</div>
 
-    <a href="main/main.html" class="explore-data-btn">
-      Start exploring the data
-    </a>
+      <!-- HEADER: compare solo all'inizio -->
+      <div class="tutorial-header">
+        <h2>How to navigate this website</h2>
+        <p>
+          This quick guide helps you understand how to use the main interactive features of the
+          <strong>Food Waste: The Whole Story</strong> site.
+        </p>
+      </div>
+
+      <div class="tutorial-progress">
+  <span class="tutorial-step-label">
+    STEP <span id="currentStep">1</span> / <span id="totalSteps">6</span>
+  </span>
+  <div class="tutorial-progress-line">
+    <div class="tutorial-progress-fill"></div>
   </div>
-</section>
+</div>
 
 
-  
+      <ul class="tutorial-steps">
+        <li class="active-step">
+          At the beginning there is an <strong>INTRO</strong>, you will see the title and a short introduction to the project.
+          <br><em>Note:</em> here you can click <strong>"Explore the data"</strong> to enter the main data visualization area.
+          <img src="assets/img/tutorial/homepage.png" alt="Homepage screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          Once inside the <strong>DATAPAGE</strong>, the first element you’ll interact with is the TIMELINE.
+          <br><em>How to Use:</em> you can drag the timeline left or right, handle or click on the years to select them.
+          <img src="assets/img/tutorial/timeline.png" alt="Timeline screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          The core of the site is the <strong>DATA MATRIX</strong>. Each cell represents a combination of <em>country</em>, <em>commodity</em>, and <em>year</em>.
+          <br><em>Note:</em> percentages represent only the main cause.
+          <img src="assets/img/tutorial/matrice.png" alt="Matrix screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Select a country:</strong> click on a row to open its detail page.
+          <img src="assets/img/tutorial/row.png" alt="Row screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Understand charts:</strong> each commodity shows causes and value chain stages.
+          <img src="assets/img/tutorial/paginadidettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Interact:</strong> hover and click on elements to reveal more details.
+          <img src="assets/img/tutorial/hover-tooltip.png" alt="Hover screenshot" class="tutorial-screenshot">
+        </li>
+      </ul>
+
+      <a href="main/main.html" class="explore-data-btn" id="finishTutorialBtn" style="display:none">
+        Start exploring the data
+      </a>
+    </div>
+  </section>
 
   <script src="index/script.js"></script>
 </body>
