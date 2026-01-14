@@ -714,9 +714,12 @@ function drawLabels(items, fontSize, positionCallback, rotated = true) {
 function drawRowLabels() {
     const matrixY = CONFIG.layout.headerHeight + CONFIG.layout.sliderHeight + CONFIG.layout.margin.vertical;
     
-
+    // Prima disegna tutti i testi dei paesi
+    push();
+    textAlign(LEFT, CENTER);
+    textSize(CONFIG.typography.rowSize);
+    textFont(CONFIG.typography.fontFamily);
     
-    // Poi disegna i nomi dei paesi (sopra il rettangolo)
     for (let i = 0; i < sortedCountries.length; i++) {
         const x = CONFIG.layout.margin.horizontal - 80;
         const y = matrixY + i * cellHeight + cellHeight / 2;
@@ -727,12 +730,7 @@ function drawRowLabels() {
             labelText = labelText.slice(0, CONFIG.typography.maxCountryChars) + '…';
         }
         
-        push();
-        textAlign(LEFT, CENTER);
-        textSize(CONFIG.typography.rowSize);
-        textFont(CONFIG.typography.fontFamily);
-        
-        // Se questa riga è in hover, usa testo bianco
+        // Imposta il colore in base all'hover
         if (hoveredRowData && hoveredRowData.row === i) {
             fill(CONFIG.colors.text.hover);
         } else {
@@ -740,47 +738,48 @@ function drawRowLabels() {
         }
         
         text(labelText, x, y);
-        pop();
     }
+    pop();
     
-    // Disegna i cestini
+    // Disegna i cestini in un blocco separato
     if (basketImage && basketImage.width > 0) {
+        push();
+        imageMode(CENTER);
+        
         for (let i = 0; i < sortedCountries.length; i++) {
-            const x = CONFIG.layout.margin.horizontal - 115; // Posizione a destra delle label
+            const x = CONFIG.layout.margin.horizontal - 115;
             const y = matrixY + i * cellHeight + cellHeight / 2;
-            const targetWidth = 50; // Larghezza target
-            const targetHeight = 50; // Altezza target
+            const targetWidth = 50;
+            const targetHeight = 50;
             
-            push();
-            imageMode(CENTER);
-            
-            // Calcola le proporzioni corrette mantenendo l'aspect ratio originale
+            // Calcola le proporzioni
             const imgRatio = basketImage.width / basketImage.height;
             const targetRatio = targetWidth / targetHeight;
             
             let displayWidth, displayHeight;
             
             if (imgRatio > targetRatio) {
-                // L'immagine è più larga che alta rispetto al target
                 displayWidth = targetWidth;
                 displayHeight = targetWidth / imgRatio;
             } else {
-                // L'immagine è più alta che larga rispetto al target
                 displayHeight = targetHeight;
                 displayWidth = targetHeight * imgRatio;
             }
             
-            // Se questa riga è in hover, applica un filtro bianco al cestino
+            // Imposta il tint se necessario
             if (hoveredRowData && hoveredRowData.row === i) {
                 tint(CONFIG.colors.text.hover);
+            } else {
+                noTint();
             }
             
             image(basketImage, x, y, displayWidth, displayHeight);
-            noTint(); // Rimuovi il tint per le prossime immagini
-            pop();
         }
+        
+        // Assicurati di rimuovere il tint alla fine
+        noTint();
+        pop();
     }
-
 }
 
 // Disegna il rettangolo di hover per la riga
@@ -863,72 +862,64 @@ function drawCellDot(row, col, x, y, exists, country, year) {
     if (img && img.width > 0) {
         push();
         imageMode(CENTER);
-        noSmooth(); // Disabilita interpolazione per immagini nitide
+        noSmooth();
         
         const naturalWidth = img.width;
         const naturalHeight = img.height;
         
-        // Calcola la dimensione target in base alla percentuale
-        let targetSize;
         if (exists) {
             const percentage = getWastePercentage(country, commodities[col], year);
-            targetSize = calculateImageSize(percentage)* 1.2; // Scala leggermente più grande per immagini piene
+            const targetSize = calculateImageSize(percentage) * 1.2;
             let scale;
+            
             if (naturalWidth > naturalHeight) {
-                // Immagine più larga che alta
                 scale = targetSize / naturalWidth;
             } else {
-                // Immagine più alta che larga
                 scale = targetSize / naturalHeight;
             }
             
-            // Arrotonda per evitare scaling frazionario
             scale = Math.round(scale * 100) / 100;
-            
             let w = naturalWidth * scale;
             let h = naturalHeight * scale;
 
-            // Se la riga è in hover, usa cerchio bianco
+            // Disegna cerchio di sfondo
             if (hoveredRowData && hoveredRowData.row === row) {
-                fill(CONFIG.colors.row.circle); // Bianco con trasparenza
+                fill(CONFIG.colors.row.circle);
             } else {
-                fill(CONFIG.colors.legend.background+'cc'); // Colore normale
+                fill(CONFIG.colors.legend.background + 'cc');
             }
             
-            circle(x + cellWidth/2, y + cellHeight/2, max(w, h)); // Cerchio di sfondo
-            w = w * 0.7; // Riduci leggermente per adattarsi al cerchio
+            circle(x + cellWidth/2, y + cellHeight/2, max(w, h));
+            
+            // Riduci dimensioni per adattarsi al cerchio
+            w = w * 0.7;
             h = h * 0.7;
             image(img, x + cellWidth/2, y + cellHeight/2, w, h);
+            
+            pop(); // IMPORTANTE: pop qui per l'esistente
             return;
         } 
         
-
-        // Per le immagini outline usa la dimensione originale del tuo codice precedente
+        // Per immagini outline
         const targetMax = min(cellWidth * 0.7, cellHeight * 0.7);
-        
-        // Calcola scala che mantenga proporzioni
         let scale = 1;
+        
         if (naturalWidth > targetMax || naturalHeight > targetMax) {
-            // Riduci
             const widthScale = targetMax / naturalWidth;
             const heightScale = targetMax / naturalHeight;
             scale = min(widthScale, heightScale);
         }
         
-        // Arrotonda a 2 decimali per evitare scaling frazionario
         scale = Math.round(scale * 100) / 100;
-        
         const w = naturalWidth * scale;
         const h = naturalHeight * scale;
         
-        // Disegna l'immagine outline con la vecchia logica
         image(img, x + cellWidth/2, y + cellHeight/2, w, h);
-        pop();
-        smooth();
-        return; // Esci dalla funzione dopo aver disegnato l'outline
+        pop(); // IMPORTANTE: pop anche qui
+        return;
         
     } else {
-        // Fallback (solo per debug)
+        // Fallback
         if (exists) {
             fill(100, 200, 100);
             noStroke();
@@ -941,6 +932,7 @@ function drawCellDot(row, col, x, y, exists, country, year) {
         }
     }
 }
+
 
 function mouseClicked() {
     if (isValidCell(hoveredRow, hoveredCol)) {
