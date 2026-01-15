@@ -10,20 +10,21 @@ const CONFIG = {
     },
     overlay: '#415E5A',
     legend: {
-      background: '#415E5A', // Colore di sfondo della legenda
-      border: '#415E5A',
-      circle: '#F5F3EE' // Colore dei pallini (stesso sfondo del sito)
+      background: '#D4D7D2', // Colore di sfondo della legenda
+      border: '#D4D7D2',
+      circle: '#415E5A' // Colore dei pallini (stesso sfondo del sito)
     }
   },
   layout: {
+    gridWidth: 1200, // <--- AGGIUNTO: Modifica questo valore per stringere/allargare la zona griglia
     legend: {
-      width: 180, // Leggermente più larga
-      height: 1000, // Più alta per ospitare l'immagine
-      marginRight: 50, // Più vicina al centro
+      width: 175, // Leggermente più larga
+      height: 1350, // Più alta per ospitare l'immagine
+      marginRight: 150, // Più vicina al centro
       padding: 15
     },
     margin: {
-      horizontal: 300,
+      horizontal: 100, // <--- MODIFICATO: Questo è il punto di ancoraggio a sinistra
       vertical: 110
     }
   },
@@ -89,12 +90,12 @@ let img_basket = null;
 let commodityImgs = {};
 let commodityOutline = {};
 
-// Parametri visivi griglia
+// Parametri visivi griglia (MODIFICATI PER ESSERE FISSI)
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 132;
-const TARGET_CELL_WIDTH = 300;
-const CELL_SPACING = 5;
-const SIDE_MARGIN = 100;
+const TARGET_CELL_WIDTH = 260; // <--- FISSO: La cella non cambia più dimensione in base allo schermo
+const CELL_SPACING = 0;      // Spaziatura tra le celle
+const SIDE_MARGIN =0;
 
 // Layout Verticale
 const TOP_TEXT_MARGIN = 20;
@@ -103,11 +104,11 @@ let SLIDER_Y_POS = 80;
 let GRID_START_Y = 180;
 
 // Colore riempimento commodity
-const LEVEL2_COLOR = ['#EDC69A'];
+const LEVEL2_COLOR = ['#4F5257'];
 
 // Costante per altezza minima riempimento
-const MIN_FILL_HEIGHT = 5;
-const MIN_FILL_PERCENTAGE = 3;
+const MIN_FILL_HEIGHT = 0;
+const MIN_FILL_PERCENTAGE = 0;
 
 // Costante per food supply stages
   const foodSupplyStage = [
@@ -626,46 +627,33 @@ function drawSliderWaveGraph() {
   }
 }
 
+// MODIFICATO: Funzione per calcolare quante colonne stanno nella larghezza definita
+function getDynamicColumns() {
+  return max(1, floor(CONFIG.layout.gridWidth / (TARGET_CELL_WIDTH + CELL_SPACING)));
+}
+
 function checkGridHover(items, startY) {
-  const availableW = width - (SIDE_MARGIN * 2);
-  const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
-  const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
+  const dynamicCols = getDynamicColumns();
+  const cellWidth = TARGET_CELL_WIDTH;
   const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
 
-  const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
-  const centeringOffset = floor((width - gridTotalWidth) / 2);
+  const startX = CONFIG.layout.margin.horizontal;
 
   const hoverReduction = 0.5;
   const hoverWidth = cellWidth * hoverReduction;
   const hoverHeight = cellHeight * hoverReduction;
 
-  let currentX = centeringOffset;
+  let currentX = startX;
   let currentY = startY;
 
   for (let i = 0; i < items.length; i++) {
     const commodity = items[i];
 
-    const rowData = data.find(d =>
-      d.country === selectedCountry &&
-      d.year === selectedYear &&
-      d.commodity === commodity
-    );
-
-    if (!rowData) {
-      if (i > 0 && i % COLUMNS === 0) {
-        currentX = centeringOffset;
-        currentY += cellHeight - 80 + CELL_SPACING;
-      }
-      currentX += cellWidth + CELL_SPACING;
-      continue;
+    if (i > 0 && i % dynamicCols === 0) {
+      currentX = startX;
+      currentY += cellHeight - 20 + CELL_SPACING;
     }
 
-    if (i > 0 && i % COLUMNS === 0) {
-      currentX = centeringOffset;
-      currentY += cellHeight - 80 + CELL_SPACING;
-    }
-
-    // Calcola l'area di hover ridotta centrata
     const hoverX = currentX + (cellWidth - hoverWidth) / 2;
     const hoverY = currentY + (cellHeight - hoverHeight) / 2;
 
@@ -681,10 +669,6 @@ function checkGridHover(items, startY) {
         y: currentY,
         w: cellWidth,
         h: cellHeight,
-        hoverX: hoverX, 
-        hoverY: hoverY, 
-        hoverW: hoverWidth, 
-        hoverH: hoverHeight, 
         index: i,
         hasData: true
       };
@@ -696,32 +680,26 @@ function checkGridHover(items, startY) {
   return null;
 }
 
-const COLUMNS = 4;
-
 function drawFlexGrid(items, startY) {
-  const availableW = width - (SIDE_MARGIN * 2);
-  const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
-  const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
+  const dynamicCols = getDynamicColumns();
+  const cellWidth = TARGET_CELL_WIDTH;
   const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
 
-  const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
-  const centeringOffset = floor((width - gridTotalWidth) / 2);
+  const startX = CONFIG.layout.margin.horizontal;
 
-  let currentX = centeringOffset;
+  let currentX = startX;
   let currentY = startY;
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
 
-    if (i > 0 && i % COLUMNS === 0) {
-      currentX = centeringOffset;
-      currentY += cellHeight - 80 + CELL_SPACING;
+    if (i > 0 && i % dynamicCols === 0) {
+      currentX = startX;
+      currentY += cellHeight - 20 + CELL_SPACING;
     }
 
     if (i === hoveredCellIndex && isHoveringCell) {
-      push();
-      drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
-      pop();
+      // Viene disegnata dopo sopra l'overlay
     } else {
       drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
     }
@@ -768,7 +746,8 @@ function drawTooltip() {
   const pad = TOOLTIP_CONFIG.pad;
   const offset = TOOLTIP_CONFIG.offset;
 
-  const column = index % COLUMNS;
+  const dynamicCols = getDynamicColumns();
+  const column = index % dynamicCols;
 
   let ttX;
 
@@ -782,7 +761,7 @@ function drawTooltip() {
     if (!canFitRight) {
       ttX = leftX;
     }
-  } else if (column === COLUMNS - 1) {
+  } else if (column === dynamicCols - 1) {
     ttX = leftX;
     if (!canFitLeft) {
       ttX = rightX;
@@ -857,7 +836,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   strokeWeight(0);
   rect(x, y, w, h, 8);
 
-  const pb = 30;
+  const pb = 13;
   const availW = w - pb * 4;
   const availH = h - pb * 4;
 
@@ -892,8 +871,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
     const iconImg = commodityOutline[norm] || null;
 
     if (iconImg && iconImg.width) {
-      const maxIconW = Math.round(w * 0.36);
-      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height) * 0.8;
+      const maxIconW = Math.round(w * 0.5);
+      const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.35) / iconImg.height) * 0.8;
       const iw = Math.round(iconImg.width * iconScale);
       const ih = Math.round(iconImg.height * iconScale);
       imageMode(CENTER);
@@ -994,8 +973,8 @@ function drawComplexCell(commodityName, x, y, w, h) {
   const norm = normalizeFilename(commodityName);
   const iconImg = commodityImgs[norm] || null;
   if (iconImg && iconImg.width) {
-    const maxIconW = Math.round(w * 0.36);
-    const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.28) / iconImg.height) * 0.8;
+    const maxIconW = Math.round(w * 0.5);
+    const iconScale = Math.min(maxIconW / iconImg.width, (h * 0.35) / iconImg.height) * 0.8;
     const iw = Math.round(iconImg.width * iconScale);
     const ih = Math.round(iconImg.height * iconScale);
     imageMode(CENTER);
@@ -1015,22 +994,21 @@ function drawComplexCell(commodityName, x, y, w, h) {
 }
 
 function drawHoveredCell() {
-  const availableW = width - (SIDE_MARGIN * 2);
-  const totalSpacing = (COLUMNS - 1) * CELL_SPACING;
-  const cellWidth = floor((availableW - totalSpacing) / COLUMNS);
+  const dynamicCols = getDynamicColumns();
+  const cellWidth = TARGET_CELL_WIDTH;
   const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
-  const gridTotalWidth = (cellWidth * COLUMNS) + totalSpacing;
-  const centeringOffset = floor((width - gridTotalWidth) / 2);
+  
+  const startX = CONFIG.layout.margin.horizontal;
 
-  let currentX = centeringOffset;
+  let currentX = startX;
   let currentY = GRID_START_Y;
 
   for (let i = 0; i < commodities.length; i++) {
     const commodity = commodities[i];
 
-    if (i > 0 && i % COLUMNS === 0) {
-      currentX = centeringOffset;
-      currentY += cellHeight - 80 + CELL_SPACING;
+    if (i > 0 && i % dynamicCols === 0) {
+      currentX = startX;
+      currentY += cellHeight - 20 + CELL_SPACING;
     }
 
     if (i === hoveredCellIndex) {
