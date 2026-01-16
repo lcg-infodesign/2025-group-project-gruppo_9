@@ -1077,116 +1077,381 @@ function drawSliderLegend() {
 function drawSizeLegend() {
     const legendX = width - CONFIG.layout.legend.marginRight - CONFIG.layout.legend.width;
     const legendY = GRID_START_Y + 20;
-    const legendWidth = CONFIG.layout.legend.width;
-    const legendHeight = CONFIG.layout.legend.height;
     const padding = CONFIG.layout.legend.padding;
+    
+    // 1. PRIMA CALCOLA L'ALTEZZA NECESSARIA
+    const totalStages = foodSupplyStage.length;
+    
+    // Parametri layout
+    const maxIconsPerRow = 3;
+    const iconSize = 22;
+    const iconSpacingY = 30;
+    const stageLabelHeight = 40;
+    
+    // Raccogli commodity per stage
+    const stageCommodities = {};
+    foodSupplyStage.forEach(stage => {
+        stageCommodities[stage] = [];
+    });
+    
+    // Popola con dati reali
+    for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+        if (row.country === selectedCountry && row.year === selectedYear && row.loss) {
+            const fullRow = getFullDataRow(selectedCountry, selectedYear, row.commodity);
+            if (fullRow && fullRow.supplyChainPhase) {
+                const stage = fullRow.supplyChainPhase.toLowerCase().replace(/\s+/g, '');
+                if (stageCommodities[stage] && !stageCommodities[stage].includes(row.commodity)) {
+                    stageCommodities[stage].push(row.commodity);
+                }
+            }
+        }
+    }
+    
+    // Calcola altezza totale necessaria
+    let totalHeightNeeded = 0;
+    const stageHeights = {};
+    
+    foodSupplyStage.forEach(stage => {
+        const commoditiesList = stageCommodities[stage] || [];
+        const commodityCount = commoditiesList.length;
+        
+        let stageHeight = stageLabelHeight;
+        if (commodityCount > 0) {
+            const iconRows = Math.ceil(commodityCount / maxIconsPerRow);
+            stageHeight += iconRows * iconSpacingY;
+        }
+        
+        stageHeights[stage] = stageHeight;
+        totalHeightNeeded += stageHeight;
+    });
+    
+    // Aggiungi padding superiore e inferiore, titolo, ecc.
+    const titleAreaHeight = 100; // Titolo + spazio
+    const bottomAreaHeight = 30; // Spazio in basso
+    const calculatedHeight = titleAreaHeight + totalHeightNeeded + bottomAreaHeight;
+    
+    // Usa l'altezza calcolata invece di quella fissa
+    const legendHeight = min(calculatedHeight, height - legendY - 50); // Non oltre l'altezza del canvas
+    const legendWidth = CONFIG.layout.legend.width + 40;
+    
+    // Calcola lineBottomY in base all'altezza calcolata
+    const lineX = legendX + 30;
+    const lineTopY = legendY + titleAreaHeight - 20;
+    const lineBottomY = legendY + legendHeight - bottomAreaHeight;
     
     push();
     
-    // Sfondo della legenda con il colore del CONFIG
+    // Sfondo della legenda
     fill(CONFIG.colors.legend.background);
     stroke(CONFIG.colors.legend.border);
     strokeWeight(2);
     rect(legendX, legendY, legendWidth, legendHeight, 12);
     
-    // Titolo della legenda (bianco per contrasto con sfondo scuro)
-    fill('#F5F3EE'); // Colore chiaro per contrasto
+    // Titolo
+    fill('#415E5A');
     noStroke();
     textFont(CONFIG.typography.fontFamily);
     textAlign(LEFT, TOP);
     textSize(CONFIG.typography.legendSize);
     textStyle(BOLD);
     
-    const titleX = legendX + 15 ;
+    const titleX = legendX + 15;
     let currentY = legendY + padding;
     
-    text("FOOD SUPPLY\nSTAGES", titleX, currentY);
+    text("FOOD SUPPLY STAGES", titleX, currentY);
     
-    currentY += 45;
-    
-    // Sottotitolo
-    textSize(CONFIG.typography.legendSize - 4);
+    currentY += 25;
+    textSize(CONFIG.typography.legendSize - 2);
     textStyle(NORMAL);
-    fill('#F5F3EE');
-    textAlign(LEFT, TOP);
-    text("from production\nto consumption", titleX, currentY);
+    text('from production\nto consumption', titleX, currentY);
     
-    currentY += 50;
+    currentY += 40;
 
-    // Linea verticale centrale con colore chiaro
-    const lineX = legendX + 20;
-    const lineTopY = currentY;
-    const lineBottomY = legendY + legendHeight - padding - 30;
-    
-    stroke(CONFIG.colors.legend.circle); // Colore chiaro dei pallini
+    // Linea verticale - SOLO FINO ALL'ULTIMO STAGE
+    stroke('#415E5A');
     strokeWeight(2);
     strokeCap(ROUND);
-    line(lineX, lineTopY, lineX, lineBottomY);
     
-    // Calcola la spaziatura tra i punti
-    const totalItems = foodSupplyStage.length;
-    const availableHeight = lineBottomY - lineTopY;
-    const spacing = availableHeight / (totalItems - 1);
+    // Calcola l'ultima Y effettiva
+    let lastStageY = lineTopY;
+    let actualLastY = lineTopY;
     
-    // Punti e labels
-    for(let i = 0; i < totalItems; i++) {
+    for(let i = 0; i < totalStages; i++) {
         const stage = foodSupplyStage[i];
-        const pointY = lineTopY + (i * spacing);
+        const baseStageHeight = stageHeights[stage];
+        // Non scaliamo più, usiamo altezza reale
+        lastStageY += baseStageHeight;
+        if (i === totalStages - 1) {
+            actualLastY = lastStageY;
+        }
+    }
+    // Variabili per memorizzare icone da disegnare DOPO (per tooltip sopra)
+    const iconsToDraw = [];
+    
+    // DISEGNA TUTTI GLI STAGES IN ORDINE
+    let currentStageY = lineTopY + 20;
+
+    // Disegna linea solo fino all'ultimo stage
+    const actualLineBottomY = min(actualLastY, lineBottomY);
+    line(lineX, currentStageY, lineX, actualLineBottomY);
+    
+    
+    for(let i = 0; i < totalStages; i++) {
+        const stage = foodSupplyStage[i];
+        const commoditiesList = stageCommodities[stage] || [];
+        const commodityCount = commoditiesList.length;
         
-        // Punto con il colore dal CONFIG
+        const baseStageHeight = stageHeights[stage];
+        const pointY = currentStageY;
+        
+        // PUNTO DELLO STAGE (sempre disegnato)
         push();
         noStroke();
-        fill(CONFIG.colors.legend.circle); // Colore chiaro dei pallini
+        
+        if (commodityCount > 0) {
+            fill('#415E5A');
+        } else {
+            fill('#415E5A');
+            stroke('#415E5A');
+            strokeWeight(1);
+        }
+        
         circle(lineX, pointY, 16);
         
-        // Punto interno più piccolo per effetto "anello"
-        fill(CONFIG.colors.legend.background); // Stesso colore dello sfondo
+        fill(CONFIG.colors.legend.background);
+        if (commodityCount === 0) {
+            strokeWeight(0);
+        }
         circle(lineX, pointY, 8);
         pop();
         
-        // Testo della label (bianco per leggibilità)
+        // NOME DELLO STAGE
         push();
-        fill('#F5F3EE'); // Colore chiaro per contrasto
+        fill('#415E5A');
         noStroke();
         textSize(CONFIG.typography.legendSize - 3);
         textFont(CONFIG.typography.fontFamily);
-        textStyle(NORMAL);
+        textStyle(BOLD);
         textAlign(LEFT, CENTER);
         
-        // Formatta il testo
-        const formattedStage = stage
-            .replace(/-/g, ' ')
-            .replace(/\b\w/g, l => l.toUpperCase())
-            .replace(/WHOLESUPPLYCHAIN/i, 'Whole supply chain')
-            .replace(/FOODSERVICES/i, 'Food services');
+        const formattedStage = getFormattedStageName(stage);
+        text(formattedStage, lineX + 20, pointY);
+        pop();
         
-        // Tronca se troppo lungo
-        const maxChars = 20;
-        const displayText = formattedStage.length > maxChars ? 
-            formattedStage.substring(0, maxChars - 3) + "..." : 
-            formattedStage;
+        // RACCOGLI LE COMMODITY PER DISEGNARLE DOPO
+        if (commodityCount > 0) {
+            const iconRows = Math.ceil(commodityCount / maxIconsPerRow);
+            const iconsStartY = pointY + 25;
+            
+            for (let row = 0; row < iconRows; row++) {
+                const rowY = iconsStartY + (row * iconSpacingY);
+                const iconsInThisRow = Math.min(maxIconsPerRow, commodityCount - (row * maxIconsPerRow));
+                
+                for (let iconIndex = 0; iconIndex < iconsInThisRow; iconIndex++) {
+                    const globalIndex = (row * maxIconsPerRow) + iconIndex;
+                    const commodityName = commoditiesList[globalIndex];
+                    const norm = normalizeFilename(commodityName);
+                    const iconImg = commodityImgs[norm];
+                    
+                    const rowStartX = lineX + 40;
+                    const iconX = rowStartX + (iconIndex * (iconSize + 8)) + (iconSize / 2);
+                    
+                    iconsToDraw.push({
+                        iconImg,
+                        commodityName,
+                        x: iconX,
+                        y: rowY,
+                        size: iconSize,
+                        norm
+                    });
+                }
+            }
+        }
         
-        text(displayText, lineX + 15, pointY);
+        currentStageY += baseStageHeight;
+    }
+    
+    // ORA DISEGNA TUTTE LE ICONE (dopo gli stages)
+    iconsToDraw.forEach(iconData => {
+        const { iconImg, commodityName, x, y, size, norm } = iconData;
+        
+        if (iconImg && iconImg.width > 0) {
+            push();
+            imageMode(CENTER);
+            
+            const scale = size / max(iconImg.width, iconImg.height);
+            const w = iconImg.width * scale;
+            const h = iconImg.height * scale;
+            
+            image(iconImg, x, y, w, h);
+            pop();
+        } else {
+            push();
+            fill('#415E5A');
+            noStroke();
+            circle(x, y, size * 0.7);
+            
+            fill(CONFIG.colors.legend.background);
+            textSize(10);
+            textAlign(CENTER, CENTER);
+            text(commodityName.charAt(0).toUpperCase(), x, y);
+            pop();
+        }
+    });
+    
+    // ORA DISEGNA I TOOLTIP (sopra le icone)
+    iconsToDraw.forEach(iconData => {
+        const { commodityName, x, y, size } = iconData;
+        
+        if (dist(mouseX, mouseY, x, y) < size / 2) {
+            drawIconTooltip(mouseX, mouseY, commodityName);
+        }
+    });
+    
+    // Se non ci sono dati
+    const totalCommodities = Object.values(stageCommodities).reduce((sum, arr) => sum + arr.length, 0);
+    if (totalCommodities === 0) {
+        push();
+        fill('#888888');
+        noStroke();
+        textSize(CONFIG.typography.legendSize - 3);
+        textAlign(CENTER, CENTER);
+        text("No data available\nfor selected filters", 
+             legendX + legendWidth / 2, 
+             legendY + legendHeight / 2);
         pop();
     }
     
-    // Indicatori di direzione con stile elegante
-    push();
-    fill('#F5F3EE');
-    noStroke();
-    textSize(CONFIG.typography.legendSize - 3);
-    textAlign(LEFT, CENTER);
-    textStyle(BOLD);
+    // Contatore in basso (solo se ci sono commodity)
+    if (totalCommodities > 0) {
+        push();
+        fill('#415E5A');
+        noStroke();
+        textSize(CONFIG.typography.legendSize - 4);
+        textAlign(LEFT, CENTER);
+        text(`${totalCommodities} commodities`, legendX + 15, legendY + legendHeight - 15);
+        pop();
+    }
     
-    // Numero totale degli stages
-    push();
-    fill('#F5F3EE');
-    noStroke();
-    textSize(CONFIG.typography.legendSize - 3);
-    textAlign(CENTER, CENTER);
-    textStyle(NORMAL);
     pop();
+}
 
+function drawIconTooltip(x, y, commodityName) {
+    push();
+    
+    // Calcola dimensioni
+    textSize(11);
+    const textW = textWidth(commodityName);
+    const tooltipW = textW + 20;
+    const tooltipH = 25;
+    
+    // Posiziona senza uscire dallo schermo
+    let tooltipX = x + 15;
+    let tooltipY = y + 15;
+    
+    if (tooltipX + tooltipW > width - 10) tooltipX = x - tooltipW - 15;
+    if (tooltipY + tooltipH > height - 10) tooltipY = y - tooltipH - 15;
+    
+    // Sfondo con bordo
+    fill('#415E5A');
+    stroke('#283618');
+    strokeWeight(1);
+    rect(tooltipX, tooltipY, tooltipW, tooltipH, 4);
+    
+    // Testo
+    fill('#FFFFFF');
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text(commodityName, tooltipX + tooltipW / 2, tooltipY + tooltipH / 2);
+    
+    pop();
+}
+
+function getFormattedStageName(stage) {
+    const stageNames = {
+        'wholesupplychain': 'WHOLE CHAIN',
+        'pre-harvest': 'PRE-HARVEST',
+        'harvest': 'HARVEST',
+        'post-harvest': 'POST-HARVEST',
+        'farm': 'FARM',
+        'grading': 'GRADING',
+        'packing': 'PACKING',
+        'storage': 'STORAGE',
+        'transport': 'TRANSPORT',
+        'collector': 'COLLECTOR',
+        'trader': 'TRADER',
+        'market': 'MARKET',
+        'processing': 'PROCESSING',
+        'wholesale': 'WHOLESALE',
+        'distributor': 'DISTRIBUTOR',
+        'retail': 'RETAIL',
+        'export': 'EXPORT',
+        'foodservices': 'FOOD SERVICES',
+        'households': 'HOUSEHOLDS'
+    };
+    
+    return stageNames[stage] || stage.toUpperCase();
+}
+
+// Funzione per formattare i nomi degli stages in modo leggibile
+function getFormattedStageName(stage) {
+    const stageNames = {
+        'wholesupplychain': 'WHOLE CHAIN',
+        'pre-harvest': 'PRE-HARVEST',
+        'harvest': 'HARVEST',
+        'post-harvest': 'POST-HARVEST',
+        'farm': 'FARM',
+        'grading': 'GRADING',
+        'packing': 'PACKING',
+        'storage': 'STORAGE',
+        'transport': 'TRANSPORT',
+        'collector': 'COLLECTOR',
+        'trader': 'TRADER',
+        'market': 'MARKET',
+        'processing': 'PROCESSING',
+        'wholesale': 'WHOLESALE',
+        'distributor': 'DISTRIBUTOR',
+        'retail': 'RETAIL',
+        'export': 'EXPORT',
+        'foodservices': 'FOOD SERVICES',
+        'households': 'HOUSEHOLDS'
+    };
+    
+    return stageNames[stage] || stage.toUpperCase();
+}
+
+// Funzione per tooltip delle icone
+function drawIconTooltip(x, y, commodityName) {
+    push();
+    
+    // Calcola dimensioni del tooltip in base al testo
+    const textWidth = commodityName.length * 7; // Stima approssimativa
+    const tooltipW = textWidth + 20;
+    const tooltipH = 25;
+    
+    // Posiziona il tooltip in modo che non esca dallo schermo
+    let tooltipX = x + 15;
+    let tooltipY = y + 15;
+    
+    if (tooltipX + tooltipW > width - 10) {
+        tooltipX = x - tooltipW - 15;
+    }
+    if (tooltipY + tooltipH > height - 10) {
+        tooltipY = y - tooltipH - 15;
+    }
+    
+    // Sfondo del tooltip
+    fill('#415E5A');
+    noStroke();
+    rect(tooltipX, tooltipY, tooltipW, tooltipH, 4);
+    
+    // Testo del tooltip
+    fill('#FFFFFF');
+    textSize(11);
+    textAlign(CENTER, CENTER);
+    text(commodityName, tooltipX + tooltipW / 2, tooltipY + tooltipH / 2);
+    
     pop();
 }
 
