@@ -731,11 +731,11 @@ function drawRowLabels() {
         }
         
         // Imposta il colore in base all'hover
-        if (hoveredRowData && hoveredRowData.row === i) {
-            fill(CONFIG.colors.text.hover);
-        } else {
+        //if (hoveredRowData && hoveredRowData.row === i) {
+        //    fill(CONFIG.colors.text.hover);
+        //} else {
             fill(CONFIG.colors.text.primary);
-        }
+        //}
         
         text(labelText, x, y);
     }
@@ -767,11 +767,11 @@ function drawRowLabels() {
             }
             
             // Imposta il tint se necessario
-            if (hoveredRowData && hoveredRowData.row === i) {
-                tint(CONFIG.colors.text.hover);
-            } else {
+            //if (hoveredRowData && hoveredRowData.row === i) {
+            //    tint(CONFIG.colors.text.hover);
+            //} else {
                 noTint();
-            }
+            //}
             
             image(basketImage, x, y, displayWidth, displayHeight);
         }
@@ -790,7 +790,8 @@ function drawRowHoverBackground() {
     push();
     
     // Rettangolo con punte arrotondate
-    fill(CONFIG.colors.row.hover + 'cc'); // 80 = 50% trasparenza
+    //fill(CONFIG.colors.row.hover + 'cc'); // 80 = 50% trasparenza
+    fill(CONFIG.colors.slider.wave + '30');
     noStroke();
     
     // Calcola le coordinate
@@ -852,11 +853,11 @@ function drawCellDot(row, col, x, y, exists, country, year) {
     if (exists) {
         img = commodityImages[col];
     } else {
-        if(hoveredRowData && hoveredRowData.row === row) {
-            img = commodityOutlineImagesHover[col]; 
-        } else {
+        //if(hoveredRowData && hoveredRowData.row === row) {
+        //    img = commodityOutlineImagesHover[col]; 
+        //} else {
             img = commodityOutlineImages[col]; 
-        }
+        //}
     }
     
     if (img && img.width > 0) {
@@ -883,11 +884,11 @@ function drawCellDot(row, col, x, y, exists, country, year) {
             let h = naturalHeight * scale;
 
             // Disegna cerchio di sfondo
-            if (hoveredRowData && hoveredRowData.row === row) {
-                fill(CONFIG.colors.row.circle);
-            } else {
+            //if (hoveredRowData && hoveredRowData.row === row) {
+            //    fill(CONFIG.colors.row.circle);
+            //} else {
                 fill(CONFIG.colors.legend.background + 'cc');
-            }
+            //}
             
             circle(x + cellWidth/2, y + cellHeight/2, max(w, h));
             
@@ -939,7 +940,7 @@ function mouseClicked() {
         const country = sortedCountries[hoveredRow];
         const exists = checkCombinationCached(country, commodities[hoveredCol], currentYear);
         
-        if (exists) {
+        if (country !== null) {
             clickedCol = hoveredCol;
             clickedRow = hoveredRow;
             
