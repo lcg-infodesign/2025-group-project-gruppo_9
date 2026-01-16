@@ -77,13 +77,6 @@ Il dataset aggrega dati provenienti da:
 
 Si tratta di un sistema in continuo aggiornamento, che riflette la **complessità del monitoraggio globale** dello spreco alimentare.
 
-### Metodi di raccolta FAO
-
-- **raccolta manuale** dalla letteratura scientifica;
-- **raccolta automatizzata** tramite FAO Data Lab (web scraping, NLP, estrazione di valori e metadati).
-
-Ogni osservazione conserva informazioni sulla **metodologia utilizzata**.
-
 ### I campi del dataset
 
 - m49 code  
