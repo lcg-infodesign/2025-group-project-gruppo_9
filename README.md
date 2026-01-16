@@ -1,46 +1,55 @@
 # Food Waste – The Whole Story
 
-## Il progetto
+## Overview
 
 Ogni giorno nel mondo si perdono tonnellate di cibo prima ancora di arrivare ai consumatori.  
 Ma ciò che spesso manca non è solo il cibo: **mancano le informazioni**. Mancano dati. Mancano interi pezzi della storia.
 
-Questo progetto nasce da una domanda semplice ma potente:
-
-> **Cosa ci raccontano i dati? E cosa ci raccontano quelli che non ci sono?**
-
-Il dataset FAO sul food loss è ricco di numeri, ma anche di vuoti. Analizzandolo, ci siamo accorti che per molti **Paesi, anni o commodity** esistono interi blocchi di informazioni mancanti.  
+Il dataset FAO sul *food loss and waste* è ricco di numeri, ma anche di **vuoti**: per molti Paesi, anni o commodity esistono interi blocchi di dati mancanti.    
 Queste assenze non sono solo un limite tecnico: **sono un messaggio**.
 
-Lo spreco non si misura solo nei prodotti agricoli che non arrivano nei piatti, ma anche nelle **informazioni perse lungo la filiera**.  
-Da questa intuizione nasce il concept del progetto: *dare voce a ciò che solitamente rimane invisibile*.
+Questo progetto nasce da una domanda semplice, ma potente:
 
-**Food Waste** non racconta solo *quanto* sprechiamo, ma anche **il rumore del vuoto** che rende questo fenomeno ancora più complesso da affrontare e da comprendere.  
-Dove il dato è presente, **la forma è piena**. Dove è assente o parziale, *resta solo una sagoma*.
+> **Cosa ci raccontano i dati? E cosa ci raccontano invece quelli che non ci sono?**
+
+**Food Waste - The Whole Story** è un progetto di *information design* che esplora lo spreco alimentare globale rendendo visibile non solo ciò che viene misurato, ma anche ciò che resta invisibile.  
+Le mancanze del dataset non sono trattate come un errore, ma come **parte integrante del fenomeno**.
 
 ---
 
 ## Obiettivi di conoscenza
 
-Il progetto guida l’utente a scoprire:
+Il progetto guida l’utente a comprendere:
 
-- **quanta perdita alimentare esiste nel mondo**;
-- **come varia tra Paesi e categorie alimentari**;
-- **in quale fase della filiera si spreca di più**;
-- quanto il fenomeno sia *frammentato e parzialmente invisibile*;
+- **l’entità della perdita alimentare a livello globale**;
+- **le differenze tra Paesi e categorie alimentari**;
+- **le fasi della filiera in cui si concentra maggiormente lo spreco**;
+- il carattere *frammentato e incompleto* delle informazioni disponibili;
 - che **la mancanza di dati è parte del problema**: senza misurazioni, non possono esistere politiche efficaci.
-
-L’utente è invitato a mettere in relazione **quantità di spreco** e **quantità di informazione disponibile**, sviluppando una consapevolezza critica.
 
 ---
 
-## Struttura e navigazione del sito
+## Concept e messaggio
 
-Dopo una breve introduzione, il sito si apre con una **matrice dinamica** che cambia in base all’anno selezionato e ai Paesi che contribuiscono maggiormente al dataset.
+> **Non possiamo risolvere ciò che non conosciamo.**  
+> **E ciò che manca nei dati è già parte del problema.**
+
+Il progetto si basa sull’idea che lo spreco non riguardi solo i prodotti agricoli lungo la filiera, ma anche le **informazioni perse nel processo di monitoraggio**.
+
+Dove il dato è presente, la visualizzazione è **piena e definita**.  
+Dove il dato manca o è parziale, rimangono **sagome, vuoti, assenze visive**.
+
+Le mancanze non ostacolano la comprensione: **la rendono più profonda**, evidenziando la complessità di un fenomeno globale difficile da misurare in modo uniforme.
+
+---
+
+## Struttura e interazione
+
+Dopo una breve introduzione, il sito presenta una **matrice interattiva** che varia in base all’anno selezionato e ai Paesi che contribuiscono maggiormente al dataset.
 
 - Ogni cella rappresenta l’incontro tra **Paese**, **commodity** e **anno**.
-- Le **forme piene** indicano dati presenti.
-- La **dimensione** è proporzionale alla percentuale di spreco per quella commodity.
+- Le **forme piene** indicano dati disponibili.
+- La **dimensione** delle forme è proporzionale alla percentuale di spreco.
 - Le **sagome** o gli **spazi vuoti** segnalano l’assenza di informazioni.
 
 Ogni vuoto diventa **un invito a cliccare** e a chiedersi *perché* quel dato non esiste.
@@ -50,34 +59,23 @@ Qui il racconto diventa più concreto:
 
 - i **cestini** visualizzano la perdita alimentare;
 - mostrano anche quando questa **non può essere misurata**;
-- è possibile osservare la **fase di spreco principale nella filiera** e, quando disponibile, anche la **causa principale dello spreco**.
+- è possibile osservare la **fase di spreco principale della filiera** e, quando disponibile, anche la **causa principale dello spreco**.
 
 Ogni interazione permette di scoprire non solo quanto cibo viene perso, ma anche **quanto ne resta invisibile**.
 
 ---
 
-## Il messaggio
+## Dataset e fonti
 
-> **Non possiamo risolvere ciò che non conosciamo.**  
-> **E ciò che manca nei dati è già parte del problema.**
+Il progetto utilizza il dataset della **FAO – Technical Platform on the Measurement and Reduction of Food Loss and Waste**, la principale piattaforma internazionale sul tema.
 
-Questo sito non vuole solo informare, ma **interrogare, provocare e rendere visibile la complessità** di un tema globale.  
-Le assenze **non ostacolano la comprensione**: *la rendono più profonda*.
+Il dataset aggrega dati provenienti da:
+- pubblicazioni scientifiche;
+- rapporti istituzionali;
+- banche dati globali (World Bank, IFPRI, FAOSTAT);
+- studi nazionali.
 
----
-
-## Dataset: informazioni e fonti
-
-Il dataset utilizzato proviene dalla **FAO – Technical Platform on the Measurement and Reduction of Food Loss and Waste**, la principale piattaforma internazionale dedicata allo studio delle perdite e degli sprechi alimentari lungo la filiera.
-
-La FAO aggrega informazioni provenienti da:
-
-- oltre **700 pubblicazioni scientifiche**;
-- **rapporti istituzionali**;
-- **banche dati globali** (World Bank, IFPRI, FAOSTAT);
-- **studi nazionali**.
-
-La versione più recente include oltre **29.000 punti dati** ed è un sistema *“vivente”*, costantemente aggiornato.
+Si tratta di un sistema in continuo aggiornamento, che riflette la **complessità del monitoraggio globale** dello spreco alimentare.
 
 ### Metodi di raccolta FAO
 
@@ -108,47 +106,36 @@ Ogni osservazione conserva informazioni sulla **metodologia utilizzata**.
 
 La presenza di dati mancanti o ripetuti **non indica una mancanza di impegno**, ma riflette la **complessità del monitoraggio globale** dello spreco alimentare.
 
-**Portale FAO:**  
+**FAO Portal:**  
 https://www.fao.org/home/en/
 
 ---
 
 ## Metodologia progettuale
 
-Per rendere il dataset esplorabile in modo chiaro e coerente, abbiamo:
+Per rendere il dataset esplorabile e coerente con gli obiettivi di conoscenza, il gruppo ha:
 
-- scelto di utilizzare i dati nelle colonne *country, commodity, year, loss percentage, food supply stage, cause of loss*;
+- selezionato le variabili più rilevanti (colonne *country, commodity, year, loss percentage, food supply stage, cause of loss*);
 - **standardizzato i nomi dei Paesi**;
-- **raggruppato le commodity in 16 categorie** più ampie;
+- **raggruppato le commodity in 16 categorie**;
 - **raggruppato le cause di perdita in 14 categorie**;
-- calcolato la **percentuale media di spreco** per lo stesso prodotto nello stesso Paese e anno;
-- identificato, per ogni prodotto, la **fase della catena di approvvigionamento con il maggiore spreco** e, ove possibile, la **causa principale**.
+- calcolato la **percentuale media di spreco** per prodotto, Paese e anno;
+- individuato **la fase della filiera con maggiore spreco** e, ove possibile, la **causa principale**.
 
-Il risultato è un dataset **più leggibile** e adatto a una **visualizzazione interattiva orientata alla comprensione**.
-
-**Link al dataset:**  
+**Dataset rielaborato:**  
 https://docs.google.com/spreadsheets/d/1NZWyZyY00FchE5g2odcLVNRNYcSqfYXh57ye09JH8Pk/edit?gid=1460783596#gid=1460783596
 
 ---
 
-## Strumenti utilizzati
+## Strumenti
 
-### Per la prototipazione e il brainstorming
-
-- **Excel e Google Fogli**, per sistemare in parte e rendere utilizzabile il dataset
-- **Google Document**, per raccogliere idee di base del concept, opinioni, scambi, testi
-- **Miro**, per organizzare visivamente il lavoro, definire una moodboard e uno stile
-- **Figma**, per creare il mockup definitivo ed effettuare delle prove di visualizzazione 
-
-### Per le illustrazioni
-
-- **Illustrator**  
-- **Procreate**
-
-### Per lo sviluppo web
-
-- **Visual Studio Code**, per la creazione del codice html, css, JavaScript e p5.js  
-- **GitHub**, per la condivisione del progetto e il lavoro simultaneo
+- **Excel / Google Sheets**, analisi e riorganizzazione del dataset
+- **Google Document**, raccolta idee di base per il concept, opinioni, scambi, testi
+- **Miro**, organizzazione concettuale e moodboard
+- **Figma**, prototipazione, mockup, prove di visualizzazione 
+- **Illustrator / Procreate**, illustrazioni
+- **Visual Studio Code**, sviluppo web, codice html, css, JavaScript e p5.js  
+- **GitHub**, versionamento e lavoro collaborativo
 
 ---
 
