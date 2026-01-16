@@ -6,6 +6,7 @@ const CONFIG = {
       track: '#415E5A',
       thumb: '#F5F3EE',
       text: '#16201f',
+      circle: '#EDC69A',
       wave: '#415E5A'
     },
     overlay: '#415E5A',
@@ -33,7 +34,8 @@ const CONFIG = {
     titleFont: 'Roboto',
     sliderValueSize: 20,
     tooltipSize: 12,
-    legendSize: 18
+    legendSize: 18,
+    legendSliderSize: 11
   }
 };
 
@@ -491,7 +493,7 @@ function draw() {
   }
 
   // 6. Disegna legenda
-  drawSizeLegend();
+  drawLegends();
 
   // 6. Disegna Tooltip 
   if (tooltipData && isHoveringCell) {
@@ -567,7 +569,7 @@ function drawSliderDataPoints() {
   for (let year of years) {
     const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
     const pointHeight = 6.5;
-    const colorValue = LEVEL2_COLOR;
+    const colorValue = CONFIG.colors.slider.circle;
     fill(colorValue);
 
     ellipse(x, slider.y + 10, pointHeight);
@@ -591,6 +593,24 @@ function drawSliderWaveGraph() {
   const years = Object.keys(allYearData).map(Number).sort((a, b) => a - b);
   const graphHeight = 30;
   const graphY = slider.y - graphHeight;
+
+  // Disegna linea che indica la parte più alta del grafico
+  push();
+  stroke(CONFIG.colors.slider.wave);
+  strokeWeight(1);
+  line(slider.x, graphY, slider.x + slider.width, graphY);
+  
+  // Etichetta "max data availability" a sinistra della linea
+  noStroke();
+  fill(CONFIG.colors.slider.wave);
+  textSize(10);
+  textAlign(LEFT, BOTTOM);
+  text("Max data\navailability", slider.x - 53, graphY + 12);
+  pop();
+  
+  push();
+  noFill();
+
 
   push();
   beginShape();
@@ -1018,6 +1038,40 @@ function drawHoveredCell() {
 
     currentX += cellWidth + CELL_SPACING;
   }
+}
+
+function drawLegends(){
+    // Puoi aggiungere altre legende qui se necessario
+    drawSizeLegend();
+    drawSliderLegend();
+}
+
+function drawSliderLegend() {
+    const legendX = slider.x
+    const legendY = 15;
+    push();
+    fill(CONFIG.colors.slider.track);
+    noStroke();
+    
+    rect(legendX, legendY, 200, 70, 8);
+    pop();
+
+    // Testo della legenda
+    push();
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+    textSize(CONFIG.typography.legendSliderSize +1);
+    textLeading(14); // interlinea
+    const textX = legendX + 15;
+    const textY = legendY + 15;
+    text(
+        "The graph above the timeline\nshows the amount of available\ndata, about food waste, by year.",
+        textX,
+        textY
+    );
+    pop();
 }
 
 function drawSizeLegend() {

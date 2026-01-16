@@ -14,6 +14,7 @@ const CONFIG = {
       titleFont: 'Roboto',
       sliderValueSize: 20,
       tooltipSize: 12,
+      legendSize: 11
   }
 };
 
