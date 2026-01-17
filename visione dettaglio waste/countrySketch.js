@@ -1164,7 +1164,7 @@ function drawSizeLegend() {
     currentY += 25;
     textSize(CONFIG.typography.legendSize - 2);
     textStyle(NORMAL);
-    text('from production\nto consumption', titleX, currentY);
+    text('From production\nto consumption', titleX, currentY);
     
     currentY += 40;
 
