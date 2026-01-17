@@ -231,14 +231,20 @@ li {
 
 /* Dimensioni e posizioni iniziali */
 .scroll-img.banana {
-    top:-500px;
+    top:-550px;
     max-width:350px;
 }
 
+.scroll-img.lisca {
+    top:-100px;
+    max-width:300px;
+}
+
 .scroll-img.sacco {
-    top:150px;
+    top:250px;
     max-width: 250px;
 }
+
 
 /* --- BLOCCO 2: SFONDO VERDE (Mela + Cestino) --- */
 .green-section {

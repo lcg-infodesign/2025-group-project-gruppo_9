@@ -842,7 +842,7 @@ function drawTooltip() {
     text(supplyText, ttX + 20, textY);
   } else {
     textSize(16);
-    fill('#EDC69A');
+    fill('rgba(0, 0, 0, 0)');
     text("Data not available for this year", ttX + pad, textY + 5);
   }
 
