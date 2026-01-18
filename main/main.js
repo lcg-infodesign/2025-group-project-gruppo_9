@@ -1344,3 +1344,16 @@ function updateYear() {
     
     redraw();
 }
+
+const helpBtn = document.getElementById('helpBtn');
+const tutorialOverlay = document.getElementById('tutorialOverlay');
+const closeTutorial = document.getElementById('closeTutorial');
+
+helpBtn.addEventListener('click', () => {
+  tutorialOverlay.classList.add('active');
+  resetTutorial(); // riporta allo step 1
+});
+
+closeTutorial.addEventListener('click', () => {
+  tutorialOverlay.classList.remove('active');
+});

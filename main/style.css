@@ -15,7 +15,7 @@ body {
 #headerBar {
     width: 100vw;
     height: 60px;
-    background: var(--bg);
+    background: 'var(--bg)';
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
     padding: 14px 32px;
     display: grid;
@@ -113,6 +113,33 @@ body {
 .nav-btn.btn-secondary:hover {
     border-color: var(--dark);
     background: transparent;
+}
+
+/* ===== TUTORIAL OVERLAY ===== */
+#tutorialOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(245, 243, 238, 0.96);
+  display: none;              /* 🔴 CHIUSO DI DEFAULT */
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+#tutorialOverlay.active {
+  display: flex;              /* 🟢 APERTO SOLO CON CLASSE */
+}
+
+#closeTutorial {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--dark);
+  z-index: 2100; /* SOPRA A TUTTO */
 }
 
 
