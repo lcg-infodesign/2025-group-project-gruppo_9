@@ -413,7 +413,7 @@ function mouseMoved() {
     if (hoverResult) {
       isHoveringCell = true;
       hoveredCellIndex = hoverResult.index;
-      cursor('pointer');
+      cursor('default');
       tooltipData = getFullDataRow(selectedCountry, selectedYear, hoverResult.commodity);
       if (tooltipData) {
         tooltipData.x = hoverResult.x;
