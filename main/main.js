@@ -1107,10 +1107,10 @@ function drawSliderLegend() {
     textAlign(LEFT, TOP);
     textSize(CONFIG.typography.legendSize +1);
     textLeading(14); // interlinea
-    const textX = legendX + 15;
-    const textY = legendY + 15;
+    const textX = legendX + 10;
+    const textY = legendY + 16;
     text(
-        "The graph above the timeline\nshows the amount of available\ndata, about food waste, by year.",
+        "The graph above the timeline\nshows the amount of food waste\ndata available by year.",
         textX,
         textY
     );
