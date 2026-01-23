@@ -322,7 +322,7 @@ li {
 
 .apple {
     position: absolute;
-    top: -300px; /* ben visibile all’inizio */
+    top: -305px; /* ben visibile all’inizio */
     left: 50%;
     transform: translateX(-50%);
 
