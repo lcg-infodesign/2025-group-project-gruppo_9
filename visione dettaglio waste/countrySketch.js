@@ -509,20 +509,6 @@ function drawHoverOverlay() {
   pop();
 }
 
-function drawHeaderInfo() {
-  push();
-  fill(0);
-  noStroke();
-  textFont(CONFIG.typography.fontFamily);
-  textAlign(CENTER, TOP);
-  textSize(40);
-
-  const textToDisplay = `${selectedCountry || "Select Country"}`;
-
-  text(textToDisplay, 735, 40);
-  pop();
-}
-
 function drawTimeline() {
   drawSliderWaveGraph();
 
@@ -538,22 +524,23 @@ function drawTimeline() {
   ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
   noStroke();
 
-  const boxW = 120;
-  const boxH = 50;
-  const boxX = slider.x + slider.width / 2 - boxW / 2;
-  const boxY = slider.y + 80;
+  // --- Year Box in Center ---
+  const boxX = width / 2;
+  const boxY = 20; // sopra lo slider
 
-  fill('#415E5A');
+  // Scritta "Selected Year:" centrata sopra il box
   noStroke();
+  fill('#415E5A');
   textSize(14);
   textAlign(CENTER, TOP);
   textFont(CONFIG.typography.fontFamily);
-  text("Selected Year", boxX + boxW / 2, boxY - 20);
-
-  textSize(CONFIG.typography.sliderValueSize);
+  text("Selected Year:", boxX, boxY);
+  
+  // Numero anno centrato nel box
   textStyle(BOLD);
-  textAlign(CENTER, CENTER);
-  text(selectedYear, boxX + boxW / 2, boxY + boxH / 2 - 10);
+  textSize(CONFIG.typography.sliderValueSize);
+  textAlign(CENTER, TOP);
+  text(selectedYear, boxX, boxY + 30);
   textStyle(NORMAL);
 
   textSize(12);
@@ -1064,10 +1051,10 @@ function drawSliderLegend() {
     textAlign(LEFT, TOP);
     textSize(CONFIG.typography.legendSliderSize +1);
     textLeading(14); // interlinea
-    const textX = legendX + 15;
-    const textY = legendY + 15;
+    const textX = legendX + 10;
+    const textY = legendY + 16;
     text(
-        "The graph above the timeline\nshows the amount of available\ndata, about food waste, by year.",
+        "The graph above the timeline\nshows the amount of food waste\ndata available by year.",
         textX,
         textY
     );
@@ -1127,7 +1114,7 @@ function drawSizeLegend() {
     });
     
     // Aggiungi padding superiore e inferiore, titolo, ecc.
-    const titleAreaHeight = 100; // Titolo + spazio
+    const titleAreaHeight = 150; // Titolo + spazio
     const bottomAreaHeight = 30; // Spazio in basso
     const calculatedHeight = titleAreaHeight + totalHeightNeeded + bottomAreaHeight;
     
@@ -1159,12 +1146,12 @@ function drawSizeLegend() {
     const titleX = legendX + 15;
     let currentY = legendY + padding;
     
-    text("FOOD SUPPLY STAGES", titleX, currentY);
+    text("Waste along\nthe supply chain", titleX, currentY);
     
-    currentY += 25;
-    textSize(CONFIG.typography.legendSize - 2);
+    currentY += 50;
+    textSize(CONFIG.typography.legendSize - 5);
     textStyle(NORMAL);
-    text('From production\nto consumption', titleX, currentY);
+    text('This scheme maps each\ncommodity to the supply\nchain stage where greatest\nwaste occurrs', titleX, currentY);
     
     currentY += 40;
 
@@ -1175,7 +1162,7 @@ function drawSizeLegend() {
     
     // Calcola l'ultima Y effettiva
     let lastStageY = lineTopY;
-    let actualLastY = lineTopY;
+    let actualLastY = currentY;
     
     for(let i = 0; i < totalStages; i++) {
         const stage = foodSupplyStage[i];

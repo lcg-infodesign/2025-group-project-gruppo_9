@@ -142,7 +142,7 @@ body {
 
 #dropdownContainer {
   width: 300px; /* O un valore fisso tipo 300px */
-  padding-top: 25px; /* Ridotto da 35px */
+  padding-top: 180px; /* Ridotto da 35px */
   display: flex;
   position: absolute; /* Cambia da absolute a relative */
   justify-content: center; /* Centro invece di flex-end */
