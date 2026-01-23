@@ -89,6 +89,7 @@ const ASSETS_BASE = "../assets/img/";
 let img_empty = null;
 let img_over = null;
 let img_basket = null;
+let legendImage = null;
 let commodityImgs = {};
 let commodityOutline = {};
 
@@ -216,6 +217,7 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_empty = img);
   loadImageSafe(ASSETS_BASE + "empty.basket.png", img => img_over = img);
   loadImageSafe(ASSETS_BASE + "basket.png", img => img_basket = img);
+  loadImageSafe(ASSETS_BASE + "legenda.svg", img => legendImage = img);
 
   //loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
 
@@ -1030,6 +1032,7 @@ function drawHoveredCell() {
 function drawLegends(){
     // Puoi aggiungere altre legende qui se necessario
     drawSizeLegend();
+    drawInfoLegend();
     drawSliderLegend();
 }
 
@@ -1061,9 +1064,124 @@ function drawSliderLegend() {
     pop();
 }
 
-function drawSizeLegend() {
+function drawInfoLegend() {
     const legendX = width - CONFIG.layout.legend.marginRight - CONFIG.layout.legend.width;
     const legendY = GRID_START_Y + 20;
+    const padding = CONFIG.layout.legend.padding;
+    const legendWidth = CONFIG.layout.legend.width + 40;
+    const legendHeight = 395;
+    
+    push();
+
+    // Sfondo della legenda
+    fill(CONFIG.colors.overlay);
+    noStroke();
+    rect(legendX, legendY, legendWidth, legendHeight, 8);
+
+    let currentY = legendY + padding;
+
+    // --- legenda DIDASCALIA ---
+    fill(CONFIG.colors.background);
+    noStroke();
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, TOP);
+
+    // 1) Testo principale 
+    textSize(CONFIG.typography.legendSize - 5);
+    textStyle(NORMAL);
+    textLeading(14); // interlinea
+
+    const textX = legendX + padding;
+    const textY = currentY;
+
+    text(
+        "Each bin is filled according to\nthe percentage of waste for\neach commodity.\n\nWhen present, the glyph below\nindicates the primary cause\nof loss.",
+        textX,
+        textY
+    );
+
+    currentY +=105;
+
+    // 2) Testo Cause of loss
+    textSize(CONFIG.typography.legendSize - 5);
+    textStyle(BOLD);
+    text("Causes of loss:", textX, currentY);
+
+    currentY +=25;
+
+    // 3) Immagini cause of loss
+    let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
+                  "environmental factor", "storage", "harvest and management", "transport",  "waste", "insects, parasites and animals"];
+    for (let i = 0; i < causes.length; i++) {
+      //non avendo ancora le immagini, disegno dei cerchi segnaposto
+      const cause = causes[i];
+      const imgSize = 20;
+      const spacingX= 95;
+      const spacingY= 30;
+      const xPos = textX + (i % 2) * spacingX;
+      const yPos = currentY + Math.floor(i / 2) * spacingY;
+      fill(CONFIG.colors.background);
+      noStroke();
+      ellipse(xPos + imgSize / 2, yPos + imgSize / 2, imgSize);
+      // testo a fianco
+      //se c'è la parola "and" la sostituisamo con una virgola
+      let causeText = cause.replace(" and ", ", ");
+      //se la parola è troppo lunga, mandiamo a capo ad ogni spazio
+      if (causeText.length > 15) {
+        causeText = causeText.replace(/ /g, '\n');
+      }   
+
+      fill(CONFIG.colors.background);
+      textLeading(10);
+      textSize(10);
+      textAlign(LEFT, CENTER);
+      textStyle(NORMAL);
+      text(causeText, xPos + imgSize + 5, yPos + imgSize / 2);
+    }
+
+    currentY +=190;
+
+    // Linea separatrice
+    stroke(CONFIG.colors.background);
+    strokeWeight(1);
+    line(legendX + padding, currentY, legendX + legendWidth - padding, currentY);
+    
+    // Immagine outline e testo "dato non presente"
+    currentY += 30;
+    const outlineImageY = currentY;
+    
+    if (legendImage && legendImage.width > 0) {
+        const outlineImg = legendImage;
+        if (outlineImg && outlineImg.width > 0) {
+            push();
+            imageMode(CENTER);
+            noSmooth();
+            
+            const imgSize = 35;
+            const scale = imgSize / max(outlineImg.width, outlineImg.height);
+            const w = outlineImg.width * scale;
+            const h = outlineImg.height * scale;
+            
+            image(outlineImg, legendX + 30, outlineImageY, w, h);
+            pop();
+            smooth();
+        }
+    }
+    
+    // Testo "dato non presente"
+    fill(CONFIG.colors.background);
+    noStroke();
+    textSize(CONFIG.typography.legendSize);
+    textFont(CONFIG.typography.fontFamily);
+    textAlign(LEFT, CENTER);
+    text("No available data", legendX + 50, outlineImageY+3);
+    
+    pop();
+}
+
+function drawSizeLegend() {
+    const legendX = width - CONFIG.layout.legend.marginRight - CONFIG.layout.legend.width;
+    const legendY = GRID_START_Y + 20 + 420;
     const padding = CONFIG.layout.legend.padding;
     
     // 1. PRIMA CALCOLA L'ALTEZZA NECESSARIA
@@ -1303,10 +1421,9 @@ function drawSizeLegend() {
         fill('#888888');
         noStroke();
         textSize(CONFIG.typography.legendSize - 3);
-        textAlign(CENTER, CENTER);
+        textAlign(LEFT, CENTER);
         text("No data available\nfor selected filters", 
-             legendX + legendWidth / 2, 
-             legendY + legendHeight / 2);
+             legendX + 15, legendY + legendHeight - 22);
         pop();
     }
     
@@ -1357,56 +1474,30 @@ function drawIconTooltip(x, y, commodityName) {
 
 function getFormattedStageName(stage) {
     const stageNames = {
-        'wholesupplychain': 'WHOLE CHAIN',
-        'pre-harvest': 'PRE-HARVEST',
-        'harvest': 'HARVEST',
-        'post-harvest': 'POST-HARVEST',
-        'farm': 'FARM',
-        'grading': 'GRADING',
-        'packing': 'PACKING',
-        'storage': 'STORAGE',
-        'transport': 'TRANSPORT',
-        'collector': 'COLLECTOR',
-        'trader': 'TRADER',
-        'market': 'MARKET',
-        'processing': 'PROCESSING',
-        'wholesale': 'WHOLESALE',
-        'distributor': 'DISTRIBUTOR',
-        'retail': 'RETAIL',
-        'export': 'EXPORT',
-        'foodservices': 'FOOD SERVICES',
-        'households': 'HOUSEHOLDS'
+        'wholesupplychain': 'Whole chain',
+        'pre-harvest': 'Pre-harvest',
+        'harvest': 'Harvest',
+        'post-harvest': 'Post-harvest',
+        'farm': 'Farm',
+        'grading': 'Grading',
+        'packing': 'Packing',
+        'storage': 'Storage',
+        'transport': 'Transport',
+        'collector': 'Collector',
+        'trader': 'Trader',
+        'market': 'Market',
+        'processing': 'Processing',
+        'wholesale': 'Wholesale',
+        'distributor': 'Distributor',
+        'retail': 'Retail',
+        'export': 'Export',
+        'foodservices': 'Food services',
+        'households': 'Households'
     };
     
     return stageNames[stage] || stage.toUpperCase();
 }
 
-// Funzione per formattare i nomi degli stages in modo leggibile
-function getFormattedStageName(stage) {
-    const stageNames = {
-        'wholesupplychain': 'WHOLE CHAIN',
-        'pre-harvest': 'PRE-HARVEST',
-        'harvest': 'HARVEST',
-        'post-harvest': 'POST-HARVEST',
-        'farm': 'FARM',
-        'grading': 'GRADING',
-        'packing': 'PACKING',
-        'storage': 'STORAGE',
-        'transport': 'TRANSPORT',
-        'collector': 'COLLECTOR',
-        'trader': 'TRADER',
-        'market': 'MARKET',
-        'processing': 'PROCESSING',
-        'wholesale': 'WHOLESALE',
-        'distributor': 'DISTRIBUTOR',
-        'retail': 'RETAIL',
-        'export': 'EXPORT',
-        'foodservices': 'FOOD SERVICES',
-        'households': 'HOUSEHOLDS'
-    };
-    
-    return stageNames[stage] || stage.toUpperCase();
-}
 
 // Funzione per tooltip delle icone
 function drawIconTooltip(x, y, commodityName) {
