@@ -1345,15 +1345,36 @@ function updateYear() {
     redraw();
 }
 
+/* =========================
+   TUTORIAL OVERLAY CONTROL
+========================= */
+
+// ===== TUTORIAL BUTTON =====
 const helpBtn = document.getElementById('helpBtn');
 const tutorialOverlay = document.getElementById('tutorialOverlay');
-const closeTutorial = document.getElementById('closeTutorial');
+const tutorialSection = document.getElementById('tutorialSection');
+const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
 
-helpBtn.addEventListener('click', () => {
-  tutorialOverlay.classList.add('active');
-  resetTutorial(); // riporta allo step 1
-});
+if (helpBtn && tutorialSection && tutorialCloseBtn) {
+    helpBtn.addEventListener('click', () => {
+        tutorialSection.classList.add('active'); // Mostra overlay
+        tutorialOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Blocca scroll sotto overlay
+    });
 
-closeTutorial.addEventListener('click', () => {
-  tutorialOverlay.classList.remove('active');
-});
+    tutorialCloseBtn.addEventListener('click', () => {
+        tutorialSection.classList.remove('active');
+        tutorialOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Chiudi anche cliccando fuori dal container
+    tutorialOverlay.addEventListener('click', (e) => {
+        if (e.target === tutorialOverlay) {
+            tutorialSection.classList.remove('active');
+            tutorialOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+}
+

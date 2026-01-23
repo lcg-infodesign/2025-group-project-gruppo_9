@@ -10,7 +10,63 @@
 
 <body>
 
-  <!-- HEADER -->
+  <button id="helpBtn" aria-label="Open tutorial">?</button>
+
+
+    <!-- TUTORIAL OVERLAY -->
+<div id="tutorialOverlay" style="display:none">
+  <section id="tutorialSection">
+    <div class="tutorial-container">
+
+         <button id="tutorialCloseBtn" aria-label="Close tutorial">×</button>
+
+      <div class="tutorial-progress">
+        <span class="tutorial-step-label">
+          STEP <span id="currentStep">1</span> / <span id="totalSteps">5</span>
+        </span>
+        <div class="tutorial-progress-line">
+          <div class="tutorial-progress-fill"></div>
+        </div>
+      </div>
+
+      <ul class="tutorial-steps">
+        <li>
+          Once inside the <strong>DATAPAGE</strong>, the first element you’ll interact with is the TIMELINE.
+          <br><em>How to Use:</em> drag the timeline left/right or click on the years.
+          <img src="assets/img/tutorial/timeline.png" alt="Timeline screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          The core of the site is the <strong>DATA MATRIX</strong>. Each cell represents a combination of <em>country</em>, <em>commodity</em>, and <em>year</em>.
+          <br><em>Note:</em> percentages represent only the main cause.
+          <img src="assets/img/tutorial/matrice.png" alt="Matrix screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Select a country:</strong> click on a row to open its detail page.
+          <img src="assets/img/tutorial/row.png" alt="Row screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Understand charts:</strong> each commodity shows causes and value chain stages.
+          <img src="assets/img/tutorial/paginadidettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
+        </li>
+
+        <li>
+          <strong>Interact:</strong> hover and click on elements to reveal more details.
+          <img src="assets/img/tutorial/hover-tooltip.png" alt="Hover screenshot" class="tutorial-screenshot">
+        </li>
+      </ul>
+
+      <a href="main/main.html" class="explore-data-btn" id="finishTutorialBtn" style="display:none">
+        Start exploring the data
+      </a>
+
+    </div>
+  </section>
+
+</div>
+
   <!-- HEADER -->
     <header id="headerBar">
     <div class="header-left">
@@ -19,11 +75,10 @@
     </div>
 
     <div class="header-center">
-        <a href="../index.html" id="siteLogo">
-            <span class="main-title">FOOD WASTE:</span>
-            <span class="subtitle">THE WHOLE STORY</span>
-        </a>
-    </div>
+    <a href="../index.html" id="siteLogo">
+        <img src="../assets/img/logo/logoverdescuro.png" alt="Food Waste Logo" class="logo-img">
+    </a>
+</div>
 
     <nav class="header-right">
         <a href="../dati/dati.html" class="nav-link">Data</a>
@@ -107,6 +162,9 @@
     </div>
 
 </footer>
+
+<button id="backToTop" aria-label="Back to top">↑</button>
+<script src="../js/backToTop.js"></script>
 
 </body>
 </html>

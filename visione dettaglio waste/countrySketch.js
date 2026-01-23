@@ -1507,3 +1507,37 @@ function updateVisualization() {
   const t = document.getElementById("title");
   if (t) t.textContent = `${selectedCountry || "—"} ${selectedYear || ""}`;
 }
+
+/* =========================
+   TUTORIAL OVERLAY CONTROL
+========================= */
+
+// ===== TUTORIAL BUTTON =====
+const helpBtn = document.getElementById('helpBtn');
+const tutorialOverlay = document.getElementById('tutorialOverlay');
+const tutorialSection = document.getElementById('tutorialSection');
+const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
+
+if (helpBtn && tutorialSection && tutorialCloseBtn) {
+    helpBtn.addEventListener('click', () => {
+        tutorialSection.classList.add('active'); // Mostra overlay
+        tutorialOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Blocca scroll sotto overlay
+    });
+
+    tutorialCloseBtn.addEventListener('click', () => {
+        tutorialSection.classList.remove('active');
+        tutorialOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Chiudi anche cliccando fuori dal container
+    tutorialOverlay.addEventListener('click', (e) => {
+        if (e.target === tutorialOverlay) {
+            tutorialSection.classList.remove('active');
+            tutorialOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+}
+
