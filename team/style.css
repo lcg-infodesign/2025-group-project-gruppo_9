@@ -16,6 +16,7 @@ body {
     background-color: var(--bg); 
     margin: 0;
     padding: 0;
+    padding-top: 60px; /* uguale all'altezza dell'header */
 }
 
 /* SEZIONI CONTENUTO GENERICHE */
@@ -144,11 +145,13 @@ li {
 
 /* STILI HEADER */
 #headerBar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
-    height: 60px;
-    background: var(--bg);
+    height: 60px; /* Mantieni la tua altezza */
+    background: #e3e4df;
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
-    padding: 14px 32px;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -156,6 +159,7 @@ li {
     box-sizing: border-box;
     white-space: nowrap;
     overflow-x: hidden;
+    z-index: 1000; /* Sopra tutto il resto */
 }
 
 .header-left { 
@@ -173,24 +177,10 @@ li {
 }
 
 /* STILE LOGO MULTI-LINEA (ROBOTO) */
-#siteLogo {
-    font-family: 'Roboto', sans-serif; 
-    font-size: 1.5rem; 
-    font-weight: 600;
-    color: var(--dark);
-    text-decoration: none;
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    line-height: 1.1;
-}
-
-.subtitle {
-    font-size: 0.85rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    color: var(--dark);
-    margin-top: 2px;
+#siteLogo img.logo-img {
+    height: 65px; /* Altezza desiderata */
+    width: auto;  /* Mantiene proporzioni */
+    display: block;
 }
 
 /* LINK NAVIGAZIONE (ROBOTO MONO) */
@@ -416,6 +406,85 @@ li {
     font-weight: 400;
 }
 
+/* --- TEAM CARD: ROLE & SKILLS --- */
+
+.member-role {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin: 6px 0 14px;
+    color: var(--accent);
+}
+
+/* Skills container */
+.member-skills {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--bg);
+
+    /* allineamento più ordinato */
+    text-align: left;
+    max-width: 200px;
+}
+
+.team-member {
+    gap: 6px;
+}
+
+/* singola skill */
+.member-skills li {
+    margin-bottom: 6px;
+    padding-left: 10px;
+    position: relative;
+}
+
+/* micro-dot minimale a sinistra */
+.member-skills li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--bg);
+    opacity: 0.6;
+}
+
+/* BACK TO TOP BUTTON */
+#backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+
+  background-color: #415E5A; /* verde slider */
+  color: #F5F3EE;            /* background */
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 999;
+}
+
+#backToTop.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#backToTop:hover {
+  background-color: #283618; /* verde scuro testo */
+}
 
 /* FOOTER */
 .footer {
@@ -513,52 +582,4 @@ li {
     /* Per mobile, magari vuoi nomi e mail vicini */
     .names p { display: block; font-weight: bold; margin-top: 10px; }
     .emails p { display: block; margin-bottom: 10px; }
-}
-
-/* --- TEAM CARD: ROLE & SKILLS --- */
-
-.member-role {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin: 6px 0 14px;
-    color: var(--accent);
-}
-
-/* Skills container */
-.member-skills {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.75rem;
-    line-height: 1.6;
-    color: var(--bg);
-
-    /* allineamento più ordinato */
-    text-align: left;
-    max-width: 200px;
-}
-
-.team-member {
-    gap: 6px;
-}
-
-/* singola skill */
-.member-skills li {
-    margin-bottom: 6px;
-    padding-left: 10px;
-    position: relative;
-}
-
-/* micro-dot minimale a sinistra */
-.member-skills li::before {
-    content: "·";
-    position: absolute;
-    left: 0;
-    color: var(--bg);
-    opacity: 0.6;
 }
