@@ -155,7 +155,7 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
 
 ### Progetti e siti di riferimento
 
-- Il progetto è stato inizialmente sviluppato a partire dal fork del lavoro del **Gruppo 7 (A.A. 2024/2025)**  
+- Il progetto è stato inizialmente sviluppato a partire dal fork del lavoro del **Gruppo 7 (A.A.2024/2025)**  
   https://lcg-infodesign.github.io/lavoro-di-gruppo-gruppo-7/
 
 - Per alcune specifiche implementazioni in **p5.js**, si è fatto riferimento alla documentazione ufficiale:  
@@ -166,11 +166,11 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
   - The Pudding: https://pudding.cool/
 
 - Come riferimento per la rappresentazione di sistemi complessi, relazioni e assenze informative:
-  - *Six Degrees of Francis Bacon* – visualizzazione di reti culturali  
+  - *Six Degrees of Francis Bacon* - visualizzazione di reti culturali  
     http://www.sixdegreesoffrancisbacon.com/
-  - *Atlante Calvino* – esplorazione narrativa e spaziale di dati letterari  
+  - *Atlante Calvino* - esplorazione narrativa e spaziale di dati letterari  
     https://atlantecalvino.unige.ch/
-  - *Infinite View* – navigazione spaziale e stratificazione visiva  
+  - *Infinite View* - navigazione spaziale e stratificazione visiva  
     https://pdimagearchive.org/infinite-view/
 
 - Come ispirazione per una visione d’insieme astratta di fenomeni globali:
@@ -194,11 +194,8 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
 ### Riferimenti teorici e testuali
 
 - *Cartographies of Time: A History of the Timeline*  
-  https://www.datavis.ca/gallery/timelines.php  
-  https://www.bibliosearch.polimi.it/discovery/fulldisplay?docid=cdi_proquest_reports_1034611872
 
 - *A New Chart of History* (Joseph Priestley)  
-  https://en.wikipedia.org/wiki/A_New_Chart_of_History
 
 Questi riferimenti hanno contribuito a definire sia l’approccio concettuale sia le scelte visive e interattive del progetto, senza costituire modelli da replicare, ma piuttosto **strumenti critici di confronto e ispirazione**.
 
