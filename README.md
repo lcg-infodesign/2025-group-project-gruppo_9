@@ -155,7 +155,7 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
 
 ### Progetti e siti di riferimento
 
-- Il progetto è stato inizialmente sviluppato a partire dal fork del lavoro del **Gruppo 7 (A.A. precedente)**  
+- Il progetto è stato inizialmente sviluppato a partire dal fork del lavoro del **Gruppo 7 (A.A. 2024/2025)**  
   https://lcg-infodesign.github.io/lavoro-di-gruppo-gruppo-7/
 
 - Per alcune specifiche implementazioni in **p5.js**, si è fatto riferimento alla documentazione ufficiale:  
