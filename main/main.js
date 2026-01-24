@@ -227,7 +227,7 @@ function setup() {
 
     document.addEventListener('keydown', handleKeyPress);
 
-    currentYear=2020;
+    currentYear=1998;
     updateYear();
 }
 
