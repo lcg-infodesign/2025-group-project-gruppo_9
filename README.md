@@ -143,3 +143,63 @@ I membri del team e i loro ruoli:
 - **Rebecca Sole Bassani** — si è occupata di studio e ricerca, definizione degli obiettivi di conoscenza, sviluppo del concept, definizione dello stile visivo, sitemap e user flow, prototipazione e mockup su Figma, scrittura del copy e del README, codice html, css e JavaScript (parte introduttiva, header, footer, pagine Data e About), verificazione della coerenza progettuale;
 - **Stefano Lorini** — si è occupato di studio e ricerca, realizzazione codice (html, css e JavaScript) di base del sito, codice pagina principale (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI;
 - **Tommaso Barazzetta** — si è occupato di studio e ricerca, realizzazione codice di base del sito (html, css e JavaScript), codice pagina di dettaglio (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI.
+
+---
+<details>
+<summary><strong>Riferimenti e ispirazioni</strong></summary>
+
+<br>
+
+Questo progetto si inserisce all’interno di un percorso di ricerca e sperimentazione sul *data visualization* e sull’*information design*.  
+Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e risorse, sia per aspetti concettuali che tecnici.
+
+### Progetti e siti di riferimento
+
+- Il progetto è stato inizialmente sviluppato a partire dal fork del lavoro del **Gruppo 7 (A.A. precedente)**  
+  https://lcg-infodesign.github.io/lavoro-di-gruppo-gruppo-7/
+
+- Per alcune specifiche implementazioni in **p5.js**, si è fatto riferimento alla documentazione ufficiale:  
+  https://p5js.org/
+
+- Per la progettazione dell’introduzione e delle interazioni basate sullo scroll, sono stati analizzati:
+  - GSAP Scroll: https://gsap.com/scroll/  
+  - The Pudding: https://pudding.cool/
+
+- Come riferimento per la rappresentazione di sistemi complessi, relazioni e assenze informative:
+  - *Six Degrees of Francis Bacon* – visualizzazione di reti culturali  
+    http://www.sixdegreesoffrancisbacon.com/
+  - *Atlante Calvino* – esplorazione narrativa e spaziale di dati letterari  
+    https://atlantecalvino.unige.ch/
+  - *Infinite View* – navigazione spaziale e stratificazione visiva  
+    https://pdimagearchive.org/infinite-view/
+
+- Come ispirazione per una visione d’insieme astratta di fenomeni globali:
+  - *Global Data Centers Distribution* (DensityDesign)  
+    https://densitydesign.github.io/teaching-dd15/course-results/es01/group04/
+
+- Come riferimento per la rappresentazione dell’incertezza e dei dati incompleti:
+  - Claus O. Wilke, *Visualizing Uncertainty*  
+    https://clauswilke.com/dataviz/visualizing-uncertainty.html
+
+- Come esempio storico di visualizzazione di elementi che si aggregano e si disperdono nello spazio:
+  - *We Feel Fine*  
+    http://www.wefeelfine.org/
+
+- Per l’esplorazione di approcci, estetiche e soluzioni contemporanee nel campo della data visualization:
+  - Observable D3 Gallery  
+    https://observablehq.com/@d3/gallery
+  - Information is Beautiful Awards  
+    https://www.informationisbeautifulawards.com/showcase?award=2024&type=awards
+
+### Riferimenti teorici e testuali
+
+- *Cartographies of Time: A History of the Timeline*  
+  https://www.datavis.ca/gallery/timelines.php  
+  https://www.bibliosearch.polimi.it/discovery/fulldisplay?docid=cdi_proquest_reports_1034611872
+
+- *A New Chart of History* (Joseph Priestley)  
+  https://en.wikipedia.org/wiki/A_New_Chart_of_History
+
+Questi riferimenti hanno contribuito a definire sia l’approccio concettuale sia le scelte visive e interattive del progetto, senza costituire modelli da replicare, ma piuttosto **strumenti critici di confronto e ispirazione**.
+
+</details>
