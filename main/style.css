@@ -158,16 +158,18 @@ body {
 ========================= */
 
 .tutorial-container {
+  font-family: 'Roboto Mono', monospace; 
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--dark);
+  text-decoration: none;
   background: #f4f1ec;
-  border: 3px solid #b64939;
-  border-radius: 20px;
   padding: 3rem;
   max-width: 900px;
   width: 90%;
   max-height: 85vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 0 0 6px rgba(182, 73, 57, 0.25);
 }
 
 /* =========================
@@ -187,6 +189,10 @@ body {
 
 #tutorialCloseBtn:hover {
   color: #b64939;
+}
+
+.tutorial-screenshot{
+  max-width: 900px;  
 }
 
 /* BACK TO TOP BUTTON */
