@@ -300,6 +300,8 @@ body {
   max-height: 85vh;
   overflow-y: auto;
   position: relative;
+  margin-top: 10px;
+  max-height: calc(80vh - 80px);
 }
 
 /* =========================
