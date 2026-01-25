@@ -1597,25 +1597,34 @@ const tutorialSection = document.getElementById('tutorialSection');
 const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
 
 if (helpBtn && tutorialSection && tutorialCloseBtn) {
+
     helpBtn.addEventListener('click', () => {
-        tutorialSection.classList.add('active'); // Mostra overlay
+        tutorialSection.classList.add('active');
         tutorialOverlay.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Blocca scroll sotto overlay
+        document.body.style.height = '100vh';
+        document.body.style.overflow = 'hidden';
+        const header = document.getElementById('headerBar');
+        if(header) header.style.overflow = 'hidden';
     });
 
     tutorialCloseBtn.addEventListener('click', () => {
         tutorialSection.classList.remove('active');
         tutorialOverlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        document.body.style.height = '';
+        document.body.style.overflow = '';
+        const header = document.getElementById('headerBar');
+        if(header) header.style.overflow = '';
     });
 
-    // Chiudi anche cliccando fuori dal container
     tutorialOverlay.addEventListener('click', (e) => {
         if (e.target === tutorialOverlay) {
             tutorialSection.classList.remove('active');
             tutorialOverlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            document.body.style.height = '';
+            document.body.style.overflow = '';
+            const header = document.getElementById('headerBar');
+            if(header) header.style.overflow = '';
         }
     });
-}
 
+}
