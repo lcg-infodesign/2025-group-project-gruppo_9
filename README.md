@@ -77,7 +77,12 @@ Il dataset aggrega dati provenienti da:
 
 Si tratta di un sistema in continuo aggiornamento, che riflette la **complessità del monitoraggio globale** dello spreco alimentare.
 
-### I campi del dataset
+<details>
+<summary><strong>Campi del dataset</strong></summary>
+
+<br>
+
+Il dataset FAO include i seguenti campi informativi:
 
 - m49 code  
 - country  
@@ -96,6 +101,8 @@ Si tratta di un sistema in continuo aggiornamento, che riflette la **complessit�
 - reference  
 - url  
 - notes  
+
+</details>
 
 La presenza di dati mancanti o ripetuti **non indica una mancanza di impegno**, ma riflette la **complessità del monitoraggio globale** dello spreco alimentare.
 
