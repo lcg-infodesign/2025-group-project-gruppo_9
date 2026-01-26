@@ -585,31 +585,47 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-    slider.thumb.dragging = false;
+    // Trascinando lo slider
+    if (slider.thumb.dragging) {
+        slider.thumb.dragging = false;
+        
+        // Aggancia il pallino alla posizione esatta dell'anno corrente
+        updateSliderThumb(); 
+        redraw(); // Ridisegna per vedere lo scatto finale
+    }
+
+    // Gestione cursore
     if (isHoveringSlider || isHoveringBasket || isHoveringCountry || hoveredRowData) {
         document.body.style.cursor = 'pointer';
     } else {
         document.body.style.cursor = 'default';
     }
+    
     return false;
 }
 
 function updateYearFromSlider(x) {
-    const percent = constrain((x - slider.x) / slider.width, 0, 1);
-    currentYear = yearRange.min + round(percent * (yearRange.max - yearRange.min));
-    updateSliderThumb();
+    // Calcola la percentuale esatta basata sui pixel
+    const rawPercent = constrain((x - slider.x) / slider.width, 0, 1);
     
-    // Calcola il range delle percentuali per il nuovo anno
-    calculateWastePercentageRange(currentYear);
+    // Muovi fluidamente
+    slider.thumb.x = slider.x + rawPercent * slider.width;
     
-    // Riordina le nazioni per il nuovo anno
-    combinationCache = {};
-    currentCacheYear = null;
-    sortCountriesByCommodities(currentYear);
+    // Anno più vicino
+    const newYear = yearRange.min + round(rawPercent * (yearRange.max - yearRange.min));
     
-    // Ridimensiona il canvas
-    resizeCanvasForCurrentData();
+    // Ricalcola tutto se l'anno è cambiato
+    if (newYear !== currentYear) {
+        currentYear = newYear;
     
+        calculateWastePercentageRange(currentYear);
+        combinationCache = {};
+        currentCacheYear = null;
+        sortCountriesByCommodities(currentYear);
+        resizeCanvasForCurrentData();
+    }
+    
+    // Pallino che si muove
     redraw();
 }
 
