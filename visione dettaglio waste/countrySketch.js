@@ -442,14 +442,14 @@ function mouseMoved() {
 function mousePressed() {
   if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
     slider.thumb.dragging = true;
-    cursor('grabbing');
+    cursor('pointer');
     return;
   }
 
   if (isHoveringSlider) {
     updateYearFromSlider(mouseX);
     slider.thumb.dragging = true;
-    cursor('grabbing');
+    cursor('pointer');
     return;
   }
 }
