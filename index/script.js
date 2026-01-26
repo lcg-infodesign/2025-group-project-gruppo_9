@@ -236,23 +236,23 @@ const finishTutorialBtn = document.getElementById("finishTutorialBtn");
 let currentStep = 0;
 
 function showStep(index) {
-  // CALCOLO CORRETTO: Conta solo gli elementi della lista (4)
-  const total = tutorialSteps.length; 
+  const total = tutorialSteps.length;
   
   const currentStepEl = document.getElementById('currentStep');
   const totalStepsEl = document.getElementById('totalSteps');
   const fill = document.querySelector('.tutorial-progress-fill');
+  
+  // 1. Selezioniamo la scritta "Click anywhere..."
+  const hint = document.querySelector('.tutorial-hint');
 
-  // Aggiorna i numeri (es. 1 di 4)
+  // Aggiorna numeri
   if(currentStepEl) currentStepEl.textContent = index + 1;
   if(totalStepsEl) totalStepsEl.textContent = total;
 
-  // Mostra/Nascondi gli step della lista
+  // Mostra/Nascondi slide
   tutorialSteps.forEach((step, i) => {
-    // Se è lo step corrente, mostralo (display block), altrimenti nascondilo
     if (i === index) {
       step.style.display = "block";
-      // Aggiunge classe per eventuali animazioni CSS
       step.classList.add("active-step");
     } else {
       step.style.display = "none";
@@ -260,17 +260,20 @@ function showStep(index) {
     }
   });
 
-  // Aggiorna la barra di progresso
+  // Aggiorna barra
   if (fill) {
     fill.style.width = ((index + 1) / total) * 100 + '%';
   }
 
-  // Gestione del Bottone Finale
-  // Se siamo all'ultimo step (index 3), mostra il bottone "Start Exploring"
+  // --- CONTROLLO FINALE (Bottone vs Hint) ---
   if (index === total - 1) {
+    // SIAMO ALLA FINE: Mostra bottone, NASCONDI scritta
     finishTutorialBtn.style.display = 'inline-block';
+    if(hint) hint.style.display = 'none'; 
   } else {
+    // NON SIAMO ALLA FINE: Nascondi bottone, MOSTRA scritta
     finishTutorialBtn.style.display = 'none';
+    if(hint) hint.style.display = 'block'; 
   }
 }
 
