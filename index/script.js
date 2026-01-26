@@ -79,9 +79,9 @@ document.addEventListener("click", (e) => {
 
 // TASTIERA GENERALE
 document.addEventListener("keydown", (e) => {
-  if (e.key === " " || e.key === "ArrowRight") {
-    e.preventDefault();
-    handleProgress();
+  if (e.key === " " || e.key === "ArrowRight" || e.key === "ArrowDown") {
+    e.preventDefault(); 
+    handleProgress(); 
   }
 });
 
