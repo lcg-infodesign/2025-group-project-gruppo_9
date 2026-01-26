@@ -721,6 +721,7 @@ function drawFlexGrid(items, startY) {
       // Viene disegnata dopo sopra l'overlay
     } else {
       drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
+      drawCellDetails(item, currentX, currentY, cellWidth, cellHeight);
     }
 
     currentX += cellWidth + CELL_SPACING;
@@ -1032,6 +1033,7 @@ function drawHoveredCell() {
 
     if (i === hoveredCellIndex) {
       drawComplexCell(commodity, currentX, currentY, cellWidth, cellHeight);
+      drawCellDetails(commodity, currentX, currentY, cellWidth, cellHeight);
       return;
     }
 
@@ -1632,7 +1634,37 @@ function updateVisualization() {
   const t = document.getElementById("title");
   if (t) t.textContent = `${selectedCountry || "—"} ${selectedYear || ""}`;
 }
+function drawCellDetails(commodityName, x, y, w, h) {
+  push();
+  // Posizionamento sotto la base del cestino
+  const detailY = y + h - 85; 
+  const centerX = x + w / 2;
 
+  const rowData = getFullDataRow(selectedCountry, selectedYear, commodityName);
+  
+  // 1. Disegno l'icona della causa (piccola, sopra il nome)
+  if (rowData && rowData.hasData && rowData.mainCauseOfWaste) {
+    const normCause = normalizeFilename(rowData.mainCauseOfWaste);
+    const cImg = causeImgs[normCause];
+    if (cImg) {
+      imageMode(CENTER);
+      image(cImg, centerX-42, detailY - 144, 25, 25); // Dimensione icona 22px
+    }
+  }
+
+  // 2. Disegno il nome della commodity (sotto l'icona)
+  fill(CONFIG.colors.slider.text);
+  noStroke();
+  textAlign(CENTER, TOP);
+  textSize(15);
+  textStyle(BOLD);
+  textFont(CONFIG.typography.fontFamily);
+  
+  // Scriviamo il nome in maiuscolo per ordine estetico
+  text(commodityName.toUpperCase(), centerX, detailY + 32);
+  
+  pop();
+}
 /* =========================
    TUTORIAL OVERLAY CONTROL
 ========================= */
