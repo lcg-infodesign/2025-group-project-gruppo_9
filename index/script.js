@@ -236,65 +236,53 @@ const finishTutorialBtn = document.getElementById("finishTutorialBtn");
 let currentStep = 0;
 
 function showStep(index) {
-  const header = document.querySelector('.tutorial-header');
-  const fill = document.querySelector('.tutorial-progress-fill');
+  // CALCOLO CORRETTO: Conta solo gli elementi della lista (4)
+  const total = tutorialSteps.length; 
+  
   const currentStepEl = document.getElementById('currentStep');
   const totalStepsEl = document.getElementById('totalSteps');
+  const fill = document.querySelector('.tutorial-progress-fill');
 
-  const total = tutorialSteps.length + 1; // +1 = header-step
+  // Aggiorna i numeri (es. 1 di 4)
+  if(currentStepEl) currentStepEl.textContent = index + 1;
+  if(totalStepsEl) totalStepsEl.textContent = total;
 
-  // progress label
-  currentStepEl.textContent = index + 1;
-  totalStepsEl.textContent = total;
+  // Mostra/Nascondi gli step della lista
+  tutorialSteps.forEach((step, i) => {
+    // Se è lo step corrente, mostralo (display block), altrimenti nascondilo
+    if (i === index) {
+      step.style.display = "block";
+      // Aggiunge classe per eventuali animazioni CSS
+      step.classList.add("active-step");
+    } else {
+      step.style.display = "none";
+      step.classList.remove("active-step");
+    }
+  });
 
-  // HEADER = STEP 1
-  if (index === 0) {
-    header.classList.remove('hidden');
-
-    tutorialSteps.forEach(step => {
-      step.classList.remove('active-step');
-    });
-  } 
-  // ALTRI STEP
-  else {
-    header.classList.add('hidden');
-
-    tutorialSteps.forEach((step, i) => {
-      step.classList.toggle('active-step', i === index - 1);
-    });
-  }
-
-  // progress bar
+  // Aggiorna la barra di progresso
   if (fill) {
     fill.style.width = ((index + 1) / total) * 100 + '%';
   }
 
-  // bottone finale
-  finishTutorialBtn.style.display =
-    index === total - 1 ? 'inline-block' : 'none';
-
-    const hint = document.querySelector('.tutorial-hint');
-const totalSteps = tutorialSteps.length + 1; // header + li
-
-// ultimo step → niente hint
-if (index === totalSteps - 1) {
-  hint.style.display = 'none';
-} else {
-  hint.style.display = 'block';
+  // Gestione del Bottone Finale
+  // Se siamo all'ultimo step (index 3), mostra il bottone "Start Exploring"
+  if (index === total - 1) {
+    finishTutorialBtn.style.display = 'inline-block';
+  } else {
+    finishTutorialBtn.style.display = 'none';
+  }
 }
 
-}
-
-// FUNZIONI UNICHE (FIX SALTI)
+// NAVIGAZIONE AVANTI
 function goTutorialNext() {
-  const totalSteps = tutorialSteps.length + 1;
-
-if (currentStep < totalSteps - 1) {
-  currentStep++;
-  showStep(currentStep);
+  if (currentStep < tutorialSteps.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
 }
 
-}
+// NAVIGAZIONE INDIETRO
 function goTutorialPrev() {
   if (currentStep > 0) {
     currentStep--;
@@ -302,20 +290,21 @@ function goTutorialPrev() {
   }
 }
 
+// RESET (Quando apri il tutorial)
 function resetTutorial() {
   currentStep = 0;
   showStep(currentStep);
 }
 
-
-// CLICK TUTORIAL
+// CLICK SUL TUTORIAL (Per avanzare cliccando ovunque tranne sul bottone finale)
 tutorialSec.addEventListener("click", (e) => {
   if (e.target.closest("#finishTutorialBtn")) return;
   goTutorialNext();
 });
 
-// FRECCE + SPAZIO (TUTTE)
+// TASTIERA SOLO PER IL TUTORIAL
 document.addEventListener("keydown", (e) => {
+  // Se il tutorial non è visibile, non fare nulla
   if (!tutorialSec.classList.contains("visible")) return;
 
   const nextKeys = [" ", "ArrowRight", "ArrowDown"];
@@ -331,13 +320,13 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// BOTTONE TUTORIAL
+// APERTURA TUTORIAL DAL BOTTONE "?"
 tutorialBtn?.addEventListener("click", (e) => {
   e.stopPropagation();
   tutorialSec.classList.add("section-visible");
   tutorialSec.scrollIntoView({ behavior: "smooth" });
   setTimeout(() => {
     tutorialSec.classList.add("visible");
-    showStep(0);
+    resetTutorial(); // Usa la funzione reset semplificata
   }, 300);
 });
