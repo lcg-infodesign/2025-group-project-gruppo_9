@@ -13,7 +13,7 @@ Questo progetto nasce da una domanda semplice, ma potente:
 > **Cosa ci raccontano i dati? E cosa ci raccontano invece quelli che non ci sono?**
 
 **Food Waste - The Whole Story** è un progetto di *information design* che esplora lo spreco alimentare globale rendendo visibile non solo ciò che viene misurato, ma anche ciò che resta invisibile.  
-Le mancanze del dataset non sono trattate come un errore, ma come **parte integrante del fenomeno**.
+Le mancanze del dataset sono trattate come **parte integrante del fenomeno**.
 
 ---
 
@@ -67,7 +67,7 @@ Ogni interazione permette di scoprire non solo quanto cibo viene perso, ma anche
 
 ## Dataset e fonti
 
-Il progetto utilizza il dataset della **FAO – Technical Platform on the Measurement and Reduction of Food Loss and Waste**, la principale piattaforma internazionale sul tema.
+Il progetto utilizza il dataset della **FAO, Technical Platform on the Measurement and Reduction of Food Loss and Waste**, la principale piattaforma internazionale sul tema.
 
 Il dataset aggrega dati provenienti da:
 - pubblicazioni scientifiche;
@@ -144,7 +144,7 @@ https://docs.google.com/spreadsheets/d/1NZWyZyY00FchE5g2odcLVNRNYcSqfYXh57ye09JH
 Questo progetto è stato realizzato dal **Gruppo 9 del Laboratorio di Information Design, C1, A.A. 2025–2026**.
 I membri del team e i loro ruoli:
 
-- **Caterina Gallo** — si è occupata di studio e ricerca, scelta di font e palette colori, definizione dello stile visivo, realizzazione delle illustrazioni, scrittura del copy dell’intro, codice html, css e JavaScript (parte introduttiva);
+- **Caterina Gallo** — si è occupata di studio e ricerca, scelta di font e palette colori, definizione dello stile visivo, realizzazione delle illustrazioni, revisione testi e copywriting, codice html, css e JavaScript (parte introduttiva);
 - **Giulia Furlani** — si è occupata di studio e ricerca, sviluppo del concept, prototipazione e mockup su Figma, scelta di font e palette colori, realizzazione delle illustrazioni;
 - **Irene Massignani** — si è occupata di studio e ricerca, sintesi e semplificazione dataset, sviluppo del concept, definizione dello stile visivo, prototipazione e mockup su Figma, animazioni e codice html, css e JavaScript (pagine Data e About), verificazione della coerenza progettuale;
 - **Rebecca Sole Bassani** — si è occupata di studio e ricerca, definizione degli obiettivi di conoscenza, sviluppo del concept, definizione dello stile visivo, sitemap e user flow, prototipazione e mockup su Figma, scrittura del copy e del README, codice html, css e JavaScript (parte introduttiva, header, footer, pagine Data e About), verificazione della coerenza progettuale;
