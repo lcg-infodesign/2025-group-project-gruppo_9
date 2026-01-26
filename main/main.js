@@ -342,7 +342,7 @@ function drawSlider() {
     const boxY = 20; // sopra lo slider
 
     // Scritta "Selected Year:" centrata sopra il box
-    noStroke();
+    /*noStroke();
     fill('#415E5A');
     textSize(14);
     textAlign(CENTER, TOP);
@@ -353,7 +353,7 @@ function drawSlider() {
     textStyle(BOLD);
     textSize(CONFIG.typography.sliderValueSize);
     textAlign(CENTER, TOP);
-    text(currentYear, boxX, boxY + 30);
+    text(currentYear, boxX, boxY + 30);*/
     textStyle(NORMAL);
     
     // Etichette min e max
@@ -617,6 +617,11 @@ function updateYearFromSlider(x) {
     // Ricalcola tutto se l'anno è cambiato
     if (newYear !== currentYear) {
         currentYear = newYear;
+
+        const yearElement = document.getElementById('current-year');
+        if (yearElement) {
+            yearElement.textContent = currentYear;
+        }
     
         calculateWastePercentageRange(currentYear);
         combinationCache = {};
@@ -1354,6 +1359,12 @@ function updateYear() {
     currentCacheYear = null;
     calculateWastePercentageRange(currentYear); // Aggiorna il range delle percentuali
     sortCountriesByCommodities(currentYear);
+
+    // Aggiorna il testo nell'HTML
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) {
+        yearElement.textContent = currentYear;
+    }
     
     // Ridimensiona il canvas prima di ridisegnare
     resizeCanvasForCurrentData();

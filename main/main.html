@@ -89,10 +89,45 @@
 </header>
 
 
+
+
     <div id="p5-container"></div>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="main.js"></script>
+
+    <!-- Aggiungi un container per la parte fissa -->
+<div id="fixed-header">
+    <div id="year-display">
+        Selected year:<br><span id="current-year"></span>
+    </div>
+</div>
+
+<script>
+// Gestione dello scroll per lo sfondo
+window.addEventListener('scroll', function() {
+    const fixedHeader = document.getElementById('fixed-header');
+    
+    if (!fixedHeader) return;
+    
+    // Soglia minima di scroll (puoi regolarla)
+    const scrollThreshold = 10; // 10px di scroll
+    
+    if (window.scrollY > scrollThreshold) {
+        fixedHeader.classList.add('scrolled');
+    } else {
+        fixedHeader.classList.remove('scrolled');
+    }
+});
+
+// Inizializza allo stato corretto al caricamento
+document.addEventListener('DOMContentLoaded', function() {
+    const fixedHeader = document.getElementById('fixed-header');
+    if (fixedHeader && window.scrollY > 10) {
+        fixedHeader.classList.add('scrolled');
+    }
+});
+</script>
 
      <!-- FOOTER -->
 <footer class="footer">
