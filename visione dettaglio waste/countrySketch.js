@@ -92,6 +92,7 @@ let img_basket = null;
 let legendImage = null;
 let commodityImgs = {};
 let commodityOutline = {};
+let causeImgs = {};
 
 // Parametri visivi griglia (MODIFICATI PER ESSERE FISSI)
 const INTERNAL_NOMINAL_W = 90;
@@ -220,7 +221,16 @@ function preload() {
   loadImageSafe(ASSETS_BASE + "legenda.svg", img => legendImage = img);
 
   //loadImageSafe(ASSETS_BASE + "glifi/default.png", img => fillImages.default = img);
-
+  let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
+                "environmental factor", "storage", "harvest and management", "transport", "waste", "insects, parasites and animals"];
+  
+  for (let c of causes) {
+    const normCause = normalizeFilename(c);
+    // Carica l'immagine dalla cartella assets/img/cause/
+    loadImageSafe(ASSETS_BASE + normCause + ".png", img => {
+      causeImgs[normCause] = img || null;
+    });
+  }
   /*for (let s of stages) {
     for (let c of causes) {
       const key = `${s}_${c}`;
@@ -1110,7 +1120,7 @@ function drawInfoLegend() {
     currentY +=25;
 
     // 3) Immagini cause of loss
-    let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
+    /*let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
                   "environmental factor", "storage", "harvest and management", "transport",  "waste", "insects, parasites and animals"];
     for (let i = 0; i < causes.length; i++) {
       //non avendo ancora le immagini, disegno dei cerchi segnaposto
@@ -1137,6 +1147,43 @@ function drawInfoLegend() {
       textAlign(LEFT, CENTER);
       textStyle(NORMAL);
       text(causeText, xPos + imgSize + 5, yPos + imgSize / 2);
+    }*/
+   // 3) Immagini cause of loss
+    let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
+                  "environmental factor", "storage", "harvest and management", "transport",  "waste", "insects, parasites and animals"];
+    
+    for (let i = 0; i < causes.length; i++) {
+      const cause = causes[i];
+      const normCause = normalizeFilename(cause);
+      const imgSize = 22; // Leggermente più grande per visibilità
+      const spacingX = 95;
+      const spacingY = 32;
+      const xPos = textX + (i % 2) * spacingX;
+      const yPos = currentY + Math.floor(i / 2) * spacingY;
+
+      // Disegna l'immagine se caricata, altrimenti usa un cerchio di fallback
+      if (causeImgs[normCause]) {
+        imageMode(CENTER);
+        image(causeImgs[normCause], xPos + imgSize / 2, yPos + imgSize / 2, imgSize, imgSize);
+      } else {
+        fill(CONFIG.colors.background + '50'); // Cerchio semi-trasparente se manca l'immagine
+        noStroke();
+        ellipse(xPos + imgSize / 2, yPos + imgSize / 2, imgSize);
+      }
+
+      // Testo a fianco
+      let causeText = cause.replace(" and ", ", ");
+      if (causeText.length > 15) {
+        causeText = causeText.replace(/ /g, '\n');
+      }   
+
+      fill(CONFIG.colors.background);
+      textLeading(10);
+      textSize(10);
+      textAlign(LEFT, CENTER);
+      textStyle(NORMAL);
+      // Sposta il testo leggermente a destra dell'immagine
+      text(causeText, xPos + imgSize + 6, yPos + imgSize / 2);
     }
 
     currentY +=190;
