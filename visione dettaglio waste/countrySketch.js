@@ -465,7 +465,7 @@ function mouseDragged() {
 function mouseReleased() {
   slider.thumb.dragging = false;
   if (isHoveringSlider) cursor('pointer');
-  else if (isHoveringCell) cursor('pointer');
+  else if (isHoveringCell) cursor('default');
   else cursor('default');
 }
 
