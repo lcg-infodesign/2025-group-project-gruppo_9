@@ -341,19 +341,7 @@ function drawSlider() {
     const boxX = width / 2;
     const boxY = 20; // sopra lo slider
 
-    // Scritta "Selected Year:" centrata sopra il box
-    /*noStroke();
-    fill('#415E5A');
-    textSize(14);
-    textAlign(CENTER, TOP);
-    textFont(CONFIG.typography.fontFamily);
-    text("Selected Year:", boxX, boxY);
     
-    // Numero anno centrato nel box
-    textStyle(BOLD);
-    textSize(CONFIG.typography.sliderValueSize);
-    textAlign(CENTER, TOP);
-    text(currentYear, boxX, boxY + 30);*/
     textStyle(NORMAL);
     
     // Etichette min e max
@@ -787,12 +775,9 @@ function drawRowLabels() {
                 displayWidth = targetHeight * imgRatio;
             }
             
-            // Imposta il tint se necessario
-            //if (hoveredRowData && hoveredRowData.row === i) {
-            //    tint(CONFIG.colors.text.hover);
-            //} else {
+            
                 noTint();
-            //}
+            
             
             image(basketImage, x, y, displayWidth, displayHeight);
         }
@@ -874,11 +859,9 @@ function drawCellDot(row, col, x, y, exists, country, year) {
     if (exists) {
         img = commodityImages[col];
     } else {
-        //if(hoveredRowData && hoveredRowData.row === row) {
-        //    img = commodityOutlineImagesHover[col]; 
-        //} else {
+        
             img = commodityOutlineImages[col]; 
-        //}
+        
     }
     
     if (img && img.width > 0) {
@@ -904,12 +887,9 @@ function drawCellDot(row, col, x, y, exists, country, year) {
             let w = naturalWidth * scale;
             let h = naturalHeight * scale;
 
-            // Disegna cerchio di sfondo
-            //if (hoveredRowData && hoveredRowData.row === row) {
-            //    fill(CONFIG.colors.row.circle);
-            //} else {
+           
                 fill(CONFIG.colors.legend.background + 'cc');
-            //}
+            
             
             circle(x + cellWidth/2, y + cellHeight/2, max(w, h));
             

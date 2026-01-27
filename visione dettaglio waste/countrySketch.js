@@ -1,4 +1,4 @@
-// ===== CONFIGURAZIONE STILE (da Codice B) =====
+// ===== CONFIGURAZIONE STILE  =====
 const CONFIG = {
   colors: {
     background: '#FFFFFF',
@@ -17,15 +17,15 @@ const CONFIG = {
     }
   },
   layout: {
-    gridWidth: 1200, // <--- AGGIUNTO: Modifica questo valore per stringere/allargare la zona griglia
+    gridWidth: 1200, // Modificare questo valore per stringere/allargare la  griglia
     legend: {
       width: 175, // Leggermente più larga
-      height: 1350, // Più alta per ospitare l'immagine
+      height: 1350, // Più alta per  l'immagine
       marginRight: 150, // Più vicina al centro
       padding: 15
     },
     margin: {
-      horizontal: 100, // <--- MODIFICATO: Questo è il punto di ancoraggio a sinistra
+      horizontal: 100, // punto di ancoraggio a sinistra
       vertical: 110
     }
   },
@@ -77,7 +77,7 @@ let yearRange = {
   max: 0
 };
 
-// AGGIUNTO: Variabile per hover cella
+//  Variabile per hover cella
 let isHoveringCell = false;
 let hoveredCellIndex = -1;
 
@@ -94,10 +94,10 @@ let commodityImgs = {};
 let commodityOutline = {};
 let causeImgs = {};
 
-// Parametri visivi griglia (MODIFICATI PER ESSERE FISSI)
+// Parametri visivi griglia 
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 132;
-const TARGET_CELL_WIDTH = 260; // <--- FISSO: La cella non cambia più dimensione in base allo schermo
+const TARGET_CELL_WIDTH = 260; // La cella non cambia più dimensione in base allo schermo
 const CELL_SPACING = 0;      // Spaziatura tra le celle
 const SIDE_MARGIN =0;
 
@@ -231,15 +231,7 @@ function preload() {
       causeImgs[normCause] = img || null;
     });
   }
-  /*for (let s of stages) {
-    for (let c of causes) {
-      const key = `${s}_${c}`;
-      loadImageSafe(
-        ASSETS_BASE + "glifi/" + key + ".png",
-        img => fillImages[key] = img || null
-      );
-    }
-  }*/
+  
 }
 
 // ===== SETUP =====
@@ -507,7 +499,7 @@ function draw() {
   // 6. Disegna legenda
   drawLegends();
 
-  // 6. Disegna Tooltip 
+  // 7. Disegna Tooltip 
   if (tooltipData && isHoveringCell) {
     drawTooltip();
   }
@@ -646,7 +638,7 @@ function drawSliderWaveGraph() {
   }
 }
 
-// MODIFICATO: Funzione per calcolare quante colonne stanno nella larghezza definita
+// calcolo colonne nella larghezza definita
 function getDynamicColumns() {
   return max(1, floor(CONFIG.layout.gridWidth / (TARGET_CELL_WIDTH + CELL_SPACING)));
 }
@@ -954,36 +946,7 @@ function drawComplexCell(commodityName, x, y, w, h) {
   fill(LEVEL2_COLOR);
   rect(innerX + 4, fillY - 8, innerW - 10, fillH + 8);
   pop();
-
-  // === IMMAGINE RIEMPIMENTO SOPRA IL RETTANGOLO COLORATO ===
-  /*if (fillImg) {
-    push();
-    drawingContext.save();
-    drawingContext.beginPath();
-    drawingContext.rect(innerX + 4, fillY - 8, innerW - 10, fillH + 8);
-    drawingContext.clip();
-
-    drawImageFillLevel(
-      fillImg,
-      innerX + 4,
-      innerBottomY - 8,
-      innerW - 10,
-      innerH,
-      fillH
-    );
-
-    drawingContext.restore();
-    pop();
-  }*/
-
-  // Parte superiore curva (bianca)
-  /*const hoverResult = checkGridHover(commodities, GRID_START_Y);
-  if (!(hoverResult && hoverResult.commodity === commodityName)) {
-    push();
-    fill(CONFIG.colors.slider.thumb);
-    ellipse(innerX + 70, fillY - 37, 170, 80);
-    pop();
-  }*/
+ 
 
   // === BASKET OVERLAY ===
   if (img_over && img_over.width)
@@ -1121,35 +1084,7 @@ function drawInfoLegend() {
 
     currentY +=25;
 
-    // 3) Immagini cause of loss
-    /*let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
-                  "environmental factor", "storage", "harvest and management", "transport",  "waste", "insects, parasites and animals"];
-    for (let i = 0; i < causes.length; i++) {
-      //non avendo ancora le immagini, disegno dei cerchi segnaposto
-      const cause = causes[i];
-      const imgSize = 20;
-      const spacingX= 95;
-      const spacingY= 30;
-      const xPos = textX + (i % 2) * spacingX;
-      const yPos = currentY + Math.floor(i / 2) * spacingY;
-      fill(CONFIG.colors.background);
-      noStroke();
-      ellipse(xPos + imgSize / 2, yPos + imgSize / 2, imgSize);
-      // testo a fianco
-      //se c'è la parola "and" la sostituisamo con una virgola
-      let causeText = cause.replace(" and ", ", ");
-      //se la parola è troppo lunga, mandiamo a capo ad ogni spazio
-      if (causeText.length > 15) {
-        causeText = causeText.replace(/ /g, '\n');
-      }   
-
-      fill(CONFIG.colors.background);
-      textLeading(10);
-      textSize(10);
-      textAlign(LEFT, CENTER);
-      textStyle(NORMAL);
-      text(causeText, xPos + imgSize + 5, yPos + imgSize / 2);
-    }*/
+  
    // 3) Immagini cause of loss
     let causes = ["conservation", "disease", "machinery damage", "market", "drying", "processing",
                   "environmental factor", "storage", "harvest and management", "transport",  "waste", "insects, parasites and animals"];
