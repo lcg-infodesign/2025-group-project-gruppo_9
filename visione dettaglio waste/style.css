@@ -474,7 +474,7 @@ body {
 
 /* Classe che si aggiunge quando scrolli */
 #fixed-header.scrolled {
-    background-color: #F5F3EE; /* Stesso colore di sfondo */
+    background-color: rgba(245, 243, 238, 0.9);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
