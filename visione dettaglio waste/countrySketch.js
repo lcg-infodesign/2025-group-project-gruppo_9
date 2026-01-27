@@ -208,7 +208,7 @@ function getFullDataRow(country, year, commodity) {
 // ===== PRELOAD =====
 function preload() {
   table = loadTable(
-    "../assets/dataset/cleaned_dataset_inglese.csv",
+    "../assets/dataset/dataset.csv",
     "csv",
     "header",
     () => console.log("CSV caricato", table.getRowCount()),
@@ -381,6 +381,12 @@ function updateSliderThumb() {
   if (!selectedYear) return;
   const percent = (selectedYear - yearRange.min) / (yearRange.max - yearRange.min);
   slider.thumb.x = slider.x + percent * slider.width;
+
+  // Aggiorna il testo nell'HTML
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) {
+        yearElement.textContent = selectedYear;
+    }
 }
 
 function getYearFromX(x) {
@@ -467,6 +473,11 @@ function updateYearFromSlider(x) {
     selectedYear = newYear;
     updateSliderThumb();
 
+    const yearElement = document.getElementById('current-year');
+        if (yearElement) {
+            yearElement.textContent = selectedYear;
+        }
+
     const lab = document.getElementById("yearLabel");
     if (lab) lab.textContent = selectedYear;
 
@@ -533,7 +544,7 @@ function drawTimeline() {
   const boxY = 20; // sopra lo slider
 
   // Scritta "Selected Year:" centrata sopra il box
-  noStroke();
+  /*noStroke();
   fill('#415E5A');
   textSize(14);
   textAlign(CENTER, TOP);
@@ -544,7 +555,7 @@ function drawTimeline() {
   textStyle(BOLD);
   textSize(CONFIG.typography.sliderValueSize);
   textAlign(CENTER, TOP);
-  text(selectedYear, boxX, boxY + 30);
+  text(selectedYear, boxX, boxY + 30);*/
   textStyle(NORMAL);
 
   textSize(12);
@@ -1554,13 +1565,13 @@ function handleKeyPress(event) {
     if (selectedYear > yearRange.min) {
       selectedYear--;
       updateSliderThumb();
-      updateYear();
+      //updateYear();
     }
   } else if (event.key === 'ArrowRight') {
     if (selectedYear < yearRange.max) {
       selectedYear++;
       updateSliderThumb();
-      updateYear();
+      //updateYear();
     }
   }
 }

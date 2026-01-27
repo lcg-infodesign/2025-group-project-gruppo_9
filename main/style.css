@@ -358,21 +358,6 @@ body.tutorial-open {
     z-index: 1;
 }
 
-/* Sposta la legenda dello slider FUORI dal fixed-header */
-.slider-legend {
-    position: absolute;
-    left: 50px; /* A sinistra */
-    top: 20px;
-    width: 200px;
-    background-color: #415E5A;
-    color: #F5F3EE;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    line-height: 14px;
-}
-
 #year-display {
     text-align: center;
     font-family: 'Roboto', sans-serif;
