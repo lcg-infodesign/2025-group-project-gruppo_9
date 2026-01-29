@@ -126,6 +126,37 @@ Per rendere il dataset esplorabile e coerente con gli obiettivi di conoscenza, i
 https://docs.google.com/spreadsheets/d/1NZWyZyY00FchE5g2odcLVNRNYcSqfYXh57ye09JH8Pk/edit?gid=1460783596#gid=1460783596
 
 ---
+## Autori e licenza
+
+**Food Waste – The Whole Story**  
+Progetto realizzato dal **Gruppo 9 - Laboratorio di Information Design, C1, A.A. 2025–2026**  
+Politecnico di Milano.
+
+### Licenza
+
+© 2026 Politecnico di Milano  
+
+Questo lavoro è distribuito con licenza  
+**Creative Commons Attribution–ShareAlike 4.0 International (CC BY-SA 4.0)**.
+
+https://creativecommons.org/licenses/by-sa/4.0/
+
+## Team
+I membri del team e i loro ruoli:
+
+- **Caterina Gallo** — si è occupata di studio e ricerca, scelta di font e palette colori, definizione dello stile visivo, realizzazione delle illustrazioni, revisione testi e copywriting, codice html, css e JavaScript (parte introduttiva);
+- **Giulia Furlani** — si è occupata di studio e ricerca, sviluppo del concept, prototipazione e mockup su Figma, scelta di font e palette colori, realizzazione delle illustrazioni;
+- **Irene Massignani** — si è occupata di studio e ricerca, sintesi e semplificazione dataset, sviluppo del concept, definizione dello stile visivo, prototipazione e mockup su Figma, animazioni e codice html, css e JavaScript (pagine Data e About), verificazione della coerenza progettuale;
+- **Rebecca Sole Bassani** — si è occupata di studio e ricerca, definizione degli obiettivi di conoscenza, sviluppo del concept, definizione dello stile visivo, sitemap e user flow, prototipazione e mockup su Figma, scrittura del copy e del README, codice html, css e JavaScript (parte introduttiva, header, footer, pagine Data e About), verificazione della coerenza progettuale;
+- **Stefano Lorini** — si è occupato di studio e ricerca, realizzazione codice (html, css e JavaScript) di base del sito, codice pagina principale (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI;
+- **Tommaso Barazzetta** — si è occupato di studio e ricerca, realizzazione codice di base del sito (html, css e JavaScript), codice pagina di dettaglio (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI.
+
+---
+
+<details>
+<summary><strong>Strumenti utilizzati</strong></summary>
+
+<br>
 
 ## Strumenti
 
@@ -137,21 +168,10 @@ https://docs.google.com/spreadsheets/d/1NZWyZyY00FchE5g2odcLVNRNYcSqfYXh57ye09JH
 - **Visual Studio Code**, sviluppo web, codice html, css, JavaScript e p5.js  
 - **GitHub**, versionamento e lavoro collaborativo
 
----
-
-## Team
-
-Questo progetto è stato realizzato dal **Gruppo 9 del Laboratorio di Information Design, C1, A.A. 2025–2026**.
-I membri del team e i loro ruoli:
-
-- **Caterina Gallo** — si è occupata di studio e ricerca, scelta di font e palette colori, definizione dello stile visivo, realizzazione delle illustrazioni, revisione testi e copywriting, codice html, css e JavaScript (parte introduttiva);
-- **Giulia Furlani** — si è occupata di studio e ricerca, sviluppo del concept, prototipazione e mockup su Figma, scelta di font e palette colori, realizzazione delle illustrazioni;
-- **Irene Massignani** — si è occupata di studio e ricerca, sintesi e semplificazione dataset, sviluppo del concept, definizione dello stile visivo, prototipazione e mockup su Figma, animazioni e codice html, css e JavaScript (pagine Data e About), verificazione della coerenza progettuale;
-- **Rebecca Sole Bassani** — si è occupata di studio e ricerca, definizione degli obiettivi di conoscenza, sviluppo del concept, definizione dello stile visivo, sitemap e user flow, prototipazione e mockup su Figma, scrittura del copy e del README, codice html, css e JavaScript (parte introduttiva, header, footer, pagine Data e About), verificazione della coerenza progettuale;
-- **Stefano Lorini** — si è occupato di studio e ricerca, realizzazione codice (html, css e JavaScript) di base del sito, codice pagina principale (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI;
-- **Tommaso Barazzetta** — si è occupato di studio e ricerca, realizzazione codice di base del sito (html, css e JavaScript), codice pagina di dettaglio (p5.js), risoluzione dei problemi inerenti al codice, fix e debug, progettazione UX/UI.
+</details>
 
 ---
+
 <details>
 <summary><strong>Riferimenti e ispirazioni</strong></summary>
 
@@ -196,7 +216,7 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
   - Observable D3 Gallery  
     https://observablehq.com/@d3/gallery
   - Information is Beautiful Awards  
-    https://www.informationisbeautifulawards.com/showcase?award=2024&type=awards
+    https://www.informationisbeautifulawards.com/showcase?award=2024&type=awards    
 
 ### Riferimenti teorici e testuali
 
@@ -205,5 +225,17 @@ Nel suo sviluppo, il gruppo ha fatto riferimento a diversi progetti, strumenti e
 - *A New Chart of History* (Joseph Priestley)  
 
 Questi riferimenti hanno contribuito a definire sia l’approccio concettuale sia le scelte visive e interattive del progetto, senza costituire modelli da replicare, ma piuttosto **strumenti critici di confronto e ispirazione**.
+
+### Utilizzo di strumenti di Intelligenza Artificiale
+
+Nel corso dello sviluppo del progetto sono stati utilizzati strumenti di Intelligenza Artificiale generativa, in particolare **ChatGPT** e **Google Gemini**, come supporto tecnico per:
+
+- individuare e risolvere errori nel codice;
+- effettuare operazioni di *debug*;
+- ottimizzare alcune funzioni complesse, rendendole più leggere e leggibili;
+- chiarire il funzionamento di specifiche librerie e metodi.
+
+L’utilizzo di questi strumenti è avvenuto in modo **assistivo e critico**:  
+le soluzioni proposte sono sempre state comprese, adattate e integrate manualmente nel progetto.
 
 </details>

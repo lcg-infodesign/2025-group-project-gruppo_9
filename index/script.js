@@ -258,6 +258,9 @@ function showStep(index) {
       step.style.display = "none";
       step.classList.remove("active-step");
     }
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === tutorialSteps.length - 1;
   });
 
   // Aggiorna barra
@@ -293,6 +296,19 @@ function goTutorialPrev() {
   }
 }
 
+const nextBtn = document.querySelector('.nav-btn.next');
+const prevBtn = document.querySelector('.nav-btn.prev');
+
+nextBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  goTutorialNext();
+});
+
+prevBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  goTutorialPrev();
+});
+
 // RESET (Quando apri il tutorial)
 function resetTutorial() {
   currentStep = 0;
@@ -300,10 +316,10 @@ function resetTutorial() {
 }
 
 // CLICK SUL TUTORIAL (Per avanzare cliccando ovunque tranne sul bottone finale)
-tutorialSec.addEventListener("click", (e) => {
-  if (e.target.closest("#finishTutorialBtn")) return;
-  goTutorialNext();
-});
+//tutorialSec.addEventListener("click", (e) => {
+ // if (e.target.closest("#finishTutorialBtn")) return;
+  //goTutorialNext();
+//});
 
 // TASTIERA SOLO PER IL TUTORIAL
 document.addEventListener("keydown", (e) => {
