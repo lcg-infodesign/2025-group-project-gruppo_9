@@ -102,7 +102,7 @@ let currentCacheYear = null;
 
 // ===== INIZIALIZZAZIONE =====
 function preload() {
-    dataset = loadTable('../assets/dataset/Dataset.csv', 'csv', 'header', initializeData);
+    dataset = loadTable('../assets/dataset/Dataset.csv', 'csv', 'header', initializeData); 
     basketImage = loadImage('../assets/img/basket.svg');
     legendImage = loadImage('../assets/img/legenda.svg');
 }

@@ -208,7 +208,7 @@ function getFullDataRow(country, year, commodity) {
 // ===== PRELOAD =====
 function preload() {
   table = loadTable(
-    "../assets/dataset/Dataset.csv",
+    "../assets/dataset/Dataset.csv", 
     "csv",
     "header",
     () => console.log("CSV caricato", table.getRowCount()),
