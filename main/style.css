@@ -186,7 +186,7 @@ body {
   overflow-y: auto;
   position: relative;
   
-  margin-top: 20px;
+  margin-top: 60px;
   max-height: calc(80vh - 80px);
 }
 
