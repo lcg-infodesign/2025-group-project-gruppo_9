@@ -139,7 +139,7 @@ body {
 }
 
 #dropdownContainer {
- pointer-events: none;
+ cursor: pointer;
   width: 300px; /* O un valore fisso tipo 300px */
   padding-top: 180px; /* Ridotto da 35px */
   display: flex;
@@ -150,6 +150,7 @@ body {
 /*nuove */
 /* Stile per il selettore paesi */
 #countrySelect {
+    cursor: pointer;
     /* Dimensioni e spaziatura */
     padding: 12px 20px;
     font-size: 24px;
@@ -459,7 +460,6 @@ body {
 
 /* STILI PER HEADER ANNO SELEZIONATO */
 #fixed-header {
-    pointer-events: none;
     position: fixed;
     top: 60px; /* Sotto l'header principale */
     left: 0;
