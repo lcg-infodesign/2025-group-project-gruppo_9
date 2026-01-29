@@ -543,19 +543,7 @@ function drawTimeline() {
   const boxX = width / 2;
   const boxY = 20; // sopra lo slider
 
-  // Scritta "Selected Year:" centrata sopra il box
-  /*noStroke();
-  fill('#415E5A');
-  textSize(14);
-  textAlign(CENTER, TOP);
-  textFont(CONFIG.typography.fontFamily);
-  text("Selected Year:", boxX, boxY);
   
-  // Numero anno centrato nel box
-  textStyle(BOLD);
-  textSize(CONFIG.typography.sliderValueSize);
-  textAlign(CENTER, TOP);
-  text(selectedYear, boxX, boxY + 30);*/
   textStyle(NORMAL);
 
   textSize(12);
@@ -1062,7 +1050,7 @@ function drawInfoLegend() {
     // Sfondo della legenda
     fill(CONFIG.colors.overlay);
     noStroke();
-    rect(legendX, legendY, legendWidth, legendHeight, 8);
+    rect(legendX, legendY, legendWidth+20, legendHeight+70, 8);
 
     let currentY = legendY + padding;
 
@@ -1075,7 +1063,7 @@ function drawInfoLegend() {
     // 1) Testo principale 
     textSize(CONFIG.typography.legendSize - 5);
     textStyle(NORMAL);
-    textLeading(14); // interlinea
+    textLeading(16); // interlinea
 
     const textX = legendX + padding;
     const textY = currentY;
@@ -1086,7 +1074,7 @@ function drawInfoLegend() {
         textY
     );
 
-    currentY +=105;
+    currentY +=115;
 
     // 2) Testo Cause of loss
     textSize(CONFIG.typography.legendSize - 5);
@@ -1103,9 +1091,9 @@ function drawInfoLegend() {
     for (let i = 0; i < causes.length; i++) {
       const cause = causes[i];
       const normCause = normalizeFilename(cause);
-      const imgSize = 22; // Leggermente più grande per visibilità
-      const spacingX = 95;
-      const spacingY = 32;
+      const imgSize = 38; // Leggermente più grande per visibilità
+      const spacingX = 115;
+      const spacingY = 42;
       const xPos = textX + (i % 2) * spacingX;
       const yPos = currentY + Math.floor(i / 2) * spacingY;
 
@@ -1127,14 +1115,14 @@ function drawInfoLegend() {
 
       fill(CONFIG.colors.background);
       textLeading(10);
-      textSize(10);
+      textSize(11);
       textAlign(LEFT, CENTER);
       textStyle(NORMAL);
       // Sposta il testo leggermente a destra dell'immagine
       text(causeText, xPos + imgSize + 6, yPos + imgSize / 2);
     }
 
-    currentY +=190;
+    currentY +=255;
 
     // Linea separatrice
     stroke(CONFIG.colors.background);
@@ -1142,7 +1130,7 @@ function drawInfoLegend() {
     line(legendX + padding, currentY, legendX + legendWidth - padding, currentY);
     
     // Immagine outline e testo "dato non presente"
-    currentY += 30;
+    currentY += 25;
     const outlineImageY = currentY;
     
     if (legendImage && legendImage.width > 0) {
@@ -1176,7 +1164,7 @@ function drawInfoLegend() {
 
 function drawSizeLegend() {
     const legendX = width - CONFIG.layout.legend.marginRight - CONFIG.layout.legend.width;
-    const legendY = GRID_START_Y + 20 + 420;
+    const legendY = GRID_START_Y + 75 + 420;
     const padding = CONFIG.layout.legend.padding;
     
     // 1. PRIMA CALCOLA L'ALTEZZA NECESSARIA
@@ -1233,7 +1221,7 @@ function drawSizeLegend() {
     
     // Usa l'altezza calcolata invece di quella fissa
     const legendHeight = min(calculatedHeight, height - legendY - 50); // Non oltre l'altezza del canvas
-    const legendWidth = CONFIG.layout.legend.width + 40;
+    const legendWidth = CONFIG.layout.legend.width + 62;
     
     // Calcola lineBottomY in base all'altezza calcolata
     const lineX = legendX + 30;
@@ -1599,13 +1587,13 @@ function drawCellDetails(commodityName, x, y, w, h) {
   }
 
   // 2. Disegno il nome della commodity (sotto l'icona)
-  fill(CONFIG.colors.slider.text);
+  fill('#415E5A');
   noStroke();
   textAlign(CENTER, TOP);
   textSize(15);
-  textStyle(BOLD);
-  textFont(CONFIG.typography.fontFamily);
   
+  textFont(CONFIG.typography.fontFamily);
+  textStyle(BOLD);
   // Scriviamo il nome in maiuscolo per ordine estetico
   text(commodityName.toUpperCase(), centerX, detailY + 32);
   
