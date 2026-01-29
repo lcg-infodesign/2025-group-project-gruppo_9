@@ -60,12 +60,11 @@ li {
 /* =========================================
    3. HEADER
    ========================================= */
-
 #headerBar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 60px; /* Mantieni la tua altezza */
     background: #e3e4df;
     border-bottom: 2px solid rgba(32, 51, 43, 0.15);
@@ -81,21 +80,32 @@ li {
 
 .header-left { 
     justify-self: start; 
+    /* Aggiungi queste righe per allineare i due bottoni */
     display: flex;
-    gap: 12px;
+    gap: 12px; /* Spazio tra i due bottoni */
     align-items: center;
 }
-.header-center { justify-self: center; }
+.header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .header-right {
     justify-self: end;
     display: flex;
     gap: 20px;
 }
 
-/* Logo */
+/* STILE LOGO MULTI-LINEA (ROBOTO) */
+#siteLogo {
+    display: flex;
+    align-items: center;
+}
+
 #siteLogo img.logo-img {
-    height: 65px; /* Altezza desiderata */
-    width: auto;  /* Mantiene proporzioni */
+    height: 55px;   /* sicuro dentro i 60px */
+    max-height: 100%;
+    width: auto;
     display: block;
 }
 
