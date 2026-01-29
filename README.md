@@ -170,8 +170,6 @@ I membri del team e i loro ruoli:
 
 </details>
 
----
-
 <details>
 <summary><strong>Riferimenti e ispirazioni</strong></summary>
 
