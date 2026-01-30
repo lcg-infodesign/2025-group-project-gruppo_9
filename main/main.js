@@ -96,6 +96,9 @@ let hoveredRowData = null; // Dati della riga in hover
 let isHoveringBasket = false; // Se siamo sopra un cestino
 let isHoveringCountry = false; // Se siamo sopra il nome di un paese
 
+//TUTORIAL
+let tutorialOpen = false;
+
 // ===== CACHE =====
 let combinationCache = {};
 let currentCacheYear = null;
@@ -431,6 +434,13 @@ function updateSliderThumb() {
 }
 
 function mouseMoved() {
+    if (tutorialOpen) {
+        hoveredRowData = null;
+        hoveredRow = -1;
+        hoveredCol = -1;
+        document.body.style.cursor = 'default';
+        return false;
+    }
     // Controlla se siamo sopra lo slider
     isHoveringSlider = (
         mouseX >= slider.x - 20 && 
@@ -527,6 +537,7 @@ function updateRowHover() {
 }
 
 function mousePressed() {
+  if (tutorialOpen) return false;  
     // Check slider thumb
     if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
         slider.thumb.dragging = true;
@@ -938,6 +949,7 @@ function drawCellDot(row, col, x, y, exists, country, year) {
 
 
 function mouseClicked() {
+    if (tutorialOpen) return false;
     if (isValidCell(hoveredRow, hoveredCol)) {
         const country = sortedCountries[hoveredRow];
         const exists = checkCombinationCached(country, commodities[hoveredCol], currentYear);
@@ -1366,6 +1378,7 @@ const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
 if (helpBtn && tutorialSection && tutorialCloseBtn) {
 
     helpBtn.addEventListener('click', () => {
+        tutorialOpen = true;
         tutorialSection.classList.add('active');
         tutorialOverlay.style.display = 'block';
         document.body.style.height = '100vh';
@@ -1375,6 +1388,10 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
     });
 
     tutorialCloseBtn.addEventListener('click', () => {
+        tutorialOpen = false;
+        hoveredRowData = null;        
+        hoveredRow = -1;
+        hoveredCol = -1;
         tutorialSection.classList.remove('active');
         tutorialOverlay.style.display = 'none';
         document.body.style.height = '';
@@ -1395,4 +1412,3 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
     });
 
 }
-

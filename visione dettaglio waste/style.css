@@ -278,7 +278,8 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
+  pointer-events: all;
 }
 
 #tutorialSection.active {
@@ -314,6 +315,7 @@ body {
   
   margin-top: 60px;
   max-height: calc(80vh - 80px);
+  pointer-events: auto;
 }
 
 /* =========================

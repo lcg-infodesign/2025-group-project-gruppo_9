@@ -94,6 +94,9 @@ let commodityImgs = {};
 let commodityOutline = {};
 let causeImgs = {};
 
+//TUTORIAL
+let tutorialOpen = false;
+
 // Parametri visivi griglia 
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 132;
@@ -397,6 +400,14 @@ function getYearFromX(x) {
 // ===== INTERAZIONE MOUSE (P5.JS) =====
 
 function mouseMoved() {
+  if (tutorialOpen) {
+        hoveredRowData = null;
+        hoveredRow = -1;
+        hoveredCol = -1;
+        document.body.style.cursor = 'default';
+        return false;
+    }
+
   isHoveringSlider = false;
   isHoveringCell = false;
   tooltipData = null;
@@ -438,6 +449,7 @@ function mouseMoved() {
 }
 
 function mousePressed() {
+  if (tutorialOpen) return false;
   if (dist(mouseX, mouseY, slider.thumb.x, slider.y + 5) < slider.thumb.width / 2) {
     slider.thumb.dragging = true;
     cursor('pointer');
@@ -453,6 +465,7 @@ function mousePressed() {
 }
 
 function mouseDragged() {
+  if (tutorialOpen) return false;
   if (slider.thumb.dragging) {
     updateYearFromSlider(mouseX);
     cursor('grabbing');
@@ -468,6 +481,7 @@ function mouseReleased() {
 }
 
 function updateYearFromSlider(x) {
+  if (tutorialOpen) return false;
   const newYear = getYearFromX(x);
   if (newYear !== selectedYear) {
     selectedYear = newYear;
@@ -643,6 +657,7 @@ function getDynamicColumns() {
 }
 
 function checkGridHover(items, startY) {
+   if (tutorialOpen) return;
   const dynamicCols = getDynamicColumns();
   const cellWidth = TARGET_CELL_WIDTH;
   const cellHeight = Math.round(cellWidth * (INTERNAL_NOMINAL_H / INTERNAL_NOMINAL_W));
@@ -1648,6 +1663,7 @@ const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
 if (helpBtn && tutorialSection && tutorialCloseBtn) {
 
     helpBtn.addEventListener('click', () => {
+       tutorialOpen = true;
         tutorialSection.classList.add('active');
         tutorialOverlay.style.display = 'block';
         document.body.style.height = '100vh';
@@ -1657,6 +1673,11 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
     });
 
     tutorialCloseBtn.addEventListener('click', () => {
+      tutorialOpen = false;         
+
+    hoveredRowData = null;        
+    hoveredRow = -1;
+    hoveredCol = -1;
         tutorialSection.classList.remove('active');
         tutorialOverlay.style.display = 'none';
         document.body.style.height = '';
