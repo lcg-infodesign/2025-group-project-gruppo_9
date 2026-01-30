@@ -100,6 +100,7 @@ let isHoveringCountry = false; // Se siamo sopra il nome di un paese
 let combinationCache = {};
 let currentCacheYear = null;
 
+
 // ===== INIZIALIZZAZIONE =====
 function preload() {
     dataset = loadTable('../assets/dataset/Dataset.csv', 'csv', 'header', initializeData); 
@@ -1394,3 +1395,4 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
     });
 
 }
+
