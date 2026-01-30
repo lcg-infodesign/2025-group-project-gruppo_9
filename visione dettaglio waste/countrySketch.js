@@ -711,7 +711,7 @@ function drawFlexGrid(items, startY) {
     if (i === hoveredCellIndex && isHoveringCell) {
       // Viene disegnata dopo sopra l'overlay
     } else {
-      drawComplexCell(item, currentX, currentY, cellWidth, cellHeight);
+      drawComplexCell(item, currentX, currentY, cellWidth, cellHeight, i);
       drawCellDetails(item, currentX, currentY, cellWidth, cellHeight);
     }
 
@@ -840,7 +840,7 @@ function drawTooltip() {
   pop();
 }
 
-function drawComplexCell(commodityName, x, y, w, h) {
+function drawComplexCell(commodityName, x, y, w, h, cellIndex) {
   push();
   noFill();
   stroke(0, 12);
@@ -862,6 +862,15 @@ function drawComplexCell(commodityName, x, y, w, h) {
 
   const baseX = x + (w - baseW) / 2;
   const baseY = y + (h - baseH) / 2;
+
+  // Calcola le coordinate del cestino PRIMA di verificare i dati
+  const nominalW = INTERNAL_NOMINAL_W + 50;
+  const nominalH = INTERNAL_NOMINAL_H + 50;
+  const scaleInner = Math.min(1, baseW / (nominalW + 12), baseH / (nominalH + 12));
+  const innerW = Math.round(nominalW * scaleInner);
+  const innerH = Math.round(nominalH * scaleInner);
+  const innerX = baseX + Math.round((baseW - innerW) / 2);
+  const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+12;
 
   const rowData = data.find(d =>
     d.country === selectedCountry &&
@@ -899,6 +908,11 @@ function drawComplexCell(commodityName, x, y, w, h) {
       pop();
     }
 
+    // === DISEGNA MAX/MIN LABELS ANCHE PER CESTINI SENZA DATI ===
+    if (cellIndex === 0) {
+      drawMaxMinLabels(innerX, innerBottomY, innerH);
+    }
+
     pop();
     return;
   }
@@ -910,14 +924,6 @@ function drawComplexCell(commodityName, x, y, w, h) {
   if (pct > 0 && pct < MIN_FILL_PERCENTAGE) {
     pct = MIN_FILL_PERCENTAGE;
   }
-
-  const nominalW = INTERNAL_NOMINAL_W + 50;
-  const nominalH = INTERNAL_NOMINAL_H + 50;
-  const scaleInner = Math.min(1, baseW / (nominalW + 12), baseH / (nominalH + 12));
-  const innerW = Math.round(nominalW * scaleInner);
-  const innerH = Math.round(nominalH * scaleInner);
-  const innerX = baseX + Math.round((baseW - innerW) / 2);
-  const innerBottomY = baseY + baseH - Math.round(innerH * 0.08)+12;
 
   // Altezza con map()
   const fillH = map(pct, 0, 100, MIN_FILL_HEIGHT, innerH);
@@ -972,6 +978,36 @@ function drawComplexCell(commodityName, x, y, w, h) {
     pop();
   }
 
+  // === DISEGNA MAX/MIN LABELS SOLO SUL PRIMO CESTINO ===
+  if (cellIndex === 0) {
+    drawMaxMinLabels(innerX, innerBottomY, innerH);
+  }
+
+  pop();
+}
+
+function drawMaxMinLabels(innerX, innerBottomY, innerH) {
+  push();
+  
+  // Posizioni dei label
+  const maxLabelY = innerBottomY - innerH +3;  // Sopra il cestino
+  const minLabelY = innerBottomY-25;           // Sotto il cestino
+  const labelX = innerX -10;                    // A sinistra del cestino
+  
+  // Stile del testo
+  fill('#415E5A');
+  noStroke();
+  textFont('Roboto Mono');
+  textSize(14);
+  textStyle(NORMAL);
+  textAlign(RIGHT, CENTER);
+  
+  // Disegna "max" in alto
+  text('max', labelX, maxLabelY);
+  
+  // Disegna "min" in basso
+  text('min', labelX, minLabelY);
+  
   pop();
 }
 
@@ -994,7 +1030,7 @@ function drawHoveredCell() {
     }
 
     if (i === hoveredCellIndex) {
-      drawComplexCell(commodity, currentX, currentY, cellWidth, cellHeight);
+      drawComplexCell(commodity, currentX, currentY, cellWidth, cellHeight, i);
       drawCellDetails(commodity, currentX, currentY, cellWidth, cellHeight);
       return;
     }
