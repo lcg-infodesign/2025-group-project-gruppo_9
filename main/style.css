@@ -5,6 +5,10 @@
     --highlight: #B64939;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
     background-color: #F5F3EE;
     margin: 0;

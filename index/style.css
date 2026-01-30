@@ -548,6 +548,11 @@ a,
   pointer-events: none;
 }
 
+#tutorialSection #finishTutorialBtn {
+  position: relative;
+  top: 2.5rem;
+}
+
 /* --- TUTORIAL PROGRESS --- */
 
 .tutorial-progress {

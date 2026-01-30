@@ -1,10 +1,12 @@
 * { box-sizing: border-box; }
 
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: Inter, Arial, sans-serif;
+  scroll-behavior: smooth;
 }
 
 /* ---------------- HEADER ---------------- */
@@ -287,6 +289,15 @@ body {
    TUTORIAL CONTAINER
 ========================= */
 
+.tutorial-title {
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+
 .tutorial-container {
   font-family: 'Roboto Mono', monospace; 
   font-weight: 500;
@@ -300,10 +311,51 @@ body {
   max-height: 85vh;
   overflow-y: auto;
   position: relative;
-  margin-top: 10px;
+  
+  margin-top: 60px;
   max-height: calc(80vh - 80px);
 }
 
+/* =========================
+   STEPS LIST
+========================= */
+
+.tutorial-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.tutorial-steps li {
+  background: #ffffff;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+  
+}
+
+
+/* =========================
+   IMAGES
+========================= */
+
+.tutorial-screenshot {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+body.tutorial-open {
+  overflow: hidden;
+}
 /* =========================
    CLOSE BUTTON ( X )
 ========================= */
@@ -358,7 +410,6 @@ body {
 #backToTop:hover {
   background-color: #283618; /* verde scuro testo */
 }
-
 
 /* FOOTER */
 .footer {

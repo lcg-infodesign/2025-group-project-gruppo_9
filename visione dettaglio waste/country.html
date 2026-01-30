@@ -14,54 +14,49 @@
   <button id="helpBtn" aria-label="Open tutorial">?</button>
 
 
-    <!-- TUTORIAL OVERLAY -->
+<!-- TUTORIAL OVERLAY -->
 <div id="tutorialOverlay" style="display:none">
   <section id="tutorialSection">
     <div class="tutorial-container">
 
          <button id="tutorialCloseBtn" aria-label="Close tutorial">×</button>
 
-      <div class="tutorial-progress">
-        <span class="tutorial-step-label">
-          STEP <span id="currentStep">1</span> / <span id="totalSteps">5</span>
-        </span>
-        <div class="tutorial-progress-line">
-          <div class="tutorial-progress-fill"></div>
-        </div>
-      </div>
+         <h2 class="tutorial-title">How does it work?</h2>
 
       <ul class="tutorial-steps">
         <li>
-          Once inside the <strong>DATAPAGE</strong>, the first element you’ll interact with is the TIMELINE.
-          <br><em>How to Use:</em> drag the timeline left/right or click on the years.
-          <img src="../assets/img/tutorial/timeline.png" alt="Timeline screenshot" class="tutorial-screenshot">
+          <strong>Navigate Time</strong><br>
+            Use the <strong>Timeline</strong> at the top to change years.
+            <br><em>(drag left/right, click, or use the keyboard arrow keys.)</em>
+            <br> Look at the <strong>Matrix</strong> to see the connection between <em>Country</em> and <em>Product</em>.
+            <br><em>(Note: percentages are not comparable.)</em>
+            <img src="../assets/img/tutorial/timeline.png" alt="Matrix screenshot" class="tutorial-screenshot">
         </li>
 
         <li>
-          The core of the site is the <strong>DATA MATRIX</strong>. Each cell represents a combination of <em>country</em>, <em>commodity</em>, and <em>year</em>.
-          <br><em>Note:</em> percentages represent only the main cause.
-          <img src="../assets/img/tutorial/matrice.png" alt="Matrix screenshot" class="tutorial-screenshot">
+         <strong>Dig Deeper</strong><br>
+          Want more details? <br>
+          <strong>Click on any row</strong> (Country) to open a dedicated analysis page.
+          <img src="../assets/img/tutorial/clickrow.png" alt="Row screenshot" class="tutorial-screenshot">
         </li>
 
         <li>
-          <strong>Select a country:</strong> click on a row to open its detail page.
-          <img src="../assets/img/tutorial/row.png" alt="Row screenshot" class="tutorial-screenshot">
+          <strong>Analyze the Causes</strong><br>
+          Inside the country view, discover the <strong>main</strong> causes and supply chain stages where food is lost.(e.g., during harvest or transport).
+          <img src="../assets/img/tutorial/dettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
         </li>
 
         <li>
-          <strong>Understand charts:</strong> each commodity shows causes and value chain stages.
-          <img src="../assets/img/tutorial/paginadidettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
+          <strong>Explore details</strong><br>
+          Don't just look, interact! <strong>Hover your mouse</strong> over charts and bars to reveal precise numbers and "hidden" info.
+          <img src="../assets/img/tutorial/hover.png" alt="Hover screenshot" class="tutorial-screenshot">
         </li>
 
         <li>
-          <strong>Interact:</strong> hover and click on elements to reveal more details.
-          <img src="../assets/img/tutorial/hover-tooltip.png" alt="Hover screenshot" class="tutorial-screenshot">
+        <strong>Ready to explore?</strong><br>
+                 Dive into the data and discover the whole story.
         </li>
       </ul>
-
-      <a href="main/main.html" class="explore-data-btn" id="finishTutorialBtn" style="display:none">
-        Start exploring the data
-      </a>
 
     </div>
   </section>
