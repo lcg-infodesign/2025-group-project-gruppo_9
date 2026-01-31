@@ -262,12 +262,11 @@ body {
   padding-bottom: 0;
 }
 
-.tutorial-steps li strong {
-  font-size: 1.3rem;
+.tutorial-steps li > strong {
+  font-size: 1.4rem;
   color: #F5F3EE; 
   display: block;
   margin-bottom: 5px;
-  letter-spacing: 1px;
 }
 
 .tutorial-steps li p {
