@@ -67,7 +67,7 @@ let dataset = [], commodities = [], countries = [];
 let cellWidth, cellHeight;
 let hoveredCol = -1, hoveredRow = -1;
 let clickedCol = -1, clickedRow = -1;
-let currentYear = 2020;
+let currentYear = 1998;
 let yearRange = { min: 1972, max: 2024 };
 let sortedCountries = [];
 let slider = {
