@@ -7,7 +7,14 @@ html, body {
   padding: 0;
   font-family: Inter, Arial, sans-serif;
   scroll-behavior: smooth;
+overflow-x: hidden; /* evita scrollbar orizzontale */
+    overflow-y: auto;   /* solo una scrollbar verticale per il browser */
 }
+
+#canvasContainer {
+    overflow: hidden;   /* Chrome non aggiunge scrollbar interna */
+}
+
 
 /* ---------------- HEADER ---------------- */
 
