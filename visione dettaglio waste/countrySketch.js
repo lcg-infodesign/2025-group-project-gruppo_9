@@ -574,21 +574,22 @@ function drawTimeline() {
 
 function drawSliderDataPoints(y) {
   const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+  
+  hoveredTimelineYear = null;
 
   for (let year of years) {
     const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
     const pointHeight = 6.5;
 
-    // Rimuovi qualsiasi modifica a variabili globali
-    // if (dist(mouseX, mouseY, x, y + 10) < 8) {
-    //   hoveredTimelineYear = year;
-    // }
+    // Se il mouse è vicino al pallino (< 8px)
+    if (dist(mouseX, mouseY, x, y + 10) < 8) {
+      hoveredTimelineYear = year;
+    }
 
     fill(CONFIG.colors.slider.circle);
     ellipse(x, y + 10, pointHeight);
   }
 }
-
 
 
 function drawSliderWaveGraph() {
@@ -1711,19 +1712,34 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
 }
 
 function drawTimelineTooltip() {
-  if (!isHoveringSlider) return;
+  // Se non siamo sopra un pallino specifico, non disegnare nulla
+  if (hoveredTimelineYear === null) return;
 
-  const x = constrain(mouseX, slider.x, slider.x + slider.width);
-  const year = getYearFromX(x);
-
-  const y = slider.y - 15;
+  // Calcola la X basata sull'anno 
+  const x = map(hoveredTimelineYear, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+  const y = slider.y - 10; 
 
   push();
-  textSize(CONFIG.typography.sliderValueSize);
-  textAlign(CENTER, BOTTOM);
-  fill('#415E5A');
+  
+  const padding = 4; 
+  textSize(12); 
+  
+  const textStr = hoveredTimelineYear.toString();
+  const textW = textWidth(textStr) + padding * 2;
+  const textH = 16; 
+
+  rectMode(CENTER);
+  textAlign(CENTER, CENTER);
+
+  // Sfondo rettangolare 
+  fill(CONFIG.colors.tooltip?.background || '#415E5A'); 
   noStroke();
-  text(year, x, y);
+  rect(x, y, textW, textH, 4); 
+
+  // Testo
+  fill(CONFIG.colors.text?.hover || '#F5F3EE');
+  text(textStr, x, y); 
+  
   pop();
 }
 
