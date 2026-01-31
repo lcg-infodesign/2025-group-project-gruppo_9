@@ -264,10 +264,9 @@ body {
 
 .tutorial-steps li strong {
   font-size: 1.3rem;
-  color: #EDC69A; /* Giallo Oro */
+  color: #F5F3EE; 
   display: block;
   margin-bottom: 5px;
-  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
@@ -293,46 +292,53 @@ body {
 body.tutorial-open {
   overflow: hidden;
 }
-
 /* =========================
-   CLOSE BUTTON ( X )
+   CLOSE BUTTON (X GEOMETRICA)
 ========================= */
 
 #tutorialCloseBtn {
   position: absolute; 
   top: 25px;
   right: 25px;
-
   width: 44px;
   height: 44px;
   border-radius: 50%;
 
   background: transparent; 
   border: 2px solid #F5F3EE;       
-  color: #F5F3EE;
-  
-  /* FLEXBOX PER CENTRATURA */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  /* RESET E CORREZIONI OTTICHE */
-  padding: 0;
-  padding-bottom: 4px; /* Centratura ottica verticale */
-  line-height: 1;
-  
-  font-size: 32px; 
-  font-weight: 300; 
-  
+  color: #F5F3EE; 
   cursor: pointer;
   z-index: 100;
   transition: all 0.3s ease;
+    font-size: 0; 
+}
+
+/* X */
+#tutorialCloseBtn::before,
+#tutorialCloseBtn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; 
+  height: 2px; 
+  
+  background-color: currentColor;
+  border-radius: 2px; 
+}
+
+/* linee per formare la X */
+#tutorialCloseBtn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#tutorialCloseBtn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 #tutorialCloseBtn:hover {
-  /* Solo cambio colore, niente rotazione */
   background-color: #F5F3EE;
-  color: #365b55;
+  color: #365b55; 
 }
 
 /* BACK TO TOP BUTTON */
@@ -345,8 +351,8 @@ body.tutorial-open {
   border-radius: 50%;
   border: none;
 
-  background-color: #415E5A; /* verde slider */
-  color: #F5F3EE;            /* background */
+  background-color: #415E5A; 
+  color: #F5F3EE;            
   font-size: 20px;
   font-weight: bold;
 
