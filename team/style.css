@@ -342,8 +342,7 @@ li {
     background-color: white; /* SFONDO BIANCO */
     overflow: hidden;   /* Taglia tutto ciò che esce dal cerchio */
     margin-bottom: 15px;
-    cursor: pointer;    /* Fa capire che è interattivo */
-}
+    }
 
 /* STILE COMUNE PER LE DUE IMMAGINI (DEFAULT E HOVER) */
 .member-photo img {

@@ -79,11 +79,13 @@ document.addEventListener("click", (e) => {
 
 // TASTIERA GENERALE
 document.addEventListener("keydown", (e) => {
-  if (e.key === " " || e.key === "ArrowRight" || e.key === "ArrowDown") {
-    e.preventDefault(); 
-    handleProgress(); 
+  const nextKeys = [" ", "ArrowRight", "ArrowDown", "Enter"];
+  if (nextKeys.includes(e.key)) {
+    e.preventDefault();
+    handleProgress();
   }
 });
+
 
 // --- NAVIGAZIONE SEZIONI ---
 function goToIntro() {

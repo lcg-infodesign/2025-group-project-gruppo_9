@@ -97,6 +97,9 @@ let causeImgs = {};
 //TUTORIAL
 let tutorialOpen = false;
 
+//timeline
+let hoveredTimelineYear = null;
+
 // Parametri visivi griglia 
 const INTERNAL_NOMINAL_W = 90;
 const INTERNAL_NOMINAL_H = 132;
@@ -507,7 +510,8 @@ function draw() {
 
   // 2. Disegna Slider
   drawTimeline();
-
+  
+drawTimelineTooltip();
   // 3. Disegna Griglia
   drawFlexGrid(commodities, GRID_START_Y);
 
@@ -528,6 +532,7 @@ function draw() {
   if (tooltipData && isHoveringCell) {
     drawTooltip();
   }
+
 }
 
 function drawHoverOverlay() {
@@ -540,12 +545,12 @@ function drawHoverOverlay() {
 
 function drawTimeline() {
   drawSliderWaveGraph();
-
+  
   fill(CONFIG.colors.slider.track);
   noStroke();
   rect(slider.x, slider.y, slider.width, 20, 5);
 
-  drawSliderDataPoints();
+  drawSliderDataPoints(slider.y);
 
   stroke(CONFIG.colors.slider.track);
   strokeWeight(2);
@@ -567,18 +572,24 @@ function drawTimeline() {
   text(yearRange.max, slider.x + slider.width, slider.y + 45);
 }
 
-function drawSliderDataPoints() {
+function drawSliderDataPoints(y) {
   const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
 
   for (let year of years) {
     const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
     const pointHeight = 6.5;
-    const colorValue = CONFIG.colors.slider.circle;
-    fill(colorValue);
 
-    ellipse(x, slider.y + 10, pointHeight);
+    // Rimuovi qualsiasi modifica a variabili globali
+    // if (dist(mouseX, mouseY, x, y + 10) < 8) {
+    //   hoveredTimelineYear = year;
+    // }
+
+    fill(CONFIG.colors.slider.circle);
+    ellipse(x, y + 10, pointHeight);
   }
 }
+
+
 
 function drawSliderWaveGraph() {
   const originalDataCounts = {
@@ -1698,3 +1709,21 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
     });
 
 }
+
+function drawTimelineTooltip() {
+  if (!isHoveringSlider) return;
+
+  const x = constrain(mouseX, slider.x, slider.x + slider.width);
+  const year = getYearFromX(x);
+
+  const y = slider.y - 15;
+
+  push();
+  textSize(CONFIG.typography.sliderValueSize);
+  textAlign(CENTER, BOTTOM);
+  fill('#415E5A');
+  noStroke();
+  text(year, x, y);
+  pop();
+}
+

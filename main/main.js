@@ -99,6 +99,9 @@ let isHoveringCountry = false; // Se siamo sopra il nome di un paese
 //TUTORIAL
 let tutorialOpen = false;
 
+//timeline
+let hoveredTimelineYear = null;
+
 // ===== CACHE =====
 let combinationCache = {};
 let currentCacheYear = null;
@@ -290,6 +293,9 @@ function draw() {
     background(CONFIG.colors.background);
     
     drawSlider();
+
+    drawHoverTimelineLabel();
+
     
     if (commodities.length === 0 || sortedCountries.length === 0) {
         drawLoadingMessage();
@@ -314,6 +320,9 @@ function draw() {
     if (isValidCell(hoveredRow, hoveredCol)) {
         drawTooltip();
     }
+
+    drawFixedYearLabels();
+
 }
 
 // Funzione helper per ottenere l'anno da una coordinata X
@@ -360,10 +369,16 @@ function drawSlider() {
 // Disegna i punti dati sulla slider track
 function drawSliderDataPoints(y) {
   const years = Object.keys(yearDataCounts).map(Number).sort((a, b) => a - b);
+  hoveredTimelineYear = null;
 
   for (let year of years) {
     const x = map(year, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
     const pointHeight = 6.5;
+
+    if (dist(mouseX, mouseY, x, y + 10) < 8) {
+      hoveredTimelineYear = year;
+    }
+
     const colorValue = CONFIG.colors.slider.circle;
     fill(colorValue);
 
@@ -1411,4 +1426,51 @@ if (helpBtn && tutorialSection && tutorialCloseBtn) {
         }
     });
 
+}
+
+//timeline
+function drawFixedYearLabels() {
+  push();
+  textFont(CONFIG.typography.fontFamily);
+  textSize(12);
+  fill(CONFIG.colors.text.primary);
+  noStroke();
+
+  const labelOffsetY = 26; // distanza verticale dalla linea del tempo
+
+  // Calcola la posizione X dei pallini agli estremi
+  const xMin = map(yearRange.min, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+  const xMax = map(yearRange.max, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+
+  textAlign(CENTER, TOP); // centrato orizzontalmente sotto il punto
+  text(yearRange.min, xMin, slider.y + labelOffsetY);
+  text(yearRange.max, xMax, slider.y + labelOffsetY);
+
+  pop();
+}
+
+function drawHoverTimelineLabel() {
+    if (hoveredTimelineYear === null) return;
+
+    const x = map(hoveredTimelineYear, yearRange.min, yearRange.max, slider.x, slider.x + slider.width);
+    const y = slider.y - 10; // sopra il pallino
+    const padding = 4;
+    const textStr = hoveredTimelineYear.toString();
+    const textW = textWidth(textStr) + padding * 2;
+    const textH = 16;
+
+    push();
+    rectMode(CENTER);
+    textAlign(CENTER, CENTER);
+
+    // Sfondo della mini-label
+    fill(CONFIG.colors.tooltip.background);
+    noStroke();
+    rect(x, y, textW, textH, 4);
+
+    // Testo
+    fill(CONFIG.colors.text.hover);
+    textSize(12);
+    text(textStr, x, y);
+    pop();
 }

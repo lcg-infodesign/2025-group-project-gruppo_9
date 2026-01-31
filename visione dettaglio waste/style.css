@@ -363,18 +363,30 @@ body.tutorial-open {
 ========================= */
 
 #tutorialCloseBtn {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  font-size: 28px;
-  background: none;
-  border: none;
+   position: fixed;
+  top: 3rem;
+  right: 5rem;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  background: #ffffff; 
+  border: none;         
+  font-size: 50px;
   cursor: pointer;
-  color: #20332b;
+    color: black;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10002;
 }
 
 #tutorialCloseBtn:hover {
-  color: #b64939;
+   background-color: #B64939;
+  color: #ffffff;
 }
 
 .tutorial-screenshot{
