@@ -1,4 +1,3 @@
-// ===== CONFIGURAZIONE COMPLETA =====
 const CONFIG = {
     colors: {
         background: '#F5F3EE',
@@ -593,23 +592,26 @@ function mousePressed() {
 
 function mouseDragged() {
     if (slider.thumb.dragging) {
-        updateYearFromSlider(mouseX);
+        // Passiamo 'true' per dire che stiamo trascinando (modalità leggera)
+        updateYearFromSlider(mouseX, true);
         document.body.style.cursor = 'grabbing';
     }
     return false;
 }
 
 function mouseReleased() {
-    // Trascinando lo slider
+    // Quando lasciamo il mouse, facciamo l'aggiornamento pesante finale
     if (slider.thumb.dragging) {
         slider.thumb.dragging = false;
         
-        // Aggancia il pallino alla posizione esatta dell'anno corrente
+        // Scatto finale magnetico del pallino
         updateSliderThumb(); 
-        redraw(); // Ridisegna per vedere lo scatto finale
+        
+        // ORA facciamo i calcoli pesanti (riordino righe e resize)
+        fullDataUpdate();
     }
 
-    // Gestione cursore
+    // Gestione cursore (codice originale invariato)
     if (isHoveringSlider || isHoveringBasket || isHoveringCountry || hoveredRowData) {
         document.body.style.cursor = 'pointer';
     } else {
@@ -619,33 +621,47 @@ function mouseReleased() {
     return false;
 }
 
-function updateYearFromSlider(x) {
+function updateYearFromSlider(x, isDragging = false) {
     // Calcola la percentuale esatta basata sui pixel
     const rawPercent = constrain((x - slider.x) / slider.width, 0, 1);
     
-    // Muovi fluidamente
+    // Muovi fluidamente il pallino
     slider.thumb.x = slider.x + rawPercent * slider.width;
     
     // Anno più vicino
     const newYear = yearRange.min + round(rawPercent * (yearRange.max - yearRange.min));
     
-    // Ricalcola tutto se l'anno è cambiato
+    // Se l'anno è cambiato
     if (newYear !== currentYear) {
         currentYear = newYear;
 
+        // Aggiorna SOLO il numero scritto a schermo
         const yearElement = document.getElementById('current-year');
         if (yearElement) {
             yearElement.textContent = currentYear;
         }
-    
-        calculateWastePercentageRange(currentYear);
-        combinationCache = {};
-        currentCacheYear = null;
-        sortCountriesByCommodities(currentYear);
-        resizeCanvasForCurrentData();
+        
+        // Se stiamo trascinando, aggiorniamo solo i pallini (visualizzazione leggera)
+        // SENZA riordinare i paesi e SENZA ridimensionare il canvas
+        if (isDragging) {
+             combinationCache = {}; // Puliamo cache per vedere i nuovi pallini
+             redraw(); // Ridisegna solo i pallini
+        } else {
+             // Se NON stiamo trascinando (click singolo), fai l'aggiornamento completo
+             fullDataUpdate();
+        }
+    } else {
+        // Se l'anno non è cambiato ma sto muovendo il mouse, ridisegna il pallino
+        redraw();
     }
-    
-    // Pallino che si muove
+}
+
+function fullDataUpdate() {
+    calculateWastePercentageRange(currentYear);
+    combinationCache = {};
+    currentCacheYear = null;
+    sortCountriesByCommodities(currentYear); // Operazione PESANTE (Riordino)
+    resizeCanvasForCurrentData();            // Operazione PESANTE (Resize)
     redraw();
 }
 
