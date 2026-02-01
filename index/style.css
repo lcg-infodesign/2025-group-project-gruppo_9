@@ -665,71 +665,50 @@ a,
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
 }
 
-/* --- SOLO PER SCHERMI GRANDI (16" / 17" / Desktop) --- */
+@media (min-width: 1366px) {
+.tutorial-container {
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* MODIFICA QUI: Ridotto da 120px a 40px */
+  padding-bottom: 40px; 
+}
 
-@media (min-width: 1550px) {
+.tutorial-header {
+  max-width: 700px;
+  /* MODIFICA QUI: Ridotto margine inferiore da 80px a 30px */
+  margin: 0 auto 30px; 
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
 
-  /* 1. SPOSTAMENTO IN ALTO DEL BLOCCO INTERO */
-  /* Usiamo l'ID per essere sicuri che funzioni */
-  #tutorialSection.visible {
-    align-items: flex-start !important; /* Blocca la centratura verticale automatica */
-    padding-top: 0 !important;
-  }
-
-  .tutorial-container {
-    justify-content: flex-start !important; /* Allinea il contenuto all'inizio (alto) */
-    padding-top: 80px !important; /* Scegli qui quanto in alto lo vuoi (es. 50px, 80px, 100px) */
-    padding-bottom: 20px !important;
-    height: auto !important; /* Lascia che l'altezza si adatti */
-    min-height: 100vh !important;
-  }
-
-  /* 2. HEADER */
-  .tutorial-header {
-    margin-bottom: 10px !important; /* Spazio giusto tra titolo e step */
-    margin-top: 0 !important;
-  }
-
-  /* 3. STEP E IMMAGINI */
-  .tutorial-steps {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    margin-bottom: 20px !important;
-  }
+.tutorial-screenshot {
+  display: block;
+  max-width: 90%; /* Va bene */
   
-  .tutorial-steps li {
-     display: flex !important;
-     flex-direction: column !important;
-     align-items: center !important;
-  }
+  height: auto;
+  max-height: 250px; /* Impedisce all'immagine di diventare gigante su laptop */
+  object-fit: contain; /* Mantiene le proporzioni senza tagliare */
+  
+  margin: 20px auto 0; 
+  
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
 
-  /* 4. IMMAGINI GRANDI E UGUALI (Senza coprire il testo) */
-  .tutorial-screenshot {
-    /* Altezza fissa per uniformità. 
-       280px è grande ma lascia spazio sotto per le scritte sul tuo 17" */
-    height: 200px !important; 
-    
-    width: auto !important;
-    max-width: 100% !important;
-    object-fit: contain !important;
-    
-    margin-top: 25px !important;
-    margin-bottom: 25px !important;
-  }
+.tutorial-steps li {
+  display: none;
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 0.6s ease;
+}
 
-  /* 5. FIX PER LE SCRITTE NASCOSTE */
-  /* Assicura che il testo sotto l'immagine abbia spazio */
-  .tutorial-steps li p {
-     margin-bottom: 10px !important;
-     max-width: 800px !important; /* Evita righe chilometriche */
-  }
-
-  /* 6. BOTTONE */
-  .action-area,
-  #tutorialSection #finishTutorialBtn {
-    margin-top: 10px !important;
-    margin-bottom: 50px !important; /* Spazio extra in fondo */
-    position: static !important; /* Niente posizionamenti strani */
-  }
+#tutorialSection #finishTutorialBtn {
+  position: relative;
+  top: 0; 
+  margin-top: 20px; /* Usa il margine per staccarlo, è più pulito */
+}
 }
