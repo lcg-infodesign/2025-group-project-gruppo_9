@@ -557,19 +557,7 @@ function drawTimeline() {
   fill(CONFIG.colors.slider.thumb);
   ellipse(slider.thumb.x, slider.y + 10, slider.thumb.width);
   noStroke();
-
-  // --- Year Box in Center ---
-  const boxX = width / 2;
-  const boxY = 20; // sopra lo slider
-
-  
-  textStyle(NORMAL);
-
-  textSize(12);
-  textAlign(LEFT);
-  text(yearRange.min, slider.x, slider.y + 45);
-  textAlign(RIGHT);
-  text(yearRange.max, slider.x + slider.width, slider.y + 45);
+ drawFixedYearLabels();
 }
 
 function drawSliderDataPoints(y) {
@@ -1740,6 +1728,29 @@ function drawTimelineTooltip() {
   fill(CONFIG.colors.text?.hover || '#F5F3EE');
   text(textStr, x, y); 
   
+  pop();
+}
+
+function drawFixedYearLabels() {
+  push();
+  textFont(CONFIG.typography.fontFamily);
+  textSize(12);
+  // CORREZIONE: Usa il colore testo definito nel tuo CONFIG
+  fill(CONFIG.colors.slider.text); 
+  noStroke();
+
+  const labelOffsetY = 26; // Distanza verticale
+
+  // Calcola la posizione X (puoi usare map o direttamente le coordinate slider)
+  const xMin = slider.x; 
+  const xMax = slider.x + slider.width;
+
+  textAlign(CENTER, TOP); 
+  
+  // Disegna min e max
+  text(yearRange.min, xMin, slider.y + labelOffsetY);
+  text(yearRange.max, xMax, slider.y + labelOffsetY);
+
   pop();
 }
 
