@@ -665,71 +665,52 @@ a,
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
 }
 
-/* --- SOLO PER SCHERMI GRANDI (16" / 17" / Desktop) --- */
+/* --- FIX PER SCHERMI GRANDI (Target: 17" e Desktop) --- */
+/* Attiviamo la regola sopra i 1300px per sicurezza, intercettando il tuo schermo */
+@media (min-width: 1300px) {
 
-@media (min-width: 1550px) {
-
-  /* 1. SPOSTAMENTO IN ALTO DEL BLOCCO INTERO */
-  /* Usiamo l'ID per essere sicuri che funzioni */
-  #tutorialSection.visible {
-    align-items: flex-start !important; /* Blocca la centratura verticale automatica */
-    padding-top: 0 !important;
-  }
-
+  /* 1. SPOSTAMENTO IN ALTO */
+  /* Spostiamo il blocco in alto invece che al centro */
   .tutorial-container {
-    justify-content: flex-start !important; /* Allinea il contenuto all'inizio (alto) */
-    padding-top: 80px !important; /* Scegli qui quanto in alto lo vuoi (es. 50px, 80px, 100px) */
+    justify-content: flex-start !important; 
+    padding-top: 50px !important; /* Spazio dall'alto */
     padding-bottom: 20px !important;
-    height: auto !important; /* Lascia che l'altezza si adatti */
-    min-height: 100vh !important;
+    height: 100vh !important;
+    overflow-y: auto !important; /* Abilita scroll se serve */
   }
 
   /* 2. HEADER */
   .tutorial-header {
-    margin-bottom: 30px !important; /* Spazio giusto tra titolo e step */
-    margin-top: 0 !important;
-  }
-
-  /* 3. STEP E IMMAGINI */
-  .tutorial-steps {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
     margin-bottom: 20px !important;
-  }
-  
-  .tutorial-steps li {
-     display: flex !important;
-     flex-direction: column !important;
-     align-items: center !important;
+    flex-shrink: 0;
   }
 
-  /* 4. IMMAGINI GRANDI E UGUALI (Senza coprire il testo) */
+  /* 3. IMMAGINI PIÙ PICCOLE (La tua richiesta specifica) */
   .tutorial-screenshot {
-    /* Altezza fissa per uniformità. 
-       280px è grande ma lascia spazio sotto per le scritte sul tuo 17" */
-    height: 280px !important; 
+    /* Riduco drasticamente l'altezza a 200px */
+    height: 200px !important; 
     
     width: auto !important;
     max-width: 100% !important;
     object-fit: contain !important;
     
-    margin-top: 25px !important;
-    margin-bottom: 25px !important;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
   }
 
-  /* 5. FIX PER LE SCRITTE NASCOSTE */
-  /* Assicura che il testo sotto l'immagine abbia spazio */
-  .tutorial-steps li p {
-     margin-bottom: 10px !important;
-     max-width: 800px !important; /* Evita righe chilometriche */
+  /* 4. FIX STRUTTURA */
+  .tutorial-steps li {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
   }
 
-  /* 6. BOTTONE */
+  /* 5. BOTTONE */
   .action-area,
   #tutorialSection #finishTutorialBtn {
-    margin-top: 10px !important;
-    margin-bottom: 50px !important; /* Spazio extra in fondo */
-    position: static !important; /* Niente posizionamenti strani */
+    margin-top: 15px !important;
+    position: static !important;
+    margin-bottom: 50px !important;
   }
 }
