@@ -665,30 +665,57 @@ a,
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
 }
 
-/* --- OVERRIDE PER SCHERMI GRANDI (17" / Full HD e oltre) --- */
+/* --- OVERRIDE PER SCHERMI GRANDI (17 Pollici / 1600px+ ) --- */
 @media (min-width: 1600px), (min-height: 850px) {
 
   .tutorial-container {
+    /* 1. SPOSTAMENTO IN ALTO (ma controllato) */
     justify-content: flex-start; 
-    padding-top: 80px; 
-    padding-bottom: 0; 
+    padding-top: 60px; /* Ridotto per lasciare spazio in basso */
+    padding-bottom: 20px;
+    height: 100vh; 
+    overflow-y: auto; /* Se lo schermo è basso, abilita lo scroll invece di tagliare */
   }
 
+  /* 2. HEADER */
   .tutorial-header {
-    margin-bottom: 20px; 
+    margin-bottom: 20px; /* Tiene il titolo vicino al contenuto */
+    flex-shrink: 0; 
   }
 
+  /* 3. IL CONTENITORE DELLO STEP (LI) */
+  /* Correggiamo qui: usiamo 'li' invece di 'step-card' */
+  .tutorial-steps li {
+    display: flex !important; /* Forza il flex per incolonnare */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 0;
+  }
+
+  /* 4. IMMAGINI UNIFORMI */
   .tutorial-screenshot {
-    height: 350px; 
-    max-height: none; 
-    width: auto; 
-    object-fit: contain; 
+    /* Altezza fissa per uniformità, ma non esagerata */
+    height: 260px; 
     
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    
+    /* Margini bilanciati */
     margin-top: 20px; 
     margin-bottom: 20px;
   }
-  
+
+  /* 5. BOTTONE */
   #tutorialSection #finishTutorialBtn {
-    margin-top: 10px; 
+    margin-top: 10px;
+    position: static; /* Rimuove posizionamenti strani */
+  }
+  
+  /* Se il bottone è dentro un div action-area */
+  .action-area {
+    margin-top: 10px;
+    padding-bottom: 40px;
   }
 }
