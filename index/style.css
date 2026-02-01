@@ -473,13 +473,13 @@ h1 {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding-bottom: 40px; /* spazio per hint in basso */
+  padding-bottom: 120px; /* spazio per hint in basso */
 }
 
 /* HEADER che scompare */
 .tutorial-header {
   max-width: 700px;
-  margin: 0 auto 30px;
+  margin: 0 auto 80px;
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -534,12 +534,7 @@ h1 {
 .tutorial-screenshot {
   display: block;
   max-width: 90%;
-
-  height: auto;
-  max-height: 250px; /* Impedisce all'immagine di diventare gigante su laptop */
-  object-fit: contain; /* Mantiene le proporzioni senza tagliare */
-
-  margin: 20px auto 0;
+  margin: 30px auto 0;
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
@@ -587,8 +582,7 @@ a,
 
 #tutorialSection #finishTutorialBtn {
   position: relative;
-  top: 0;
-  margin-top: 20px;
+  top: 2.5rem;
 }
 
 /* --- TUTORIAL PROGRESS --- */
@@ -669,4 +663,32 @@ a,
   .sacco { width: 120px; }
   .typewriter-container, .text-block, .outro-text { font-size: 1rem; }
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
+}
+
+/* --- OVERRIDE PER SCHERMI GRANDI (17" / Full HD e oltre) --- */
+@media (min-width: 1600px), (min-height: 850px) {
+
+  .tutorial-container {
+    justify-content: flex-start; 
+    padding-top: 80px; 
+    padding-bottom: 0; 
+  }
+
+  .tutorial-header {
+    margin-bottom: 20px; 
+  }
+
+  .tutorial-screenshot {
+    height: 350px; 
+    max-height: none; 
+    width: auto; 
+    object-fit: contain; 
+    
+    margin-top: 20px; 
+    margin-bottom: 20px;
+  }
+  
+  #tutorialSection #finishTutorialBtn {
+    margin-top: 10px; 
+  }
 }
