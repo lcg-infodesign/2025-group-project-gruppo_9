@@ -1,3 +1,4 @@
+/* --- RESET E IMPOSTAZIONI BASE --- */
 * { 
   margin: 0; 
   padding: 0; 
@@ -23,6 +24,7 @@ body.force-hide #interactionHint {
     transition: opacity 0.2s ease;
 }
 
+/* Classe di utilità per mostrare le sezioni tramite JavaScript */
 .section-visible {
   display: flex !important;
 }
@@ -88,88 +90,90 @@ body.force-hide #interactionHint {
   50% { opacity: 1; } 
 }
 
-/* --- NUOVO LAYOUT DEL LOGO (Centrato & Sequenziale) --- */
+/* =========================================
+   HERO SECTION (Nuovo Layout Logo & Animazioni)
+========================================= */
 
+#heroSection {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;     
+  overflow: hidden;
+  text-align: center;
+  background-color: #365b55; 
+  
+  /* Fondamentale per la logica "Clicca per continuare" */
+  cursor: pointer; 
+  transition: opacity 0.8s ease-out;
+}
+
+/* Classe aggiunta via JS quando si clicca per sfumare via */
+#heroSection.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- NUOVO LOGO COMPOSTO (Posizionamento Assoluto) --- */
 .logo-composition {
-  /* POSIZIONAMENTO ASSOLUTO PERFETTO */
   position: absolute;
-  top: 45%;  /* Un po' più in alto del 50% per bilanciare visivamente il cestino sotto */
+  top: 45%;
   left: 50%;
   
-  /* Centra rispetto al proprio asse e scala tutto per renderlo più piccolo */
-  transform: translate(-50%, -50%) scale(0.75); /* Prova 0.7 o 0.8 per la grandezza */
+  /* Centra e scala tutto il blocco */
+  transform: translate(-50%, -50%) scale(0.75); 
   
-  z-index: 1;
+  z-index: 10; /* Sopra lo sfondo */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 15px; /* Spazio verticale un po' più arioso */
+  gap: 15px; 
   
-  /* Larghezza fissa per evitare che la mosca sballi il centro */
-  width: 600px; 
+  width: 600px;
   height: auto;
+  pointer-events: none;
 }
 
-/* --- ANIMAZIONI ELEMENTI --- */
-
-/* Classe base per nascondere gli elementi all'inizio */
-.logo-row-food, .logo-row-waste, .logo-row-subtitle {
-  opacity: 0;
-  /* L'animazione 'elementFadeIn' li farà apparire */
-}
+/* --- ANIMAZIONI ELEMENTI LOGO --- */
 
 @keyframes elementFadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- RIGA 1: FOOD (F + Mela + OD) --- */
+/* RIGA 1: FOOD (F + Mela + OD) */
 .logo-row-food {
   display: flex;
   align-items: flex-end;
   gap: 5px;
-  
-  /* Entra per primo */
+  opacity: 0;
   animation: elementFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s;
 }
 
 .letter-f { height: 140px; width: auto; }
 .letters-od { height: 140px; width: auto; }
 
-/* La Mela - Animazione Speciale */
+/* La Mela */
 .apple-icon {
   height: 150px;
   width: auto;
   margin-bottom: -5px;
-  
-  /* Nascondi inizialmente per animarla separatamente */
   opacity: 0;
-  
-  /* Ruota e appare: 
-     - duration: 1s
-     - delay: 0.4s (arriva poco dopo le lettere F e OD) 
-  */
   animation: appleEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.4s;
 }
 
 @keyframes appleEntrance {
-  0% { 
-    opacity: 0; 
-    transform: scale(0) rotate(-45deg); /* Parte piccola e ruotata a sx */
-  }
-  60% {
-    transform: scale(1.1) rotate(10deg); /* Diventa un po' grande e ruota a dx */
-  }
-  100% { 
-    opacity: 1; 
-    transform: scale(1) rotate(0deg); /* Si ferma dritta */
-  }
+  0% { opacity: 0; transform: scale(0) rotate(-45deg); }
+  60% { transform: scale(1.1) rotate(10deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* --- RIGA 2: WASTE --- */
+/* RIGA 2: WASTE */
 .logo-row-waste {
-  /* Entra per secondo (delay 0.6s) */
+  opacity: 0;
   animation: elementFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.6s;
 }
 
@@ -179,9 +183,9 @@ body.force-hide #interactionHint {
   margin-top: -10px;
 }
 
-/* --- RIGA 3: SOTTOTITOLO --- */
+/* RIGA 3: SOTTOTITOLO */
 .logo-row-subtitle {
-  /* Entra per ultimo (delay 0.9s) */
+  opacity: 0;
   animation: elementFadeIn 0.8s ease-out forwards 0.9s;
 }
 
@@ -191,96 +195,65 @@ body.force-hide #interactionHint {
   margin-top: 15px;
 }
 
-/* --- LA MOSCA (Elemento Decorativo) --- */
+
 .fly-element {
   position: absolute;
-  width: 45px; 
-  top: -50px;  
-  right: 60px; /* Aggiustato per stare vicino alla D */
   
-  opacity: 0; /* Parte invisibile */
+
+  width: 350px;
+  height: auto;
   
-  /* Appare e poi inizia a fluttuare */
+  
+  top: -130px;   
+  right: -250px; 
+  
+  z-index: 20;
+  pointer-events: none;
+
+  /* Opacità di base */
+  opacity: 1; 
+
+
   animation: 
-    elementFadeIn 1s ease-out forwards 1.2s, /* Apparizione ritardata */
-    flyFloat 4s ease-in-out infinite alternate 1.2s; /* Fluttuazione continua */
+    flyAppearOnly 0.5s ease-out 0.5s both, 
+    flyFloat 3.5s ease-in-out 0.5s infinite alternate;
 }
+
+
+/* --- KEYFRAMES MOSCA --- */
 
 @keyframes flyFloat {
   0% { transform: translate(0, 0) rotate(0deg); }
   100% { transform: translate(15px, -20px) rotate(10deg); }
 }
 
-/* --- MEDIA QUERIES (Mobile) --- */
-@media (max-width: 768px) {
-  .logo-composition { 
-    width: 100%; /* Su mobile occupa tutto */
-    transform: translate(-50%, -50%) scale(0.45); /* Molto più piccolo */
-  }
-  
-  .fly-element { 
-    right: -20px; 
-    top: -40px; 
-  }
+@keyframes flyAppearOnly {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-h1 {
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  text-transform: uppercase;
-  font-size: 11rem; 
-  line-height: 0.85; 
-  font-weight: 900;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.line-food {
-  align-self: center; 
-  margin-right: 25%;
-  opacity: 0;
-  animation: slideInLeft 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s;
-}
-
-.line-waste {
-  align-self: center;
-  margin-left: 20%;
-  opacity: 0;
-  animation: slideInRight 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s;
-}
-
-.main-subtitle {
-  display: block;
+/* --- ISTRUZIONE CLICK --- */
+.click-instruction {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: 'Roboto Mono', monospace;
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: 4px;
-  margin-top: 15px;
-  align-self: flex-end; 
-  margin-right: 15%;    
-  text-align: right;
-  opacity: 0;
-  animation: fadeInUp 1.5s ease forwards 1s;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+  animation: pulseText 2s infinite;
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-100px); }
-  to { opacity: 1; transform: translateX(0); }
+@keyframes pulseText {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- ILLUSTRAZIONE COMPLETA (ANIMATA) --- */
+/* --- ILLUSTRAZIONE COMPLETA (Cestino e Sacchi) --- */
 .illustration-wrapper {
   position: absolute;
   bottom: 30px;   
@@ -338,9 +311,11 @@ h1 {
   100% { top: 60px; opacity: 1; transform: rotate(10deg); }
 }
 
-/* --- SEZIONI SUCCESSIVE (NASCOSTE INIZIALMENTE) --- */
+/* =========================================
+   SEZIONI SUCCESSIVE
+========================================= */
 
-/* INTRO */
+/* --- INTRO SECTION --- */
 #introSection {
   display: none; 
   min-height: 100vh;
@@ -349,6 +324,17 @@ h1 {
   align-items: center;
   padding: 40px;
   text-align: center;
+}
+
+/* Quando visibile */
+#introSection.section-visible {
+  display: flex;
+  animation: fadeInSection 1s ease-out;
+}
+
+@keyframes fadeInSection {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .typewriter-container {
@@ -370,7 +356,7 @@ h1 {
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-/* TIMELINE */
+/* --- TIMELINE SECTION --- */
 #timelineSection {
   display: none; 
   min-height: 100vh;
@@ -475,9 +461,9 @@ h1 {
   animation: lineBlink 1s ease-in-out infinite;
 }
 
-/* OUTRO */
+/* --- OUTRO SECTION --- */
 #outroSection {
-  display: none; /* MODIFICATO */
+  display: none; 
   min-height: 100vh;
   flex-direction: column;
   justify-content: center;
@@ -527,7 +513,7 @@ h1 {
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* --- TUTORIAL --- */
+/* --- TUTORIAL SECTION --- */
 
 #tutorialSection {
   display: none;
@@ -553,10 +539,9 @@ h1 {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding-bottom: 120px; /* spazio per hint in basso */
+  padding-bottom: 120px;
 }
 
-/* HEADER che scompare */
 .tutorial-header {
   max-width: 700px;
   margin: 0 auto 80px;
@@ -583,7 +568,6 @@ h1 {
   margin-bottom: 0;
 }
 
-/* STEPS */
 .tutorial-steps {
   list-style: none;
   font-size: 1.2rem;
@@ -598,11 +582,10 @@ h1 {
 .tutorial-steps li {
   display: none;
   opacity: 0;
-  transform: translateY(0); /* ← niente slide verso il basso */
+  transform: translateY(0);
   transition: opacity 0.6s ease;
   text-align: left;
 }
-
 
 .tutorial-steps li.active-step {
   display: block;
@@ -610,7 +593,6 @@ h1 {
   transform: translateY(0);
 }
 
-/* Screenshot più integrati */
 .tutorial-screenshot {
   display: block;
   max-width: 90%;
@@ -619,7 +601,6 @@ h1 {
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
-/* Pulsanti */
 .explore-data-btn.secondary {
   background-color: transparent;
   color: #f0f0f0;
@@ -627,10 +608,7 @@ h1 {
   margin-top: 30px;
 }
 
-button,
-a,
-.nav-btn,
-.explore-data-btn {
+button, a, .nav-btn, .explore-data-btn {
   cursor: pointer;
 }
 
@@ -666,24 +644,22 @@ a,
 }
 
 /* --- TUTORIAL PROGRESS --- */
-
 .tutorial-progress {
   position: sticky;
   top: 30px;
   margin-bottom: 60px;
   z-index: 10;
-
   display: flex;
-  flex-direction: column; /* per mettere la barra sotto */
+  flex-direction: column;
   align-items: center;
-  gap: 10px; /* distanza tra numero/frecce e barra */
+  gap: 10px;
 }
 
 .tutorial-step-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px; /* distanza tra frecce e numero */
+  gap: 15px;
 }
 
 .tutorial-progress-line {
@@ -693,7 +669,7 @@ a,
   background-color: rgba(255,255,255,0.2);
   position: relative;
   overflow: hidden;
-  margin: 0; /* niente margin necessario, il gap tra le righe è gestito dal flex */
+  margin: 0;
 }
 
 .tutorial-progress-fill {
@@ -702,7 +678,6 @@ a,
   background-color: #fff;
   transition: width 0.4s ease;
 }
-
 
 .tutorial-hint {
   position: fixed;
@@ -722,73 +697,56 @@ a,
   display: none;
 }
 
-/* --- RESPONSIVE --- */
+/* =========================================
+   MEDIA QUERIES (Responsive)
+========================================= */
+
 @media (max-width: 1024px) {
-    h1 { font-size: 8rem; }
     .illustration-wrapper { width: 350px; height: 250px; left: 30px; }
     .bin-animated { width: 150px; }
     .sacco { width: 140px; }
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: 5rem; } 
-  .line-food { margin-right: 10%; } 
-  .line-waste { margin-left: 10%; }
-  .main-subtitle { font-size: 1rem; align-self: center; margin-right: 0; }
+  /* Logo Mobile */
+  .logo-composition { 
+    width: 100%; 
+    transform: translate(-50%, -50%) scale(0.45); 
+  }
+  .fly-element { right: -20px; top: -40px; }
+  .click-instruction { bottom: 20px; font-size: 0.7rem; }
+  
+  /* Illustrazione Mobile */
   .illustration-wrapper { 
     width: 300px; height: 200px;
     left: 50%; transform: translateX(-50%); bottom: 20px;
   }
   .bin-animated { width: 130px; }
   .sacco { width: 120px; }
+  
+  /* Testi */
   .typewriter-container, .text-block, .outro-text { font-size: 1rem; }
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
 }
 
 @media (min-width: 1366px) {
-.tutorial-container {
-  max-width: 800px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  /* MODIFICA QUI: Ridotto da 120px a 40px */
-  padding-bottom: 40px; 
-}
+  .tutorial-container {
+    padding-bottom: 40px; 
+  }
 
-.tutorial-header {
-  max-width: 700px;
-  /* MODIFICA QUI: Ridotto margine inferiore da 80px a 30px */
-  margin: 0 auto 30px; 
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+  .tutorial-header {
+    margin: 0 auto 30px; 
+  }
 
-.tutorial-screenshot {
-  display: block;
-  max-width: 90%; /* Va bene */
-  
-  height: auto;
-  max-height: 250px; /* Impedisce all'immagine di diventare gigante su laptop */
-  object-fit: contain; /* Mantiene le proporzioni senza tagliare */
-  
-  margin: 20px auto 0; 
-  
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-}
+  .tutorial-screenshot {
+    max-height: 250px;
+    object-fit: contain;
+    margin: 20px auto 0; 
+  }
 
-.tutorial-steps li {
-  display: none;
-  opacity: 0;
-  transform: translateY(0);
-  transition: opacity 0.6s ease;
-}
-
-#tutorialSection #finishTutorialBtn {
-  position: relative;
-  top: 0; 
-  margin-top: 20px; /* Usa il margine per staccarlo, è più pulito */
-}
+  #tutorialSection #finishTutorialBtn {
+    position: relative;
+    top: 0; 
+    margin-top: 20px;
+  }
 }
