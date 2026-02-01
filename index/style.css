@@ -665,57 +665,71 @@ a,
   #skipBtn { bottom: 20px; right: 20px; font-size: 1rem; }
 }
 
-/* --- OVERRIDE PER SCHERMI GRANDI (17 Pollici / 1600px+ ) --- */
-@media (min-width: 1600px), (min-height: 850px) {
+/* --- SOLO PER SCHERMI GRANDI (16" / 17" / Desktop) --- */
+
+@media (min-width: 1550px) {
+
+  /* 1. SPOSTAMENTO IN ALTO DEL BLOCCO INTERO */
+  /* Usiamo l'ID per essere sicuri che funzioni */
+  #tutorialSection.visible {
+    align-items: flex-start !important; /* Blocca la centratura verticale automatica */
+    padding-top: 0 !important;
+  }
 
   .tutorial-container {
-    /* 1. SPOSTAMENTO IN ALTO (ma controllato) */
-    justify-content: flex-start; 
-    padding-top: 60px; /* Ridotto per lasciare spazio in basso */
-    padding-bottom: 20px;
-    height: 100vh; 
-    overflow-y: auto; /* Se lo schermo è basso, abilita lo scroll invece di tagliare */
+    justify-content: flex-start !important; /* Allinea il contenuto all'inizio (alto) */
+    padding-top: 80px !important; /* Scegli qui quanto in alto lo vuoi (es. 50px, 80px, 100px) */
+    padding-bottom: 20px !important;
+    height: auto !important; /* Lascia che l'altezza si adatti */
+    min-height: 100vh !important;
   }
 
   /* 2. HEADER */
   .tutorial-header {
-    margin-bottom: 20px; /* Tiene il titolo vicino al contenuto */
-    flex-shrink: 0; 
+    margin-bottom: 30px !important; /* Spazio giusto tra titolo e step */
+    margin-top: 0 !important;
   }
 
-  /* 3. IL CONTENITORE DELLO STEP (LI) */
-  /* Correggiamo qui: usiamo 'li' invece di 'step-card' */
-  .tutorial-steps li {
-    display: flex !important; /* Forza il flex per incolonnare */
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 0;
-  }
-
-  /* 4. IMMAGINI UNIFORMI */
-  .tutorial-screenshot {
-    /* Altezza fissa per uniformità, ma non esagerata */
-    height: 260px; 
-    
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-    
-    /* Margini bilanciati */
-    margin-top: 20px; 
-    margin-bottom: 20px;
-  }
-
-  /* 5. BOTTONE */
-  #tutorialSection #finishTutorialBtn {
-    margin-top: 10px;
-    position: static; /* Rimuove posizionamenti strani */
+  /* 3. STEP E IMMAGINI */
+  .tutorial-steps {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    margin-bottom: 20px !important;
   }
   
-  /* Se il bottone è dentro un div action-area */
-  .action-area {
-    margin-top: 10px;
-    padding-bottom: 40px;
+  .tutorial-steps li {
+     display: flex !important;
+     flex-direction: column !important;
+     align-items: center !important;
+  }
+
+  /* 4. IMMAGINI GRANDI E UGUALI (Senza coprire il testo) */
+  .tutorial-screenshot {
+    /* Altezza fissa per uniformità. 
+       280px è grande ma lascia spazio sotto per le scritte sul tuo 17" */
+    height: 280px !important; 
+    
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+  }
+
+  /* 5. FIX PER LE SCRITTE NASCOSTE */
+  /* Assicura che il testo sotto l'immagine abbia spazio */
+  .tutorial-steps li p {
+     margin-bottom: 10px !important;
+     max-width: 800px !important; /* Evita righe chilometriche */
+  }
+
+  /* 6. BOTTONE */
+  .action-area,
+  #tutorialSection #finishTutorialBtn {
+    margin-top: 10px !important;
+    margin-bottom: 50px !important; /* Spazio extra in fondo */
+    position: static !important; /* Niente posizionamenti strani */
   }
 }
