@@ -9,9 +9,6 @@ html, body {
   scroll-behavior: smooth; 
 }
 
-
-
-
 /* ---------------- HEADER ---------------- */
 
 /* Stili per l'header */
@@ -252,7 +249,7 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #b64939; /* rosso coerente con palette */
+  background: #b64939; 
   color: #f4f1ec;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
@@ -276,7 +273,6 @@ body {
 #tutorialSection {
   position: fixed;
   inset: 0;
-  /* Nero trasparente al 60% per risaltare il pop-up */
   background: rgba(0, 0, 0, 0.6); 
   backdrop-filter: blur(3px);
   display: none;
@@ -284,7 +280,7 @@ body {
   justify-content: center;
   z-index: 9999;
   pointer-events: all;
-  padding: 20px; /* Margine di sicurezza per schermi piccoli */
+  padding: 20px; 
 }
 
 #tutorialSection.active {
@@ -292,7 +288,7 @@ body {
 }
 
 /* =========================
-   TUTORIAL CONTAINER (Il Box Verde)
+   TUTORIAL CONTAINER 
 ========================= */
 
 .tutorial-container {
@@ -300,20 +296,22 @@ body {
   font-weight: 500;
   font-size: 0.9rem;
   
-  background: #365b55; /* Sfondo Verde Scuro */
+  background: #365b55; 
   color: #F5F3EE;
   
-  padding: 3rem;
+  /* PADDING RIMOSSO QUI */
+  padding: 0;
   width: 100%;
   max-width: 900px; 
   
   /* ALTEZZA: Non tocca mai i bordi dello schermo */
   max-height: 85vh; 
-  margin-top: 0; /* Reset del margine che c'era nel vecchio css */
+  margin-top: 0; 
   
-  /* FONDAMENTALE: Gestione Scroll e Bordi */
-  overflow-y: auto; 
-  overflow-x: hidden;
+  /* GESTIONE SCROLL: Nascosto sulla cornice */
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
   position: relative;
   
   /* ARROTONDAMENTO E BORDI */
@@ -324,6 +322,17 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   
   pointer-events: auto;
+}
+
+/* =========================
+   NUOVO WRAPPER SCROLL (Contenuto interno)
+========================= */
+.tutorial-scroll-wrapper {
+  overflow-y: auto; 
+  height: 100%;
+  
+  /* PADDING AGGIUNTO QUI (5rem come richiesto) */
+  padding: 5rem;
   
   /* Fix per Firefox per la scrollbar */
   scrollbar-width: thin;
@@ -331,19 +340,20 @@ body {
 }
 
 /* --- FIX SCROLLBAR (Chrome/Safari) --- */
-.tutorial-container::-webkit-scrollbar {
+.tutorial-scroll-wrapper::-webkit-scrollbar {
   width: 8px;
 }
-.tutorial-container::-webkit-scrollbar-track {
+.tutorial-scroll-wrapper::-webkit-scrollbar-track {
   background: transparent; 
   margin-top: 20px; 
   margin-bottom: 20px; 
 }
-.tutorial-container::-webkit-scrollbar-thumb {
+.tutorial-scroll-wrapper::-webkit-scrollbar-thumb {
   background-color: rgba(245, 243, 238, 0.3);
   border-radius: 20px;
   border: 3px solid #365b55; 
 }
+
 
 /* Titolo del Tutorial */
 .tutorial-title {
@@ -367,19 +377,17 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0; /* Reset del gap vecchio */
+  gap: 0; 
 }
 
 .tutorial-steps li {
-  background: transparent; /* Rimuove lo sfondo bianco delle card */
+  background: transparent; 
   padding: 2.5rem 0;
   border-bottom: 1px solid rgba(245, 243, 238, 0.15);
   display: flex;
   flex-direction: column;
   gap: 15px;
   color: #F5F3EE;
-  
-  /* Reset delle ombre vecchie */
   border-radius: 0; 
   box-shadow: none;
 }
@@ -424,7 +432,6 @@ body.tutorial-open {
 ========================= */
 
 #tutorialCloseBtn {
-  /* Posizionamento assoluto DENTRO il container, non fixed alla finestra */
   position: absolute; 
   top: 25px;
   right: 25px;
@@ -432,15 +439,15 @@ body.tutorial-open {
   height: 44px;
   border-radius: 50%;
 
-  background: transparent; 
+  /* Sfondo verde per coprire il testo che scorre sotto */
+  background: #365b55; 
+  
   border: 2px solid #F5F3EE;       
   color: #F5F3EE; 
   cursor: pointer;
-  z-index: 100;
+  z-index: 10; /* Z-index per stare sopra al wrapper */
   transition: all 0.3s ease;
-  font-size: 0; /* Nasconde la X testuale per usare quella CSS */
-  
-  /* Reset flexbox del vecchio stile */
+  font-size: 0; 
   display: block;
 }
 
@@ -504,7 +511,7 @@ body.tutorial-open {
 
 /* FOOTER */
 .footer {
-    background: var(--bg); /* O il tuo colore di sfondo es: #f0f0f0 */
+    background: var(--bg); 
     padding: 50px 60px;
     display: grid;
     /* Struttura a 3 colonne: Sinistra larga, linea sottile, Destra */
@@ -517,7 +524,7 @@ body.tutorial-open {
 /* Stili Testo */
 .footer p {
     font-size: 0.85rem;
-    color: #415E5A; /* Il tuo colore verde scuro */
+    color: #415E5A; 
     margin: 4px 0;
     font-family: 'Roboto Mono', monospace; 
     line-height: 1.4;
@@ -533,7 +540,7 @@ body.tutorial-open {
 .contacts-grid {
     display: grid;
     grid-template-columns: auto 1fr; /* Colonna nomi si adatta, mail prende il resto */
-    gap: 10px 30px; /* Spazio verticale e orizzontale */
+    gap: 10px 30px; 
     margin-top: 15px;
     margin-bottom: 30px;
 }
@@ -566,7 +573,7 @@ body.tutorial-open {
 .logos-container {
     display: flex;
     align-items: center;
-    gap: 30px; /* Ho aumentato un po' anche lo spazio tra i loghi per farli respirare */
+    gap: 30px; 
     margin-top: 20px; /* Un po' più di margine sopra */
     flex-wrap: wrap;
 }

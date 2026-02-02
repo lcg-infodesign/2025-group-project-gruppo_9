@@ -12,60 +12,56 @@
 
     <button id="helpBtn" aria-label="Open tutorial">?</button>
 
-<!-- TUTORIAL OVERLAY --> 
 <div id="tutorialOverlay" style="display:none">
   <section id="tutorialSection">
     <div class="tutorial-container">
 
       <button id="tutorialCloseBtn" aria-label="Close tutorial">×</button>
 
-      <h2 class="tutorial-title">How does it work?</h2>
+      <div class="tutorial-scroll-wrapper">
 
-      <ul class="tutorial-steps">
+          <h2 class="tutorial-title">How does it work?</h2>
 
-        <li>
-          <strong>Navigate Time</strong>
-          <p>Use the <strong>Timeline</strong> at the top to change years. <em>(drag left/right, click, or use the keyboard arrow keys.)</em></p>
-          <p>Look at the <strong>Matrix</strong> to see the connection between <em>Country</em> and <em>Product</em>. <em>(Note: percentages are not comparable.)</em></p>
-          <img src="../assets/img/tutorial/timeline.png" alt="Matrix screenshot" class="tutorial-screenshot">
-        </li>
+          <ul class="tutorial-steps">
 
-        <li>
-          <strong>Dig Deeper</strong>
-          <p>Want more details?</p>
-          <p><strong>Click on any row</strong> (Country) to open a dedicated analysis page.</p>
-          <img src="../assets/img/tutorial/clickrow.png" alt="Row screenshot" class="tutorial-screenshot">
-        </li>
+            <li>
+              <strong>Navigate Time</strong>
+              <p>Use the <strong>Timeline</strong> at the top to change years. <em>(drag left/right, click, or use the keyboard arrow keys.)</em></p>
+              <p>Look at the <strong>Matrix</strong> to see the connection between <em>Country</em> and <em>Product</em>. <em>(Note: percentages are not comparable.)</em></p>
+              <img src="../assets/img/tutorial/timeline.png" alt="Matrix screenshot" class="tutorial-screenshot">
+            </li>
 
-        <li>
-          <strong>Analyze the Causes</strong>
-          <p>Inside the country view, discover the <strong>main</strong> causes and supply chain stages where food is lost (e.g., during harvest or transport).</p>
-          <img src="../assets/img/tutorial/dettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
-        </li>
+            <li>
+              <strong>Dig Deeper</strong>
+              <p>Want more details?</p>
+              <p><strong>Click on any row</strong> (Country) to open a dedicated analysis page.</p>
+              <img src="../assets/img/tutorial/clickrow.png" alt="Row screenshot" class="tutorial-screenshot">
+            </li>
 
-        <li>
-          <strong>Explore details</strong>
-          <p>Don't just look, interact! <strong>Hover your mouse</strong> over charts and bars to reveal precise numbers and "hidden" info.</p>
-          <img src="../assets/img/tutorial/hover.png" alt="Hover screenshot" class="tutorial-screenshot">
-        </li>
+            <li>
+              <strong>Analyze the Causes</strong>
+              <p>Inside the country view, discover the <strong>main</strong> causes and supply chain stages where food is lost (e.g., during harvest or transport).</p>
+              <img src="../assets/img/tutorial/dettaglio.png" alt="Detail page screenshot" class="tutorial-screenshot">
+            </li>
 
-        <li>
-          <strong>Ready to explore?</strong>
-          <p>Dive into the data and discover the whole story.</p>
-        </li>
+            <li>
+              <strong>Explore details</strong>
+              <p>Don't just look, interact! <strong>Hover your mouse</strong> over charts and bars to reveal precise numbers and "hidden" info.</p>
+              <img src="../assets/img/tutorial/hover.png" alt="Hover screenshot" class="tutorial-screenshot">
+            </li>
 
-      </ul>
+            <li>
+              <strong>Ready to explore?</strong>
+              <p>Dive into the data and discover the whole story.</p>
+            </li>
 
-    </div>
+          </ul>
+      
+      </div> </div>
   </section>
 </div>
 
-  </section>
 
-</div>
-
-
-    <!-- HEADER -->
     <header id="headerBar">
     <div class="header-left">
         <a href="../main/main.html" class="nav-btn btn-secondary active">Home</a>
@@ -86,15 +82,12 @@
 </header>
 
 
-<!-- MAIN CONTENT -->
-
-    <div id="p5-container"></div>
+<div id="p5-container"></div>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <script src="main.js"></script>
 
-<!-- container per la parte fissa -->
 <div id="fixed-header">
     <div id="year-display">
         Selected year:<br><span id="current-year"></span>
@@ -127,8 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-     <!-- FOOTER -->
-<footer class="footer">
+     <footer class="footer">
 
     <div class="footer-left">
         <p><strong>Project by</strong></p>
