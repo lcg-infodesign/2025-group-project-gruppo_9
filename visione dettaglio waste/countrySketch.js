@@ -1120,19 +1120,31 @@ function drawInfoLegend() {
     const textY = currentY;
 
     text(
-        "Each bin is filled according to\nthe percentage of waste for\neach commodity.\n\nWhen present, the glyph below\nindicates the primary cause\nof loss.",
+        "Each bin is filled according to\nthe percentage of waste for\neach commodity.",
         textX,
         textY
     );
 
-    currentY +=115;
+    currentY +=55;
 
     // 2) Testo Cause of loss
-    textSize(CONFIG.typography.legendSize - 5);
+    textSize(CONFIG.typography.legendSize);
     textStyle(BOLD);
     text("Causes of loss:", textX, currentY);
 
     currentY +=25;
+    textSize(CONFIG.typography.legendSize - 5);
+    textStyle(NORMAL);
+    textLeading(16);
+    
+    text(
+        "When present, the glyph below\nindicates the primary cause\nof loss.",
+        textX,
+        currentY
+    );
+    currentY +=55;
+
+
 
   
    // 3) Immagini cause of loss
