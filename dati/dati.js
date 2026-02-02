@@ -57,3 +57,4 @@ window.addEventListener('scroll', () => {
 
     apple.style.setProperty('--fall', fallProgress.toFixed(3));
 });
+
